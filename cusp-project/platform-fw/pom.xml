@@ -9,4 +9,35 @@
   <packaging>pom</packaging>
   <name>平台定义的框架</name>
   <description>使用预定义好的框架模型</description>
+  <modules>
+  	<module>serv-provider-api</module>
+  	<module>vertx3-serv-provider</module>
+  	<module>undertow1-serv-provider</module>
+  	<module>rapidoid5-serv-provider</module>
+  </modules>
+  <properties>
+  	<vertx.version>3.2.0</vertx.version>
+  	<undertow.version>1.3.14.Final</undertow.version>
+  	<rapidoid.version>5.0.11</rapidoid.version>
+  </properties>
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>io.vertx</groupId>
+  			<artifactId>vertx-core</artifactId>
+  			<version>${vertx.version}</version>
+  			<optional>true</optional>
+  		</dependency>
+  		<dependency>
+  			<groupId>io.undertow</groupId>
+  			<artifactId>undertow-core</artifactId>
+  			<version>${undertow.version}</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>org.rapidoid</groupId>
+  			<artifactId>rapidoid-web</artifactId>
+  			<version>${rapidoid.version}</version>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
 </project>
