@@ -10,6 +10,7 @@
   <name>平台定义的框架</name>
   <description>使用预定义好的框架模型</description>
   <modules>
+  	<module>bootstrap</module>
   	<module>serv-provider-api</module>
   	<module>vertx3-serv-provider</module>
   	<module>undertow1-serv-provider</module>
