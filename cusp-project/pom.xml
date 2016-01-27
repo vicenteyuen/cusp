@@ -6,6 +6,9 @@
   <packaging>pom</packaging>
   <modules>
   	<module>platform-fw</module>
+  	<module>platform-apps</module>
+  	<module>web-apps</module>
+  	<module>plugins</module>
   </modules>
   <properties>
   	<guice.version>4.0</guice.version>

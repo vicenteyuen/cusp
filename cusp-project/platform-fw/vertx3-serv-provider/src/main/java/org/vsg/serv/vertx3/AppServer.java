@@ -49,7 +49,7 @@ public class AppServer extends AbstractVerticle  {
           routingContext.response().putHeader("content-type", "text/html").end("Hello World!");
         });
 */
-        scanRegisterControoler();
+        scanRegisterController();
         router.route().handler(BodyHandler.create());
         
         // --- scan restful url ---
@@ -63,8 +63,8 @@ public class AppServer extends AbstractVerticle  {
         
     }
     
-    private void scanRegisterControoler() {
-    	
+    private void scanRegisterController() {
+    	// --- scan all contraoller
     }
     
     
