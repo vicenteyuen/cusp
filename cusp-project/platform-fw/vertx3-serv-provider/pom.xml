@@ -8,8 +8,17 @@
   <artifactId>vertx3-serv-provider</artifactId>
   <dependencies>
   	<dependency>
+  		<groupId>com.google.guava</groupId>
+  		<artifactId>guava</artifactId>
+  		<version>19.0-rc3</version>
+  	</dependency>  
+  	<dependency>
   		<groupId>com.google.inject</groupId>
   		<artifactId>guice</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>javax.ws.rs</groupId>
+  		<artifactId>javax.ws.rs-api</artifactId>
   	</dependency>
   	<dependency>
   		<groupId>io.vertx</groupId>
@@ -24,8 +33,9 @@
   		<artifactId>slf4j-api</artifactId>
   	</dependency>
   	<dependency>
-  		<groupId>javax.ws.rs</groupId>
-  		<artifactId>javax.ws.rs-api</artifactId>
+  		<groupId>org.vsg</groupId>
+  		<artifactId>serv-provider-api</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 </project>

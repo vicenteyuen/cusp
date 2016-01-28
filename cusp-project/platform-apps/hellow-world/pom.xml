@@ -12,5 +12,32 @@
   		<artifactId>javax.ws.rs-api</artifactId>
   		<version>2.0.1</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.ofbiz</groupId>
+  		<artifactId>start</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
+  
+  <!-- create profile -->
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <build>
+      	<!-- mark plugin -->
+        <plugins>
+          <plugin>
+            <groupId>org.vsg</groupId>
+            <artifactId>apps-plugin</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <configuration>
+              <debug>true</debug>
+              <runtimeHome>E:/cusp_data/runtime</runtimeHome>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>  
+  </profiles>
+    
 </project>
