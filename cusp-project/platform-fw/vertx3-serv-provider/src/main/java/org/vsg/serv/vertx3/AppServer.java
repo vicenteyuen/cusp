@@ -40,7 +40,7 @@ public class AppServer extends AbstractVerticle  {
     public void start() throws Exception {
     	
     	
-    	Injector injector = Guice.createInjector(new ControllerScanModule());
+    	//Injector injector = Guice.createInjector(new Vertx3RuntimeModule(Thread.currentThread().getContextClassLoader()));
     	
     	
         Router router = Router.router(vertx);

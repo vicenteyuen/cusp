@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class AnnotationReflectionUtils {
+public class RuntimeClsLoaderAnnotationReflection {
 
 	/** URL prefix for loading from the file system: "file:" */
 	public static final String FILE_URL_PREFIX = "file:";
@@ -46,11 +46,19 @@ public class AnnotationReflectionUtils {
 
 	/** Separator between JAR URL and file path within the JAR */
 	public static final String JAR_URL_SEPARATOR = "!/";
+	
+	private ClassLoader runtimeClsLoader;
+	
+	
+	public RuntimeClsLoaderAnnotationReflection(ClassLoader runtimeClsLoader) {
+		this.runtimeClsLoader = runtimeClsLoader;
+	}
+	
 
 	// Taken from
 	// http://stackoverflow.com/questions/1456930/how-do-i-read-all-classes-from-a-java-package-in-the-classpath
 
-	public static <T extends Annotation> List<Class<?>> findCandidates(
+	public  <T extends Annotation> List<Class<?>> findCandidates(
 			String basePackage, Class<T> searchedAnnotation) {
 		ArrayList<Class<?>> candidates = new ArrayList<Class<?>>();
 		Enumeration<URL> urls;
@@ -58,47 +66,54 @@ public class AnnotationReflectionUtils {
 		String basePath = basePackage.replaceAll("\\.", "/");
 		
 		try {
-			urls = Thread.currentThread().getContextClassLoader().getResources(basePath);
+			urls = this.runtimeClsLoader.getResources(basePath);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 		while (urls.hasMoreElements()) {
 			URL url = urls.nextElement();
+			
 			if (isJarURL(url)) {
 				try {
-					candidates.addAll(doFindPathMatchingJarResources(url,
-							basePath, searchedAnnotation));
+					candidates.addAll(doFindPathMatchingJarResources(url,basePath, searchedAnnotation));
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
 			} else {
 				File directory = new File(url.getFile());
 				if (directory.exists() && directory.isDirectory()) {
-					for (File file : new File(url.getFile()).listFiles())
-						fetchCandidates(basePackage, file, searchedAnnotation,
-								candidates);
+					for (File file : new File(url.getFile()).listFiles()) {
+						
+						fetchCandidates(basePackage, file, searchedAnnotation, candidates);						
+					}
+
 				}
 			}
 		}
 		return candidates;
 	}
 
-	private static <T extends Annotation> void fetchCandidates(
+	private <T extends Annotation> void fetchCandidates(
 			String basePackage, File candidate, Class<T> searchedAnnotation,
 			List<Class<?>> candidates) {
-		if (candidate.isDirectory()) {
-			for (File file : candidate.listFiles())
-				fetchCandidates(basePackage + "." + candidate.getName(), file,
-						searchedAnnotation, candidates);
+		boolean isDir = candidate.isDirectory();
+
+		if (isDir) {
+			for (File file : candidate.listFiles()) {
+				String packageClsName = basePackage + "." + candidate.getName();
+				fetchCandidates(packageClsName, file, searchedAnnotation, candidates);
+			}
+			
 		} else {
+			
 			String fileName = candidate.getName();
 			if (fileName.endsWith(".class")) {
 				String className = fileName.substring(0, fileName.length() - 6);
-				Class<?> foundClass = checkCandidate(basePackage + "."
-						+ className, searchedAnnotation);
-
-				if (foundClass != null)
+				String packageClsName = basePackage + "."+ className;
+				Class<?> foundClass = checkCandidate(packageClsName, searchedAnnotation);
+				if (foundClass != null) {
 					candidates.add(foundClass);
+				}
 			}
 		}
 	}
@@ -111,10 +126,9 @@ public class AnnotationReflectionUtils {
 				.equals(protocol) && url.getPath().contains(JAR_URL_SEPARATOR)));
 	}
 
-	public static <T extends Annotation> Class<?> checkCandidate(
-			String className, Class<T> searchedAnnotation) {
+	public <T extends Annotation> Class<?> checkCandidate(String className, Class<T> searchedAnnotation) {
 		try {
-			Class<?> candidateClass = Class.forName(className);
+			Class<?> candidateClass = runtimeClsLoader.loadClass(className);
 			Target target = searchedAnnotation.getAnnotation(Target.class);
 			for (ElementType elementType : target.value()) {
 				switch (elementType) {
@@ -143,7 +157,9 @@ public class AnnotationReflectionUtils {
 				}
 			}
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -162,7 +178,7 @@ public class AnnotationReflectionUtils {
 	 * @see java.net.JarURLConnection
 	 * @see org.springframework.util.PathMatcher
 	 */
-	protected static <T extends Annotation> Set<Class<?>> doFindPathMatchingJarResources(
+	protected <T extends Annotation> Set<Class<?>> doFindPathMatchingJarResources(
 			URL sourceUrl, String basePackage, Class<T> searchedAnnotation)
 			throws IOException {
 

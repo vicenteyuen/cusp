@@ -14,15 +14,33 @@ import javax.ws.rs.Produces;
 @Path("/helloworld")
 public class HelloWorld {
 	
+	
+	
+	
+	
 	@GET
-	@Path("getpath")
+	@Path("/getpath")
 	@Produces("text/plain")
 	public String getResponse() {
+		
+
 		
 		System.out.println("run ok");
 		
 		return "hello my boy.";
 	}
+	
+	@GET
+	@Path("/getpath2")
+	@Produces("text/plain")
+	public String getResponse2() {
+		
+
+		
+		System.out.println("run ok");
+		
+		return "hello my boy.";
+	}	
 	
 
 }

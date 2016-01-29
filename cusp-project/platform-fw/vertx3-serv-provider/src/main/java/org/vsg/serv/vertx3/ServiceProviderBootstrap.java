@@ -1,10 +1,10 @@
 package org.vsg.serv.vertx3;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.ext.web.Router;
 
-import java.util.List;
-
-import javax.ws.rs.Path;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,29 +17,41 @@ public class ServiceProviderBootstrap extends AbstractVerticle implements Servic
 	
 	private static Logger logger = LoggerFactory.getLogger(AppServer.class);	
 	
-	private ClassLoader classLoader;
+	private ClassLoader runtimeClassLoader;
 	
-	public void setRuntimeClassLoader(ClassLoader classLoader)  {
-		this.classLoader = classLoader;
+	public void setRuntimeClassLoader(ClassLoader runtimeClassLoader)  {
+		this.runtimeClassLoader = runtimeClassLoader;
 	}
 	
 
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
+		Set<String> scanPackages = new LinkedHashSet<String>();
+		scanPackages.add("org.vsg");
 		
-    	Injector injector = Guice.createInjector(new ControllerScanModule());
+
+        Router router = Router.router(vertx);			
 		
-        //Router router = Router.router(vertx);		
+    	Injector injector = Guice.createInjector(
+    			new JsrRestControllerModule(router , runtimeClassLoader , scanPackages));
+	
 		
-        ControllerScanModule  modInst =  injector.getInstance(ControllerScanModule.class);
+        //JsrRestControllerModule  modInst =  injector.getInstance(JsrRestControllerModule.class);
+        
+
+        
+
+
+        
+        //List<Class<?>>  clses  =  rcar.findCandidates("org.vsg", Path.class);
+
         
         
-        List<Class<?>>  clses =  AnnotationReflectionUtils.findCandidates("org.vsg", Path.class);
+
         
         
-        
-        System.out.println("mod inst : " + clses);
+        //System.out.println("mod inst : " + clses);
 
 	}
 

@@ -42,8 +42,7 @@ public class AppRunMojo extends AbstractAppMojo {
         // --- get all dependency jar---
         // --- set load ---
         serverAgent.setParentClassLoader( originalClassLoader );
-        
-        
+
         // --- and project class path element
         try {
 			List<String> list = this.getProject().getRuntimeClasspathElements();

@@ -81,6 +81,7 @@ public class BootstrapAgent {
 			
 			
 			Class<ServiceProvider> cls = (Class<ServiceProvider>)runtimeContainerClsLoader.loadClass("org.vsg.serv.vertx3.ServiceProviderBootstrap");
+			
 			ServiceProvider inst = cls.newInstance();
 			
 			inst.setRuntimeClassLoader(runtimeContainerClsLoader);
