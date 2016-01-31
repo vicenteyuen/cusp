@@ -7,7 +7,7 @@ package org.vsg.cusp.serv.api;
  * @author Vison Ruan
  *
  */
-public interface ServiceProvider {
+public interface EngineProvider {
 	
 	/**
 	 * start service

@@ -1,6 +1,7 @@
 package org.vsg.serv.vertx3;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -14,9 +15,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.serv.vertx3.util.Runner;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 /**
  * Hello world!
@@ -32,6 +30,11 @@ public class AppServer extends AbstractVerticle  {
     public static void main( String[] args )
     {
     	Runner.runExample(AppServer.class);
+    }
+    
+    
+    public AppServer() {
+    	
     }
     
     
@@ -53,6 +56,17 @@ public class AppServer extends AbstractVerticle  {
         router.route().handler(BodyHandler.create());
         
         // --- scan restful url ---
+        Handler h = new Handler() {
+
+			@Override
+			public void handle(Object arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+        	
+        };
+        
+        
         
         router.get("/products/:productID").handler(this::handleGetProduct);
         router.put("/products/:productID").handler(this::handleAddProduct);
@@ -60,6 +74,9 @@ public class AppServer extends AbstractVerticle  {
 
         vertx.createHttpServer().requestHandler(router::accept).listen(8080);
         logger.info("Startuped server on port : [8080]");
+        
+        
+
         
     }
     

@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-public class Runner {
+public class Vertx3Runner {
 	 private static final String WEB_EXAMPLES_DIR = "web-examples";
 	  private static final String WEB_EXAMPLES_JAVA_DIR = WEB_EXAMPLES_DIR + "/src/main/java/";
 	  private static final String WEB_EXAMPLES_JS_DIR = WEB_EXAMPLES_DIR + "/src/main/js/";
@@ -39,41 +39,41 @@ public class Runner {
 
 	  static class JSAuthRunner {
 	    public static void main(String[] args) {
-	      Runner.runJSExample("io/vertx/example/web/auth/server.js");
+	      Vertx3Runner.runJSExample("io/vertx/example/web/auth/server.js");
 	    }
 	  }
 
 	  static class JSAuthJDBC {
 	    public static void main(String[] args) {
-	      Runner.runJSExample("io/vertx/example/web/authjdbc/server.js");
+	      Vertx3Runner.runJSExample("io/vertx/example/web/authjdbc/server.js");
 	    }
 	  }
 
 	  static class JSHelloWorldRunner {
 	    public static void main(String[] args) {
-	      Runner.runJSExample("io/vertx/example/web/helloworld/server.js");
+	      Vertx3Runner.runJSExample("io/vertx/example/web/helloworld/server.js");
 	    }
 	  }
 
 	  static class JSRealtimeRunner {
-	    public static void main(String[] args) { Runner.runJSExample("io/vertx/example/web/realtime/server.js"); }
+	    public static void main(String[] args) { Vertx3Runner.runJSExample("io/vertx/example/web/realtime/server.js"); }
 	  }
 
 	  static class JSChatRunner {
 	    public static void main(String[] args) {
-	            Runner.runJSExample("io/vertx/example/web/chat/server.js");
+	            Vertx3Runner.runJSExample("io/vertx/example/web/chat/server.js");
 	        }
 	  }
 
 	  static class JSSessionsRunner {
 	    public static void main(String[] args) {
-	      Runner.runJSExample("io/vertx/example/web/sessions/server.js");
+	      Vertx3Runner.runJSExample("io/vertx/example/web/sessions/server.js");
 	    }
 	  }
 
 	  static class JSTemplatingRunner {
 	    public static void main(String[] args) {
-	      Runner.runJSExample("io/vertx/example/web/templating/mvel/server.js");
+	      Vertx3Runner.runJSExample("io/vertx/example/web/templating/mvel/server.js");
 	    }
 	  }
 
@@ -89,47 +89,47 @@ public class Runner {
 
 	  static class GroovyAuthRunner {
 	    public static void main(String[] args) {
-	      Runner.runGroovyExample("io/vertx/example/web/auth/server.groovy");
+	      Vertx3Runner.runGroovyExample("io/vertx/example/web/auth/server.groovy");
 	    }
 	  }
 
 	  static class GroovyAuthJDBC {
 	    public static void main(String[] args) {
-	      Runner.runGroovyExample("io/vertx/example/web/authjdbc/server.groovy");
+	      Vertx3Runner.runGroovyExample("io/vertx/example/web/authjdbc/server.groovy");
 	    }
 	  }
 
 	  static class GroovyHelloWorldRunner {
 	    public static void main(String[] args) {
-	      Runner.runGroovyExample("io/vertx/example/web/helloworld/server.groovy");
+	      Vertx3Runner.runGroovyExample("io/vertx/example/web/helloworld/server.groovy");
 	    }
 	  }
 
 	  static class GroovyChatRunner {
-	    public static void main(String[] args) { Runner.runGroovyExample("io/vertx/example/web/chat/server.groovy"); }
+	    public static void main(String[] args) { Vertx3Runner.runGroovyExample("io/vertx/example/web/chat/server.groovy"); }
 	  }
 
 	  static class GroovyRealtimeRunner {
 	    public static void main(String[] args) {
-	      Runner.runGroovyExample("io/vertx/example/web/realtime/server.groovy");
+	      Vertx3Runner.runGroovyExample("io/vertx/example/web/realtime/server.groovy");
 	    }
 	  }
 
 	  static class GroovySessionsRunner {
 	    public static void main(String[] args) {
-	      Runner.runGroovyExample("io/vertx/example/web/sessions/server.groovy");
+	      Vertx3Runner.runGroovyExample("io/vertx/example/web/sessions/server.groovy");
 	    }
 	  }
 
 	  static class GroovyTemplatingRunner {
 	    public static void main(String[] args) {
-	      Runner.runGroovyExample("io/vertx/example/web/templating/mvel/server.groovy");
+	      Vertx3Runner.runGroovyExample("io/vertx/example/web/templating/mvel/server.groovy");
 	    }
 	  }
 
 	  static class GroovyRestRunner {
 	    public static void main(String[] args) {
-	      Runner.runGroovyExample("io/vertx/example/web/rest/simple_rest.groovy");
+	      Vertx3Runner.runGroovyExample("io/vertx/example/web/rest/simple_rest.groovy");
 	    }
 	  }
 
@@ -145,41 +145,41 @@ public class Runner {
 
 	  static class RubyAuthRunner {
 	    public static void main(String[] args) {
-	      Runner.runRubyExample("io/vertx/example/web/auth/server.rb");
+	      Vertx3Runner.runRubyExample("io/vertx/example/web/auth/server.rb");
 	    }
 	  }
 
 	  static class RubyAuthJDBC {
 	    public static void main(String[] args) {
-	      Runner.runRubyExample("io/vertx/example/web/authjdbc/server.rb");
+	      Vertx3Runner.runRubyExample("io/vertx/example/web/authjdbc/server.rb");
 	    }
 	  }
 	  static class RubyHelloWorldRunner {
 	    public static void main(String[] args) {
-	      Runner.runRubyExample("io/vertx/example/web/helloworld/server.rb");
+	      Vertx3Runner.runRubyExample("io/vertx/example/web/helloworld/server.rb");
 	    }
 	  }
 
 	  static class RubyChatRunner {
-	    public static void main(String[] args) { Runner.runRubyExample("io/vertx/example/web/chat/server.rb");
+	    public static void main(String[] args) { Vertx3Runner.runRubyExample("io/vertx/example/web/chat/server.rb");
 	    }
 	  }
 
 	  static class RubyRealtimeRunner {
 	    public static void main(String[] args) {
-	      Runner.runRubyExample("io/vertx/example/web/realtime/server.rb");
+	      Vertx3Runner.runRubyExample("io/vertx/example/web/realtime/server.rb");
 	    }
 	  }
 
 	  static class RubySessionsRunner {
 	    public static void main(String[] args) {
-	      Runner.runRubyExample("io/vertx/example/web/sessions/server.rb");
+	      Vertx3Runner.runRubyExample("io/vertx/example/web/sessions/server.rb");
 	    }
 	  }
 
 	  static class RubyTemplatingRunner {
 	    public static void main(String[] args) {
-	      Runner.runRubyExample("io/vertx/example/web/templating/mvel/server.rb");
+	      Vertx3Runner.runRubyExample("io/vertx/example/web/templating/mvel/server.rb");
 	    }
 	  }
 
@@ -216,7 +216,7 @@ public class Runner {
 	    	
 	    }
 
-	    //System.setProperty("vertx.cwd", exampleDir);
+	    System.setProperty("vertx.cwd", exampleDir);
 	    Consumer<Vertx> runner = vertx -> {
 	      try {
 

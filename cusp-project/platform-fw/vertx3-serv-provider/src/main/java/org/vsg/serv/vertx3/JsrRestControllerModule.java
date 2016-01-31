@@ -3,17 +3,28 @@
  */
 package org.vsg.serv.vertx3;
 
+import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 import io.vertx.ext.web.Router;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,27 +144,96 @@ public class JsrRestControllerModule extends AbstractModule {
 		
 		Method[] methods = candidate.getMethods();
 		
+		
 		for (Method method : methods) {
 			System.out.println("-----------------");
 			Annotation[] lists =  method.getAnnotations();
-			
+			Map<String,java.io.Serializable> restMap = new LinkedHashMap<String,java.io.Serializable>();			
 			for (Annotation anno : lists) {
 				
+				if (anno instanceof GET) {
+					
+					restMap.put("methodType", javax.ws.rs.HttpMethod.GET);
+	
+				}
 				
-
+				else if ( anno instanceof Path) {
+					javax.ws.rs.Path path = (javax.ws.rs.Path)anno;
+					restMap.put("path", path.value());
+				}
 				
-				System.out.println( anno.annotationType() ) ;
-
-				
-				System.out.println(anno);
+				else if ( anno instanceof Produces) {
+					Produces produces = (Produces)anno;
+					restMap.put("produces", produces.value());
+				}
 			}
 			
+			bindRestHandlerMapping(restMap , method , baseRootPath);
+			
+		}
+	}
+	
+	/**
+	 * defined bindding
+	 * @param restMap
+	 * @param method
+	 * @param baseRootPath
+	 */
+	private void bindRestHandlerMapping(Map<String,java.io.Serializable> restMap , Method method , String baseRootPath) {
+		
+		StringBuilder bootPathBuilder = null;
+		if ( baseRootPath == null) {
+			bootPathBuilder = new StringBuilder();
+		} else {
+			bootPathBuilder = new StringBuilder(baseRootPath);
 		}
 		
+		String methodPath = (String)restMap.get("path");
+		if(methodPath != null) {
+			bootPathBuilder.append(methodPath);
+		}
+
+		// ---- scan method ahdnel ---
+		Vertx3HandlerMap v3Handler = new Vertx3HandlerMap();
+		v3Handler.setPath(bootPathBuilder.toString());
+		v3Handler.setMethod( (String)restMap.get("methodType") );
+		
+		String methodType = (String)restMap.get("methodType");
+		
+		if (methodType == null) {
+			router.get(v3Handler.getPath()).handler(v3Handler::invokeHandler);
+		}
+		/*
+		if (methodType.equalsIgnoreCase("POST")) {
+			
+		} else {
+			router.get(v3Handler.getPath()).handler(v3Handler::invokeHandler);
+		}
+		*/
+		
+		
+		/*
+
+		Parameter[]  params = method.getParameters();
+		
+		for (Parameter param : params) {
+			Annotation[] currentAnnoForParams = param.getAnnotations();
+			
+			for (Annotation currentAnno : currentAnnoForParams) {
+				
+			}
+
+		}
+		*/
+		
+		//Vertx3HandlerMap vhm = new Vertx3HandlerMap();
+		
+		//this.router.get("/path").handler( vhm::invokeMethod );
 		
 	}
 	
 	
+
 	
 	
 	
