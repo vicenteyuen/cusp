@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import org.vsg.cusp.serv.api.ServiceProvider;
+import org.vsg.cusp.serv.api.EngineProvider;
 
 /**
  * @author ruanweibiao
@@ -80,9 +80,9 @@ public class BootstrapAgent {
 		try {
 			
 			
-			Class<ServiceProvider> cls = (Class<ServiceProvider>)runtimeContainerClsLoader.loadClass("org.vsg.serv.vertx3.ServiceProviderBootstrap");
+			Class<EngineProvider> cls = (Class<EngineProvider>)runtimeContainerClsLoader.loadClass("org.vsg.serv.vertx3.EngineProviderBootstrap");
 			
-			ServiceProvider inst = cls.newInstance();
+			EngineProvider inst = cls.newInstance();
 			
 			inst.setRuntimeClassLoader(runtimeContainerClsLoader);
 			
