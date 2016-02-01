@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.vsg</groupId>
+    <artifactId>cusp-project</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>platform-build</artifactId>
+  <packaging>pom</packaging>
+  
+  <!--set the id which is refernceed to src/conf/[profile-id] -->
+  <profiles>
+  	<profile>
+  	  <id>single-node</id>
+  	  <properties>
+  	  	<platform.home>/cusp_server</platform.home>
+  	  </properties>
+	  <build>
+	 	<plugins>
+	 	  <plugin>
+	  	  	 <groupId>org.apache.maven.plugins</groupId>
+	  	  	 <artifactId>maven-assembly-plugin</artifactId>
+	  	  	 <version>2.6</version>
+	  	  	 <executions>
+	  	  	  <execution>
+	 			<id>platform-build</id>
+	  	  	   	<phase>package</phase>
+	  	  	   	<configuration>
+	  	  	   	  <descriptors>
+	  	  	   	  	<descriptor>src/conf/single-node.xml</descriptor>
+	  	  	   	  </descriptors>
+	  	  	   	</configuration>
+	  	  	   	<goals>
+	  	  	   	  <goal>single</goal>
+	  	  	   	</goals>
+	  	  	   </execution>
+	  	  	 </executions> 	  
+	 	  </plugin>
+	 	</plugins>
+	  </build>
+  	</profile>
+  </profiles>
+  
+  
+  <build>
+ 	<plugins>
+ 	  <plugin>
+  	  	 <groupId>org.apache.maven.plugins</groupId>
+  	  	 <artifactId>maven-assembly-plugin</artifactId>
+  	  	 <version>2.6</version>
+  	  	 <executions>
+  	  	  <execution>
+ 			<id>platform-build</id>
+  	  	   	<phase>package</phase>
+  	  	   	<configuration>
+  	  	   	  <descriptors>
+  	  	   	  	<descriptor>src/build-platform.xml</descriptor>
+  	  	   	  </descriptors>
+  	  	   	</configuration>
+  	  	   	<goals>
+  	  	   	  <goal>single</goal>
+  	  	   	</goals>
+  	  	   </execution>
+  	  	 </executions> 	  
+ 	  </plugin>
+ 	</plugins>
+  </build>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.vsg</groupId>
+  		<artifactId>vertx3-serv-provider</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
+</project>

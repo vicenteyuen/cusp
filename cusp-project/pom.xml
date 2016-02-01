@@ -6,9 +6,10 @@
   <packaging>pom</packaging>
   <modules>
   	<module>platform-fw</module>
+  	<module>plugins</module>
+  	<module>platform-build</module>
   	<module>platform-apps</module>
   	<module>web-apps</module>
-  	<module>plugins</module>
   </modules>
   <properties>
   	<guice.version>4.0</guice.version>
@@ -16,6 +17,7 @@
   	<logback.version>1.1.2</logback.version>
   	<jdk.version>1.8</jdk.version>
   	<encoding>UTF-8</encoding>
+  	<junit.version>4.11</junit.version>
   </properties>
   <dependencyManagement>
   	<dependencies>

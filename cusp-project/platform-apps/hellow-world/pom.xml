@@ -27,7 +27,7 @@
             <version>0.0.1-SNAPSHOT</version>
             <configuration>
               <debug>true</debug>
-              <runtimeHome>E:/cusp_data/runtime</runtimeHome>
+              <runtimeHome>/cusp-server</runtimeHome>
             </configuration>
           </plugin>
         </plugins>

@@ -1,22 +1,15 @@
 package org.vsg.serv.vertx3;
 
-import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
-import io.vertx.core.http.HttpServer;
-import io.vertx.ext.web.Router;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.serv.api.EngineProvider;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 public class EngineProviderBootstrap implements EngineProvider {
 	
@@ -32,44 +25,41 @@ public class EngineProviderBootstrap implements EngineProvider {
 	@Override
 	public void start() {
 		
-		String verticleID = Vert3HttpServer.class.getName();
 		
+		Vert3HttpVerticle verticle = new Vert3HttpVerticle();
+		
+		//String verticleID = "org.vsg.serv.vertx3.Vert3HttpServer";
 		VertxOptions options = new VertxOptions().setClustered(false);
 		
-		runServer(verticleID , options , null);
-     
+		DeploymentOptions deploymentOptions = null;
+	
+		runServer(verticle , options , deploymentOptions);
 
-
-        
-        //List<Class<?>>  clses  =  rcar.findCandidates("org.vsg", Path.class);
-       
-        
-        //System.out.println("mod inst : " + clses);
 
 	}
 	
 
-	private void runServer(String verticleID, VertxOptions options,
+	private void runServer(Verticle verticleID, VertxOptions options,
 			DeploymentOptions deploymentOptions) {
 		if (options == null) {
 			// Default parameter
 			options = new VertxOptions();
 		}
-		// Smart cwd detection
-
+		
 		Consumer<Vertx> runner = vertx -> {
 			try {
-
 				if (deploymentOptions != null) {
 					vertx.deployVerticle(verticleID, deploymentOptions);
 				} else {
+					
+
 					vertx.deployVerticle(verticleID);
 				}
 			} catch (Throwable t) {
 				t.printStackTrace();
 			}
 		};
-
+		
 		if (options.isClustered()) {
 			Vertx.clusteredVertx(options, res -> {
 				if (res.succeeded()) {
@@ -80,9 +70,16 @@ public class EngineProviderBootstrap implements EngineProvider {
 				}
 			});
 		} else {
+			
+			if (logger.isInfoEnabled()) {
+				logger.info("Startup under single node.");
+			}
+			
+			// --- mapping ---
 			Vertx vertx = Vertx.vertx(options);
 			runner.accept(vertx);
 		}
+		
 	}
 	
 

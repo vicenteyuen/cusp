@@ -9,5 +9,6 @@
   <packaging>pom</packaging>
   <modules>
   	<module>apps-plugin</module>
+  	<module>platform-plugin</module>
   </modules>
 </project>
