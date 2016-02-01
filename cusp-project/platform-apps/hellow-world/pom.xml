@@ -23,7 +23,7 @@
         <plugins>
           <plugin>
             <groupId>org.vsg</groupId>
-            <artifactId>apps-plugin</artifactId>
+            <artifactId>platform-maven-plugin</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <configuration>
               <debug>true</debug>

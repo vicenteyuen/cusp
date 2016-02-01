@@ -37,8 +37,11 @@ public class AppRunMojo extends AbstractAppMojo {
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		// TODO Auto-generated method stub
+		
+		System.out.println(runtimeHome);
 
 		// ---create classloader handle ---
+		/*
         ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
         
         BootstrapAgent serverAgent = BootstrapAgent.getInstance();
@@ -61,6 +64,7 @@ public class AppRunMojo extends AbstractAppMojo {
 
         
         serverAgent.startup(new String[]{});
+        */
         
         
         
