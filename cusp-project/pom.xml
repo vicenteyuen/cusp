@@ -10,6 +10,7 @@
   	<module>platform-build</module>
   	<module>platform-apps</module>
   	<module>web-apps</module>
+  	<module>platform-maven-plugin</module>
   </modules>
   <properties>
   	<guice.version>4.0</guice.version>

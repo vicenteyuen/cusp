@@ -2,16 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.vsg</groupId>
-    <artifactId>plugins</artifactId>
+    <artifactId>cusp-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>apps-plugin</artifactId>
-  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <platfrom-framework.version>0.0.1-SNAPSHOT</platfrom-framework.version>
+    <platfrom-framework.version>${project.parent.version}</platfrom-framework.version>
   </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -49,17 +46,9 @@
     	<groupId>org.vsg</groupId>
     	<artifactId>bootstrap</artifactId>
     	<version>${platfrom-framework.version}</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.vsg</groupId>
-    	<artifactId>vertx3-serv-provider</artifactId>
-    	<version>${platfrom-framework.version}</version>
-    	<scope>runtime</scope>
-    	<optional>true</optional>
-    </dependency>  	
-    
+    </dependency>    
   </dependencies>
-
+  
   <build>
     <plugins>
       <plugin>
@@ -67,7 +56,7 @@
         <artifactId>maven-plugin-plugin</artifactId>
         <version>3.4</version>
         <configuration>
-          <goalPrefix>app</goalPrefix>
+          <goalPrefix>platform</goalPrefix>
           <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>     
         </configuration>
         <executions>
@@ -111,7 +100,7 @@
     		</plugin>
     	</plugins>
     </pluginManagement>
-  </build>
-    
+  </build>  
+  <artifactId>platform-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
 </project>

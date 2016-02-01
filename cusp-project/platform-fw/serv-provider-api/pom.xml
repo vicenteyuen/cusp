@@ -3,4 +3,5 @@
   <artifactId>serv-provider-api</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <groupId>org.vsg</groupId>
+  <name>服务平台框架定义</name>
 </project>

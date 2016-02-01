@@ -27,7 +27,7 @@
 	  	  	   	<phase>package</phase>
 	  	  	   	<configuration>
 	  	  	   	  <descriptors>
-	  	  	   	  	<descriptor>src/conf/single-node.xml</descriptor>
+	  	  	   	  	<descriptor>src/build/single-node.xml</descriptor>
 	  	  	   	  </descriptors>
 	  	  	   	</configuration>
 	  	  	   	<goals>
@@ -66,6 +66,11 @@
  	</plugins>
   </build>
   <dependencies>
+  	<dependency>
+  		<groupId>org.vsg</groupId>
+  		<artifactId>bootstrap</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   	<dependency>
   		<groupId>org.vsg</groupId>
   		<artifactId>vertx3-serv-provider</artifactId>
