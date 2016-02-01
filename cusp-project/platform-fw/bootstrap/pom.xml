@@ -25,7 +25,7 @@
   	<dependency>
   		<groupId>org.vsg</groupId>
   		<artifactId>serv-provider-api</artifactId>
-  		<version>${parent.version}</version>
+  		<version>${project.parent.version}</version>
   		<optional>true</optional>
   	</dependency>
   </dependencies>

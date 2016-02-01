@@ -3,6 +3,7 @@
  */
 package org.vsg.cusp.plugins.apps;
 
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 
@@ -21,19 +22,22 @@ import org.vsg.cusp.bootstrap.BootstrapAgent;
  * @author Vison Ruan
  *
  */
-@Mojo( name = "run", requiresDependencyResolution = ResolutionScope.TEST, threadSafe = true )
+@Mojo( name = "run", requiresDependencyResolution = ResolutionScope.RUNTIME, threadSafe = true )
 @Execute( phase = LifecyclePhase.PROCESS_CLASSES )
 public class AppRunMojo extends AbstractAppMojo {
 
 	
     @Parameter( defaultValue = "${project.artifacts}", required = true, readonly = true )
     private Set<Artifact> dependencies;	
+    
+    @Parameter( defaultValue="${project.runtimeHome}" ,required = true)
+    private File runtimeHome;
+    
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		// TODO Auto-generated method stub
-		
-		
+
 		// ---create classloader handle ---
         ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
         
