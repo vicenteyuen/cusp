@@ -61,6 +61,11 @@
   	</dependency>
   	<dependency>
   		<groupId>org.vsg</groupId>
+  		<artifactId>rest-soa-app</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.vsg</groupId>
   		<artifactId>vertx3-serv-provider</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>

@@ -7,30 +7,21 @@ import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.sysmng.TestRestService;
 import org.vsg.serv.vertx3.Vert3HttpVerticle;
 
-public class BootstrapServletContextListener implements ServletContextListener {
-	
-	private static Logger logger = LoggerFactory.getLogger( BootstrapServletContextListener.class );	
-	
-	
-	// --- build vertx context
+import com.google.inject.AbstractModule;
 
+public class BootstrapVertx3Module extends AbstractModule {
+
+	private static Logger logger = LoggerFactory.getLogger( BootstrapVertx3Module.class );	
+	
+	
 	@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
+	protected void configure() {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void contextInitialized(ServletContextEvent arg0) {
-		// TODO Auto-generated method stub
-		
 		try {
 			Vert3HttpVerticle verticle = new Vert3HttpVerticle();
 			
@@ -42,10 +33,25 @@ public class BootstrapServletContextListener implements ServletContextListener {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
-
+		}
+		
+		
+		
+		this.bind(TestRestService.class);
+		
+		
 	}
 	
+	
+	
+	// --- bind object ---
+	
+	
+	
+	
+	
+	
+
 	private void runServer(Verticle verticleID, VertxOptions options,
 			DeploymentOptions deploymentOptions) {
 		if (options == null) {
@@ -58,10 +64,11 @@ public class BootstrapServletContextListener implements ServletContextListener {
 				if (deploymentOptions != null) {
 					vertx.deployVerticle(verticleID, deploymentOptions);
 				} else {
-					
-
 					vertx.deployVerticle(verticleID);
 				}
+				// --- bind vertx ---
+				this.bind(Vertx.class).toInstance( vertx );
+				
 			} catch (Throwable t) {
 				t.printStackTrace();
 			}
@@ -85,8 +92,9 @@ public class BootstrapServletContextListener implements ServletContextListener {
 			// --- mapping ---
 			Vertx vertx = Vertx.vertx(options);
 			runner.accept(vertx);
+			
 		}
 	}
-			
-
+	
+	
 }
