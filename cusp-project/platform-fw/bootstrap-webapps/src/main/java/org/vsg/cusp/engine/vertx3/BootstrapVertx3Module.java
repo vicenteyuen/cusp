@@ -1,16 +1,17 @@
 package org.vsg.cusp.engine.vertx3;
 
-import java.util.function.Consumer;
-
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 
+import java.util.function.Consumer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.sysmng.TestRestService;
 import org.vsg.serv.vertx3.Vert3HttpVerticle;
+import org.vsg.serv.vertx3.Vertx3Provider;
 
 import com.google.inject.AbstractModule;
 
@@ -22,21 +23,28 @@ public class BootstrapVertx3Module extends AbstractModule {
 	@Override
 	protected void configure() {
 		// TODO Auto-generated method stub
-		try {
+/*		try {
 			Vert3HttpVerticle verticle = new Vert3HttpVerticle();
 			
 			VertxOptions options = new VertxOptions().setClustered(false);
 			
 			DeploymentOptions deploymentOptions = null;
 			
-			runServer(verticle , options , deploymentOptions);
+			//runServer(verticle , options , deploymentOptions);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
+		VertxOptions options = new VertxOptions().setClustered(false);
+		
+		DeploymentOptions deploymentOptions = null;
+		
+		Vertx3Provider vertxProv = new Vertx3Provider(options , deploymentOptions);
 		
 		
-		
+		// --- bind object
+		this.bind(Vertx.class).toProvider(vertxProv);
 		this.bind(TestRestService.class);
 		
 		
@@ -66,8 +74,6 @@ public class BootstrapVertx3Module extends AbstractModule {
 				} else {
 					vertx.deployVerticle(verticleID);
 				}
-				// --- bind vertx ---
-				this.bind(Vertx.class).toInstance( vertx );
 				
 			} catch (Throwable t) {
 				t.printStackTrace();
@@ -77,6 +83,7 @@ public class BootstrapVertx3Module extends AbstractModule {
 		if (options.isClustered()) {
 			Vertx.clusteredVertx(options, res -> {
 				if (res.succeeded()) {
+					
 					Vertx vertx = res.result();
 					runner.accept(vertx);
 				} else {

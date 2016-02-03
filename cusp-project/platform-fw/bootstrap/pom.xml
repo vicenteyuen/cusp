@@ -21,12 +21,4 @@
       </plugin>
     </plugins>
    </build>  
-  <dependencies>
-  	<dependency>
-  		<groupId>org.vsg</groupId>
-  		<artifactId>serv-provider-api</artifactId>
-  		<version>${project.parent.version}</version>
-  		<optional>true</optional>
-  	</dependency>
-  </dependencies>
 </project>
