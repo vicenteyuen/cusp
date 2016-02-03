@@ -10,17 +10,14 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.vsg.cusp.bootstrap.BootstrapAgent;
 
 /**
  * @author Vison Ruan
@@ -62,7 +59,7 @@ public class AppRunMojo extends AbstractAppMojo {
 
 			Method instanceMethod = bootCls.getMethod("getInstance");
 			
-			
+			/*
 			BootstrapAgent inst = (BootstrapAgent)instanceMethod.invoke(null);
 			
 			inst.setPlatformHome( platformHome );
@@ -83,9 +80,9 @@ public class AppRunMojo extends AbstractAppMojo {
 			
 			
 			inst.startup(new String[]{});
+			*/
 			
-		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException  e) {
 			// TODO Auto-generated catch block
 			throw new MojoExecutionException(e.getLocalizedMessage());
 		}
