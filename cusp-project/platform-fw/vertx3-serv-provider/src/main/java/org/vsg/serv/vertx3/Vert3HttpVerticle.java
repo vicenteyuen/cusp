@@ -25,6 +25,8 @@ public class Vert3HttpVerticle extends AbstractVerticle {
 		
         Router router = Router.router(vertx);
         
+        
+        
 
 		/*
     	Injector injector = Guice.createInjector(

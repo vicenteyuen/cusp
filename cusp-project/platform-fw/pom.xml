@@ -12,7 +12,7 @@
   <description>使用预定义好的框架模�?</description>
   <modules>
   	<module>bootstrap</module>
-    <module>vertx3-webapps</module>
+    <module>rest-soa-app</module>
     <module>bootstrap-webapps</module>
   </modules>
   <properties>
