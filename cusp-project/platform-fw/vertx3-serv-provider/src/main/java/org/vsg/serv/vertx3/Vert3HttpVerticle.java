@@ -23,7 +23,9 @@ public class Vert3HttpVerticle extends AbstractVerticle {
 		scanPackages.add("org.vsg");
 		
 		
-        Router router = Router.router(vertx);			
+        Router router = Router.router(vertx);
+        
+
 		/*
     	Injector injector = Guice.createInjector(
     			new JsrRestControllerModule(router , runtimeClassLoader , scanPackages));
@@ -33,10 +35,9 @@ public class Vert3HttpVerticle extends AbstractVerticle {
         //JsrRestControllerModule  modInst =  injector.getInstance(JsrRestControllerModule.class);
 
     	HttpServer  httpServer = vertx.createHttpServer();
-    	System.out.println(httpServer + " , " + router);
 
-    	httpServer.requestHandler(router::accept).listen(8080);
-        logger.info("Startuped server on port : [8080]");   	
+    	httpServer.requestHandler(router::accept).listen(8090);
+        logger.info("Startuped server on port : [8090]");   	
    	
     }
 

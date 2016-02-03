@@ -40,4 +40,6 @@
   		</dependency>
   	</dependencies>
   </dependencyManagement>
+  <name>Custom Unified Service Platform</name>
+  <description>自定义统一平台服务</description>
 </project>

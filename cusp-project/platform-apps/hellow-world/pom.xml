@@ -13,6 +13,24 @@
   		<version>2.0.1</version>
   	</dependency>
   </dependencies>
+
+      <build>
+      	<!-- mark plugin -->
+        <plugins>
+          <plugin>
+            <groupId>org.vsg</groupId>
+            <artifactId>platform-maven-plugin</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <debug>true</debug>
+              <platformHome>/dev_env/cusp-server</platformHome>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
   
   <!-- create profile -->
   <profiles>
@@ -25,9 +43,12 @@
             <groupId>org.vsg</groupId>
             <artifactId>platform-maven-plugin</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <configuration>
               <debug>true</debug>
-              <runtimeHome>/dev_env/cusp-server</runtimeHome>
+              <platformHome>/dev_env/cusp-server</platformHome>
             </configuration>
           </plugin>
         </plugins>

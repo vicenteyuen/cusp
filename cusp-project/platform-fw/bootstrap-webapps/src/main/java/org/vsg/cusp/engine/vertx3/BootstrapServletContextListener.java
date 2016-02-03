@@ -1,44 +1,51 @@
-package org.vsg.serv.vertx3;
+package org.vsg.cusp.engine.vertx3;
+
+import java.util.function.Consumer;
 
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 
-import java.util.function.Consumer;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vsg.cusp.serv.api.EngineProvider;
+import org.vsg.serv.vertx3.Vert3HttpVerticle;
 
-public class EngineProviderBootstrap implements EngineProvider {
+public class BootstrapServletContextListener implements ServletContextListener {
 	
-	private static Logger logger = LoggerFactory.getLogger(AppServer.class);	
+	private static Logger logger = LoggerFactory.getLogger( BootstrapServletContextListener.class );	
 	
-	private ClassLoader runtimeClassLoader;
 	
-	public void setRuntimeClassLoader(ClassLoader runtimeClassLoader)  {
-		this.runtimeClassLoader = runtimeClassLoader;
-	}
-	
+	// --- build vertx context
 
 	@Override
-	public void start() {
-		
-		
-		Vert3HttpVerticle verticle = new Vert3HttpVerticle();
-		
-		//String verticleID = "org.vsg.serv.vertx3.Vert3HttpServer";
-		VertxOptions options = new VertxOptions().setClustered(false);
-		
-		DeploymentOptions deploymentOptions = null;
-	
-		runServer(verticle , options , deploymentOptions);
+	public void contextDestroyed(ServletContextEvent arg0) {
+		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void contextInitialized(ServletContextEvent arg0) {
+		// TODO Auto-generated method stub
+		
+		try {
+			Vert3HttpVerticle verticle = new Vert3HttpVerticle();
+			
+			VertxOptions options = new VertxOptions().setClustered(false);
+			
+			DeploymentOptions deploymentOptions = null;
+			
+			runServer(verticle , options , deploymentOptions);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 
 	}
 	
-
 	private void runServer(Verticle verticleID, VertxOptions options,
 			DeploymentOptions deploymentOptions) {
 		if (options == null) {
@@ -79,10 +86,7 @@ public class EngineProviderBootstrap implements EngineProvider {
 			Vertx vertx = Vertx.vertx(options);
 			runner.accept(vertx);
 		}
-		
 	}
-	
-
-
+			
 
 }

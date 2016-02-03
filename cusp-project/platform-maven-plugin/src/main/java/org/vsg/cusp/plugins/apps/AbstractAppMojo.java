@@ -3,6 +3,8 @@
  */
 package org.vsg.cusp.plugins.apps;
 
+import java.io.File;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -22,16 +24,8 @@ public abstract class AbstractAppMojo extends AbstractMojo {
 	public MavenProject getProject() {
 		return mavenProject;
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see org.apache.maven.plugin.Mojo#execute()
-	 */
-	@Override
-	public void execute() throws MojoExecutionException, MojoFailureException {
-		// TODO Auto-generated method stub
 
-	}
 	
 
 	
