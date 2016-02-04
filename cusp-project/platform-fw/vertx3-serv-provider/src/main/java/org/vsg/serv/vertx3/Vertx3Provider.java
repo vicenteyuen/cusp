@@ -55,8 +55,7 @@ public class Vertx3Provider implements Provider<Vertx> {
 
 		if (options.isClustered()) {
 			
-			// --- empty code ---
-			
+
 
 		}
 		else {

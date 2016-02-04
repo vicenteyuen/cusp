@@ -18,9 +18,10 @@ public class TestServiceVerticle extends AbstractVerticle {
     @Override
     public void start() throws Exception {
 		// TODO Auto-generated method stub
+    	vertx.eventBus().publish("moduleStarted", "save monty");
 
 
-        
+        System.out.println("service");
 	
    	
     }

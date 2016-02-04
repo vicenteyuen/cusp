@@ -1,4 +1,4 @@
-package org.vsg.cusp.sysmng;
+package org.vsg.cusp.apps.productmng;
 
 import io.vertx.core.Vertx;
 
@@ -16,8 +16,8 @@ import javax.ws.rs.core.Response;
  *
  */
 
-@Path("/message")
-public class TestRestService {
+@Path("/products")
+public class ProductRest {
 	
 	
 	// --- get the proxy ---

@@ -8,7 +8,7 @@
   <artifactId>platform-apps</artifactId>
   <packaging>pom</packaging>
   <modules>
-  	<module>hellow-world</module>
+  <module>product-mng</module>
   </modules>
   <dependencies>
   	<dependency>
