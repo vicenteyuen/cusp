@@ -9,6 +9,7 @@
   <packaging>pom</packaging>
   <modules>
   <module>product-mng</module>
+  <module>system-mng</module>
   </modules>
   <dependencies>
   	<dependency>
