@@ -31,6 +31,7 @@
 		<servlet-class>
 			org.jboss.resteasy.plugins.server.servlet.HttpServlet30Dispatcher
 		</servlet-class>
+		<async-supported>true</async-supported> 
 	</servlet>
 
 	<servlet-mapping>
