@@ -1,5 +1,6 @@
 package org.vsg.cusp.sysmng;
 
+import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 
 import javax.inject.Inject;
@@ -28,26 +29,27 @@ public class TestRestService {
 	
 	@GET
 	@Path("/{param}")
-	public void printMessage(@PathParam("param") String msg , @Suspended final AsyncResponse asyncResponse) {
+	public void printMessage(@PathParam("param") String msg , @Suspended AsyncResponse asyncResponse ) {
 		
-	      Thread t = new Thread()
-	      {
-	         @Override
-	         public void run()
-	         {
-	            try
-	            {
-	               Response jaxrs = Response.ok("2000").type(MediaType.TEXT_PLAIN).build();
+		// ---- access vertx module ---
+		
+		
+		
+		vertx.deployVerticle( new AbstractVerticle() {
+
+			@Override
+			public void start() throws Exception {
+				// TODO Auto-generated method stub
+				
+				// --- get the result event---
+				
+				
+	               Response jaxrs = Response.ok("hello world, VISON").type(MediaType.TEXT_PLAIN).build();
 	               asyncResponse.resume(jaxrs);
-	            }
-	            catch (Exception e)
-	            {
-	               e.printStackTrace();
-	            }
-	         }
-	      };
-	      t.start();
-		
+			}
+			
+		});
+
 	}
 
 	

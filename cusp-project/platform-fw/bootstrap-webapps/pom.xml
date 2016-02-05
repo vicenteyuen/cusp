@@ -61,12 +61,12 @@
   	</dependency>
   	<dependency>
   		<groupId>org.vsg</groupId>
-  		<artifactId>rest-soa-app</artifactId>
+  		<artifactId>vertx3-serv-provider</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>org.vsg</groupId>
-  		<artifactId>vertx3-serv-provider</artifactId>
+  		<artifactId>product-pri-runtime</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
@@ -78,13 +78,7 @@
         <artifactId>jetty-maven-plugin</artifactId>
         <version>9.3.7.v20160115</version>
         <configuration>
-          <webApp>
-          	<contextPath>/rest</contextPath>
-          </webApp>
-          <!-- defind http client connector -->
-          <httpConnector>
-          	<port>8000</port>
-          </httpConnector>
+        	<jettyXml>${project.basedir}/src/test/resources/jetty.xml</jettyXml>
         </configuration>
       </plugin>
     </plugins>

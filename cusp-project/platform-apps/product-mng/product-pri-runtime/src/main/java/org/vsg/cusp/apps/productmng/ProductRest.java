@@ -8,6 +8,9 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -26,10 +29,10 @@ public class ProductRest {
 
 	
 	@GET
-	@Path("/{param}")
-	public Response printMessage(@PathParam("param") String msg) {
-		
-		String result = "Restful example" + msg;
+	@Path("/{id}")
+	public void getProduct(
+			@Suspended AsyncResponse asyncResponse , 
+			@PathParam("id") String productId) {
 
 		CountDownLatch latch = new CountDownLatch(2);
 		vertx.eventBus().localConsumer("moduleStarted").handler(message -> {
@@ -39,14 +42,21 @@ public class ProductRest {
 
 		
 		// --- call service verticle ---
-		vertx.deployVerticle("service:vertx-services" , res -> {
-			System.out.println(res.succeeded());
+		vertx.deployVerticle("service:vertx.mods.vertx-services" , res -> {
+			
+			System.out.println("product : " + productId + " , " + res.succeeded() );
+
+			// --- call response handle ---
+            Response jaxrs = Response.ok("hello world, VISON").type(MediaType.TEXT_PLAIN).build();
+            asyncResponse.resume(jaxrs);	
+
+
+			
+			
+			
 		});
 
 
-
-		
-		return Response.status(200).entity(result).build();
 		
 	}
 

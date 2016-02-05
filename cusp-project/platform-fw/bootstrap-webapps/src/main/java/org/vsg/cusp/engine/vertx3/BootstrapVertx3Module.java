@@ -10,7 +10,6 @@ import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vsg.cusp.sysmng.TestRestService;
 import org.vsg.serv.vertx3.Vertx3Provider;
 
 import com.google.inject.AbstractModule;
@@ -48,7 +47,9 @@ public class BootstrapVertx3Module extends AbstractModule {
 		
 		// --- bind object
 		this.bind(Vertx.class).toInstance(vertx);
-		this.bind(TestRestService.class);
+		
+		this.bind(org.vsg.cusp.apps.productmng.ProductRest.class);
+
 		
 		
 	}

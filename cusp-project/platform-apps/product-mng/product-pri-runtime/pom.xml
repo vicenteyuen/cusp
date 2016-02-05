@@ -6,4 +6,11 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>product-pri-runtime</artifactId>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.vsg</groupId>
+  		<artifactId>product-pub-runtime</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

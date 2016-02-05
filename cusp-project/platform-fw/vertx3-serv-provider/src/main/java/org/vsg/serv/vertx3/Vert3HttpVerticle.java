@@ -46,6 +46,7 @@ public class Vert3HttpVerticle extends AbstractVerticle {
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
 		// TODO Auto-generated method stub
+
 		super.start(startFuture);
 	}
 
