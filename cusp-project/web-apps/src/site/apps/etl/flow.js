@@ -3,76 +3,177 @@
  */
 
 AppMod.setConfig({
+
     /*
     paths:{
-        jquery1: '../../js/jquery-2.1.4'
+        'comps/treeview': '../../js/react-plugin/treeview/tv'
     }
     */
-})
 
+})
 
 AppMod.application({
     // --- module , plugin , component defined
-    mods: ['jquery','app' , 'jsPlumb'],
+    mods: ['jsPlumbToolkit' , 'theme-AdminLTE'],
 
-    launch : function(arguments) {
+    launch : function() {
 
-        // --- create handle ---
-        jsPlumb.ready(function() {
+        /*
 
-            var color = "gray";
-            // --- option ---
-            var instance = jsPlumb.getInstance({
-                Connector: [ "Bezier", { curviness: 50 } ],
-                DragOptions: { cursor: "pointer", zIndex: 2000 },
-                PaintStyle: { strokeStyle: color, lineWidth: 2 },
-                EndpointStyle: { radius: 9, fillStyle: color },
-                HoverPaintStyle: {strokeStyle: "#ec9f2e" },
-                EndpointHoverStyle: {fillStyle: "#ec9f2e" },
-                Container: "canvas"
+        try {
 
-            })
+            // --- load tree view component ---
+            TreeView = React.createFactory(TreeView);
+            React.render(TreeView({
+                data : dataOperTree
+            }), document.getElementById('oper-treeview'));
 
+        } catch (e) {
+            if (window.console) {
+                // --- show error ---
+                console.log(e);
+            }
+        }
+        */
+
+
+
+
+
+
+
+
+
+
+        // --- binding event ---
+        $("#import-from-csv").bind('click',function() {
+            // --- build instance ---
 
         })
 
-        // suspend drawing and initialise.
-        instance.batch(function () {
-            // declare some common values:
-            var arrowCommon = { foldback: 0.7, fillStyle: color, width: 14 },
-            // use three-arg spec to create two different arrows with the common values:
-                overlays = [
-                    [ "Arrow", { location: 0.7 }, arrowCommon ],
-                    [ "Arrow", { location: 0.3, direction: -1 }, arrowCommon ]
-                ];
 
-            // add endpoints, giving them a UUID.
-            // you DO NOT NEED to use this method. You can use your library's selector method.
-            // the jsPlumb demos use it so that the code can be shared between all three libraries.
-            var windows = jsPlumb.getSelector(".chart-demo .window");
-            for (var i = 0; i < windows.length; i++) {
-                instance.addEndpoint(windows[i], {
-                    uuid: windows[i].getAttribute("id") + "-bottom",
-                    anchor: "Bottom",
-                    maxConnections: -1
-                });
-                instance.addEndpoint(windows[i], {
-                    uuid: windows[i].getAttribute("id") + "-top",
-                    anchor: "Top",
-                    maxConnections: -1
-                });
-            }
+        jsPlumbToolkit.ready(function() {
 
-            instance.connect({uuids: ["chartWindow3-bottom", "chartWindow6-top" ], overlays: overlays, detachable: true, reattach: true});
-            instance.connect({uuids: ["chartWindow1-bottom", "chartWindow2-top" ], overlays: overlays});
-            instance.connect({uuids: ["chartWindow1-bottom", "chartWindow3-top" ], overlays: overlays});
-            instance.connect({uuids: ["chartWindow2-bottom", "chartWindow4-top" ], overlays: overlays});
-            instance.connect({uuids: ["chartWindow2-bottom", "chartWindow5-top" ], overlays: overlays});
 
-            instance.draggable(windows);
+            // --- toolkit setup ---
+
+            // prepare some data
+            var data = {
+                nodes:[
+                    { id:"1", label:"jsPlumb" },
+                    { id:"2", label:"Toolkit" },
+                    { id:"3", label:"Hello" },
+                    { id:"4", label:"World" }
+                ],
+                edges:[
+                    { source:"1", target:"2" },
+                    { source:"2", target:"3" },
+                    { source:"3", target:"4" },
+                    { source:"4", target:"1" }
+                ]
+            };
+
+
+
+            // --- declare tookit ---
+            var toolkit = jsPlumbToolkit.newInstance();
+
+
+
+            var mainElement = document.querySelector("#jtk-main"),
+                canvasElement = mainElement.querySelector(".jtk-canvas");
+                miniviewElement = mainElement.querySelector(".miniview");
+
+
+            var renderer = toolkit.render({
+                container:canvasElement,
+                miniview:{
+                    container:miniviewElement
+                },
+                layout:{
+                    type:"Spring"
+                },
+                zoomToFit:true,
+                view:{
+                    nodes:{
+                        "default":{
+                            template:"tmplNode"
+                        }
+                    }
+                },
+                jsPlumb:{
+                    Connector:"Bezier",
+                    Anchor:"Continuous",
+                    Endpoint:["Dot", { radius:3 }],
+                    PaintStyle: { lineWidth: 1, strokeStyle: '#89bcde' },
+                    EndpointStyle: { fillStyle:"#89bcde" }
+                }
+
+            });
+
+            // load the data.
+            toolkit.load({
+                data:data
+            });
 
         });
 
-        jsPlumb.fire("jsPlumbDemoLoaded", instance);
+
+
+
+
+
+
+
+
+
+        $.AdminLTE.tree('.step-container');
+
+
+
+
+
+
+        //
+
+
     }
 })
+
+
+/* define the flow menu object handle  */
+var dataOperTree = [
+    {
+        id: '5',
+        text: "Parent 1",
+        icon: "btn-folder",
+        nodes: [
+            {
+                text: "Child 1",
+                nodes: [
+                    {
+                        text: "Grandchild 1"
+                    },
+                    {
+                        text: "Grandchild 2"
+                    }
+                ]
+            },
+            {
+                text: "Child 2"
+            }
+        ]
+    },
+    {
+        text: "Parent 2"
+    },
+    {
+        text: "Parent 3"
+    },
+    {
+        text: "Parent 4"
+    },
+    {
+        text: "Parent 5"
+    }
+];

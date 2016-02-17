@@ -951,7 +951,7 @@ FixedHeader.oDoc = {
 
 /*
  * Variable: afnScroll
- * Purpose:  Array of functions that are to be used for the scrolling components
+ * Purpose:  Array of functions that are to be used for the scrolling comps
  * Scope:    FixedHeader
  */
 FixedHeader.afnScroll = [];
@@ -990,7 +990,7 @@ FixedHeader.version = "2.1.2";
  */
 
 /*
- * Just one 'scroll' event handler in FixedHeader, which calls the required components. This is
+ * Just one 'scroll' event handler in FixedHeader, which calls the required comps. This is
  * done as an optimisation, to reduce calculation and proagation time
  */
 $(window).scroll( function () {

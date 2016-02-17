@@ -2955,14 +2955,14 @@
 
 // ----------------------------- end default type --------------------------------------------
 
-            // all components can generate events
+            // all comps can generate events
 
             if (params.events) {
                 for (i in params.events)
                     self.bind(i, params.events[i]);
             }
 
-            // all components get this clone function.
+            // all comps get this clone function.
             // TODO issue 116 showed a problem with this - it seems 'a' that is in
             // the clone function's scope is shared by all invocations of it, the classic
             // JS closure problem.  for now, jsPlumb does a version of this inline where
@@ -3171,7 +3171,7 @@
         },
         setPaintStyle: function (style, doNotRepaint) {
 //		    	this._jsPlumb.paintStyle = jsPlumb.extend({}, style);
-// TODO figure out if we want components to clone paintStyle so as not to share it.
+// TODO figure out if we want comps to clone paintStyle so as not to share it.
             this._jsPlumb.paintStyle = style;
             this._jsPlumb.paintStyleInUse = this._jsPlumb.paintStyle;
             _updateHoverStyle(this);
@@ -3182,7 +3182,7 @@
         },
         setHoverPaintStyle: function (style, doNotRepaint) {
             //this._jsPlumb.hoverPaintStyle = jsPlumb.extend({}, style);
-// TODO figure out if we want components to clone paintStyle so as not to share it.
+// TODO figure out if we want comps to clone paintStyle so as not to share it.
             this._jsPlumb.hoverPaintStyle = style;
             _updateHoverStyle(this);
             if (!doNotRepaint) this.repaint();
@@ -3344,7 +3344,7 @@
                     jp = (t && t.parentNode ? t.parentNode._jsPlumb : null) || (t ? t._jsPlumb : null) || (t && t.parentNode && t.parentNode.parentNode ? t.parentNode.parentNode._jsPlumb : null);
                 if (jp) {
                     jp.fire(id, jp, e);
-                    // jsplumb also fires every event coming from components/overlays. That's what the test for `jp.component` is for.
+                    // jsplumb also fires every event coming from comps/overlays. That's what the test for `jp.component` is for.
                     _currentInstance.fire(id, jp.component || jp, e);
                 }
             };
@@ -6395,7 +6395,7 @@
  *
  * Provides a way to visually connect elements on an HTML page, using SVG.
  *
- * This file contains code for components that support overlays.
+ * This file contains code for comps that support overlays.
  *
  * Copyright (c) 2010 - 2015 jsPlumb (hello@jsplumbtoolkit.com)
  *
@@ -11987,7 +11987,7 @@
     // ************************** / SVG utility methods ********************************************
 
     /*
-     * Base class for SVG components.
+     * Base class for SVG comps.
      */
     var SvgComponent = function (params) {
         var pointerEventsSpec = params.pointerEventsSpec || "all", renderer = {};

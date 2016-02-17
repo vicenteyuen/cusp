@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Example Test 1</title>
+    <title>ETL流程定义</title>
     <!-- Bootstrap core CSS -->
     <link href="../../resources/css/bootstrap.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -14,24 +14,30 @@
     <link rel="stylesheet" href="../../resources/css/ionicons.css">
 
     <!-- Theme style -->
-    <link rel="stylesheet" href="../../resources/css/AdminLTE.css">
+    <link rel="stylesheet" href="../../resources/css/theme-AdminLTE/AdminLTE.css">
 
     <link rel="stylesheet" href="../../resources/css/bootstrap-theme-fix.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="../../resources/css/skins/_all-skins.css">
-
-
+    <link rel="stylesheet" href="../../resources/css/theme-AdminLTE/skins/_all-skins.css">
 
     <link rel="stylesheet" href="flow-app.css">
+    <link rel="stylesheet" href="jsPlumbToolkit-flow.css">
+
+    <!-- first load react js -->
+    <script src="../../js/react/core/0.14.7/react.min.js"></script>
+    <script src="../../js/react/core/0.14.7/react-dom.min.js"></script>
+    <script src="../../js/babel/core/5.8.23/browser.min.js"></script>
+    <!-- support react js -->
+    <script src="../../js/react/react-bootstrap/0.28.3/react-bootstrap.min.js"></script>
+
 
     <script src="../../js/app-lib.js"></script>
     <script src="../../js/require.js" data-main="flow"></script>
 
 
-    <link rel="stylesheet" href="jsPlumbToolkit-demo.css">
-</head>
 
+</head>
 <body class="hold-transition skin-blue sidebar-mini">
 
 <div class="wrapper">
@@ -345,10 +351,10 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                流程图
+            <h5>
+                ETL处理流程
                 <small>Version 0.1</small>
-            </h1>
+            </h5>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
                 <li class="active">仪表盘</li>
@@ -359,28 +365,72 @@
         <section class="content">
             <!-- Main row -->
             <div class="row">
-                <!-- Left col -->
                 <div class="col-md-12">
                     <!-- MAP & BOX PANE -->
-                    <div class="box box-success">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Visitors Report</h3>
-                            <div class="box-tools pull-right">
-                                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div><!-- /.box-header -->
-                        <div class="box-body no-padding">
+                    <div class="box">
+                        <div class="box-body">
                             <div class="row">
-                                <div class="col-md-12">
+
+                                <div class="col-md-2">
+                                    <div id="oper-treeview"></div>
+
+                                    <!-- step tree -->
+                                    <!--
+                                    <ul class="step-container no-padding-left">
+                                        <li class="treeview">
+                                            <a href="#">
+                                                <i class="fa fa-folder"></i> <span>输入</span>
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </a>
+                                            <ul class="treeview-menu no-padding-left" style="display: none;">
+                                                <li><a href="#" id="import-from-csv"><i class="fa fa-circle-o"></i>CSV文件输入</a></li>
+                                                <li class="active">
+                                                    <a href="#"><i class="fa fa-circle-o"></i>Excel输入 <i class="fa fa-angle-left pull-right"></i></a>
+                                                    <ul class="treeview-menu menu-open" style="display: block;">
+                                                        <li><a href="#"><i class="fa fa-circle-o"></i> Level Two</a></li>
+                                                        <li class="">
+                                                            <a href="#"><i class="fa fa-circle-o"></i> Level Two <i class="fa fa-angle-left pull-right"></i></a>
+                                                            <ul class="treeview-menu menu-open" style="display: block;">
+                                                                <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
+                                                                <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    -->
+
+                                </div>
+
+
+                                <div class="col-md-10">
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                    </div>
+                                    <div class="btn-toolbar">
+                                        <!-- toolbar -->
+                                        <a class="">
+                                            <i class="fa fa-play"></i> 执行
+                                        </a>
+                                        <a class="">
+                                            <i class="fa fa-stop"></i> 停止
+                                        </a>
+                                        <a class="">
+                                            <i class="fa fa-bug"></i> 调试
+                                        </a>
+                                    </div>
                                     <div class="pad">
                                         <!-- Map will be created here -->
-                                        <div id="jtk-main" style="height: 325px;">
-                                            <!-- demo -->
-                                            <div id="canvas"></div>
+                                        <div id="jtk-main" class="jtk-main">
+                                            <!-- defined object -->
+                                            <div id="canvas" class="jtk-canvas" style="border:1px solid #999;height:28.3rem">
+                                                <div class="miniview"></div>
 
-
-
+                                            </div>
                                         </div>
                                     </div>
                                 </div><!-- /.col -->
@@ -393,13 +443,14 @@
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
 
-
+    <!--
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
             <b>Version</b> 2.3.0
         </div>
         <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
     </footer>
+    -->
 
 
 </div>

@@ -44,7 +44,7 @@ public class UserRest {
 		
 		// --- call service verticle ---
 		try {
-			serviceInvokerManager.invokeService("service:vertx.mods.vertx-services", params, invokeResult -> {
+			serviceInvokerManager.invokeService("class:org.vsg.cusp.apps.system.service.UserServiceFacadeImpl:saveUser", params, invokeResult -> {
 				
 				Response response = Response.ok("hello world, VISON123").type(MediaType.TEXT_PLAIN).build();
 				asyncResponse.resume(response);

@@ -1,20 +1,32 @@
+
+/* current page element defined */
+ul.no-padding-left {
+    padding-left:0;
+}
+
+
 .demo {
     /* for IE10+ touch devices */
     touch-action:none;
 }
 
-.flowchart-demo .window {
+
+
+/**
+* init flow char window
+*/
+#canvas .window {
     border: 1px solid #346789;
-    box-shadow: 2px 2px 19px #aaa;
-    -o-box-shadow: 2px 2px 19px #aaa;
-    -webkit-box-shadow: 2px 2px 19px #aaa;
-    -moz-box-shadow: 2px 2px 19px #aaa;
-    -moz-border-radius: 0.5em;
-    border-radius: 0.5em;
+    box-shadow: 0.01rem 0.01rem 0.05rem #aaa;
+    -o-box-shadow: 0.01rem 0.01rem 0.05rem #aaa;
+    -webkit-box-shadow: 0.01rem 0.01rem 0.05rem #aaa;
+    -moz-box-shadow: 0.01rem 0.01rem 0.05rem #aaa;
+    -moz-border-radius: 0.3rem;
+    border-radius: 0.3rem;
     opacity: 0.8;
-    width: 80px;
-    height: 80px;
-    line-height: 80px;
+    width: 2rem;
+    height: 2rem;
+    line-height: 1rem;
     cursor: pointer;
     text-align: center;
     z-index: 20;
@@ -22,15 +34,15 @@
     background-color: #eeeeef;
     color: black;
     font-family: helvetica, sans-serif;
-    padding: 0.5em;
-    font-size: 0.9em;
+    padding: 0.5rem;
+    font-size: 0.9rem;
     -webkit-transition: -webkit-box-shadow 0.15s ease-in;
     -moz-transition: -moz-box-shadow 0.15s ease-in;
     -o-transition: -o-box-shadow 0.15s ease-in;
     transition: box-shadow 0.15s ease-in;
 }
 
-.flowchart-demo .window:hover {
+#canvas .window:hover {
     box-shadow: 2px 2px 19px #444;
     -o-box-shadow: 2px 2px 19px #444;
     -webkit-box-shadow: 2px 2px 19px #444;
@@ -38,11 +50,11 @@
     opacity: 0.6;
 }
 
-.flowchart-demo .active {
+#canvas .active {
     border: 1px dotted green;
 }
 
-.flowchart-demo .hover {
+#canvas .hover {
     border: 1px dotted red;
 }
 
@@ -66,16 +78,16 @@
     left: 22em;
 }
 
-.flowchart-demo .jsplumb-connector {
+#canvas .jsplumb-connector {
     z-index: 4;
 }
 
-.flowchart-demo .jsplumb-endpoint, .endpointTargetLabel, .endpointSourceLabel {
+#canvas .jsplumb-endpoint, .endpointTargetLabel, .endpointSourceLabel {
     z-index: 21;
     cursor: pointer;
 }
 
-.flowchart-demo .aLabel {
+#canvas .aLabel {
     background-color: white;
     padding: 0.4em;
     font: 12px sans-serif;
@@ -86,7 +98,7 @@
     cursor: pointer;
 }
 
-.flowchart-demo .aLabel.jsplumb-hover {
+#canvas .aLabel.jsplumb-hover {
     background-color: #5C96BC;
     color: white;
     border: 1px solid white;

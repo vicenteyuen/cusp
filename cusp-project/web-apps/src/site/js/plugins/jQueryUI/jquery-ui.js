@@ -26,7 +26,7 @@
  */
 
 
-// $.ui might exist from components with no dependencies, e.g., $.ui.position
+// $.ui might exist from comps with no dependencies, e.g., $.ui.position
 $.ui = $.ui || {};
 
 $.extend( $.ui, {
@@ -5668,7 +5668,7 @@ $.extend(Datepicker.prototype, {
 		return (numMonths == null ? [1, 1] : (typeof numMonths === "number" ? [1, numMonths] : numMonths));
 	},
 
-	/* Determine the current maximum date - ensure no time components are set. */
+	/* Determine the current maximum date - ensure no time comps are set. */
 	_getMinMaxDate: function(inst, minMax) {
 		return this._determineDate(inst, this._get(inst, minMax + "Date"), null);
 	},
@@ -12897,7 +12897,7 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 
 				classes = "ui-slider-range" +
 				// note: this isn't the most fittingly semantic framework class for this element,
-				// but worked best visually with a variety of themes
+				// but worked best visually with a variety of themes-AdminLTE
 				" ui-widget-header ui-corner-all";
 			} else {
 				this.range.removeClass( "ui-slider-range-min ui-slider-range-max" )

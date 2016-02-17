@@ -6125,7 +6125,7 @@ var View = fc.View = Class.extend({
 	scrollerEl: null, // the element that will most likely scroll when content is too tall
 	scrollTop: null, // cached vertical scroll value
 
-	// classNames styled by jqui themes
+	// classNames styled by jqui themes-AdminLTE
 	widgetHeaderClass: null,
 	widgetContentClass: null,
 	highlightStateClass: null,
@@ -7052,7 +7052,7 @@ var View = fc.View = Class.extend({
 	var header;
 	var headerElement;
 	var content;
-	var tm; // for making theme classes
+	var tm; // for making themes classes
 	var viewSpecCache = {};
 	var currentView;
 	var suggestedViewHeight;
@@ -9416,7 +9416,7 @@ fcViews.agenda = View.extend({ // AgendaView
 
 
 	// Builds the HTML skeleton for the view.
-	// The day-grid and time-grid components will render inside containers defined by this HTML.
+	// The day-grid and time-grid comps will render inside containers defined by this HTML.
 	renderHtml: function() {
 		return '' +
 			'<table>' +

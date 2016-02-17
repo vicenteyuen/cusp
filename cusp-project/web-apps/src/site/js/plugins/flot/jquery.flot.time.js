@@ -287,7 +287,7 @@ API.txt for details.
 							d.setFullYear(floorInBase(d.getFullYear(), tickSize));
 						}
 
-						// reset smaller components
+						// reset smaller comps
 
 						d.setMilliseconds(0);
 
