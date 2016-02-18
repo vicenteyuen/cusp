@@ -85,12 +85,15 @@ AppMod = {
     _globalLibsConf : function() {
         var _global = {
 
+            baseUrl:'../..',
+
             paths:{
                 // --- jquery load ---
-                jquery: '../../js/plugins/jquery/jquery-2.1.4',
-                jsPlumb: '../../js/plugins/jsPlumb/jsPlumb-2.0.5',
-                jsPlumbToolkit: '../../js/plugins/jsPlumb/jsPlumbToolkit-1.0.17',
-                'bs-slider': '../../js/plugins/bootstrap-slider/bootstrap-slider',
+                jquery: '/js/plugins/jquery/jquery-2.1.4',
+                jsPlumb: '/js/plugins/jsPlumb/jsPlumb-2.0.5',
+                jsPlumbToolkit: '/js/plugins/jsPlumb/jsPlumbToolkit-1.0.17',
+                'bs-slider': '/js/plugins/bootstrap-slider/bootstrap-slider',
+                'jstree':'/js/plugins/jstree/jstree',
 
                 'theme-AdminLTE': '../../js/themes/AdminLTE/app'
             },
@@ -98,6 +101,9 @@ AppMod = {
                 jsPlumb:['jquery', 'css!../../js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
                 jsPlumbToolkit:['jsPlumb', 'css!../../js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
                 'bs-slider':['jquery', 'css!../../js/plugins/bootstrap-slider/slider.css'],
+
+                'jstree':['jquery','css!../../js/plugins/jstree/style.css'],
+
                 'theme-AdminLTE':['jquery']
             }
 

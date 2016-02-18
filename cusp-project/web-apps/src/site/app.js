@@ -5,6 +5,12 @@ var express = require('express'),
     path = require("path"),
     i18n = require('i18n');
 
+var router = express.Router();
+
+
+/**
+ * i18n configration
+ */
 i18n.configure({
     locales:['en-US', 'zh-CN'],  // setup some locales - other locales default to en_US silently
     defaultLocale: 'zh-CN',
@@ -36,9 +42,26 @@ app.use('/resources',resourcesPath);
 app.use('/apps' , appsPath)
 
 
-// --- define routes
-app.get('/', require('./routes').index);
+// 该路由使用的中间件
+router.use(function timeLog(req, res, next) {
+    console.log('Time: ', Date.now());
+    next();
+});
 
+router.get('/', function(req, res) {
+    res.send('Birds home page');
+});
+
+// --- define routes modules
+router.get('/about' , function(req, res) {
+    res.send('Abo hello');
+});
+
+var routsEtl = require(__dirname + '/routes/apps/elt.js');
+app.use('/apps/etl',routsEtl);
+
+var routsJsx = require(__dirname + '/routes');
+app.get('/jsxtest' , routsJsx.index);
 
 
 /**
@@ -48,4 +71,6 @@ app.get('/', require('./routes').index);
 var server = app.listen(app.get('port'), function () {
     var host = server.address().address;
     var port = server.address().port;
+
+    console.log('Example app listening at http://%s:%s', host, port);
 });

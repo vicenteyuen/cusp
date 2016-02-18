@@ -14,9 +14,19 @@ AppMod.setConfig({
 
 AppMod.application({
     // --- module , plugin , component defined
-    mods: ['jsPlumbToolkit' , 'theme-AdminLTE'],
+    mods: ['jstree','jsPlumbToolkit' , 'theme-AdminLTE'],
 
     launch : function() {
+
+        $("#oper-treeview").jstree({
+            'plugins':['checkbox'],
+            'core' : {
+                'data':[
+                    {'id':'ajso', 'text':'Hello message'}
+                ]
+            }
+
+        });
 
         /*
 
