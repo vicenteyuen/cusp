@@ -9106,7 +9106,7 @@
 	} );
 	
 	
-	// i18n method for extensions to be able to use the language object from the
+	// locales method for extensions to be able to use the language object from the
 	// DataTable
 	_api_register( 'i18n()', function ( token, def, plural ) {
 		var ctx = this.context[0];

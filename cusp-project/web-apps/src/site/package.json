@@ -1,7 +1,20 @@
 {
-  "name": "IDS Web Apps",
+  "name": "cusp",
   "version": "1.0.0",
-  "devDependencies": {
-
+  "description": "Custom Unified Service Platform fontend project",
+  "author": "Vison Ruan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4",
+    "express-react-views": "^0.10.0",
+    "i18n": "^0.7.0",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "webpack": "^1.12.13"
+  },
+  "devDependencies": {},
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
   }
 }

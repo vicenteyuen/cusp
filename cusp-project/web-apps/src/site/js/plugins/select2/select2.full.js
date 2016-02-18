@@ -4303,7 +4303,7 @@ S2.define('select2/defaults',[
   './dropdown/selectOnClose',
   './dropdown/closeOnSelect',
 
-  './i18n/en'
+  './locales/en'
 ], function ($, require,
 
              ResultsList,
@@ -4623,7 +4623,7 @@ S2.define('select2/defaults',[
 
     this.defaults = {
       amdBase: './',
-      amdLanguageBase: './i18n/',
+      amdLanguageBase: './locales/',
       closeOnSelect: true,
       debug: false,
       dropdownAutoWidth: false,

@@ -259,7 +259,7 @@ fc.lang = function(langCode, newFcOptions) {
 	}
 
 	// compute language options that weren't defined.
-	// always do this. newFcOptions can be undefined when initializing from i18n file,
+	// always do this. newFcOptions can be undefined when initializing from locales file,
 	// so no way to tell if this is an initialization or a default-setting.
 	momOptions = getMomentLocaleData(langCode); // will fall back to en
 	$.each(momComputableOptions, function(name, func) {
