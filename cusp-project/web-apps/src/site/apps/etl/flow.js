@@ -16,14 +16,40 @@ AppMod.application({
     // --- module , plugin , component defined
     mods: ['jstree','jsPlumbToolkit' , 'theme-AdminLTE'],
 
-    launch : function() {
+    /**
+     * get launch ctx
+     * @param _ctx
+     */
+    launch : function(_ctx) {
+        var _g = _ctx.getGlobal(),
+            restApiCtx = _g.getFullRestApiContext();
 
+
+
+
+
+        /*
         $("#oper-treeview").jstree({
-            'plugins':['checkbox'],
+            'plugins':[],
             'core' : {
                 'data':[
                     {'id':'ajso', 'text':'Hello message'}
                 ]
+            }
+
+        });
+        */
+
+
+        $("#oper-treeview").jstree({
+            'plugins':[],
+            'core' : {
+                'data':{
+                    'url':restApiCtx '/user/12',
+                    'data' : function(node) {
+                        return {'id' : node.id};
+                    }
+                }
             }
 
         });

@@ -74,8 +74,10 @@ public class ServiceInvokerManagerImpl implements ServiceInvokerManager {
 				Object retrn = meth.invoke(inst ,new HashMap());
 				
 				
-				System.out.println("result : " + retrn);
-
+				Result result = new Result();
+				result.setSucess( true );
+				// --- calll handle value ---
+				handler.handle( result );
 
 
 				

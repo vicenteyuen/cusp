@@ -10,7 +10,7 @@
 	<!-- this need same with resteasy servlet url-pattern -->
 	<context-param>
 		<param-name>resteasy.servlet.mapping.prefix</param-name>
-		<param-value>/datares</param-value>
+		<param-value>/restapi</param-value>
 	</context-param>  
   
    	<context-param>
@@ -36,7 +36,7 @@
 
 	<servlet-mapping>
 		<servlet-name>Resteasy</servlet-name>
-		<url-pattern>/datares/*</url-pattern>
+		<url-pattern>/restapi/*</url-pattern>
 	</servlet-mapping>
 	 
   

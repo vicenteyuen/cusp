@@ -60,9 +60,11 @@ router.get('/about' , function(req, res) {
 var routsEtl = require(__dirname + '/routes/apps/elt.js');
 app.use('/apps/etl',routsEtl);
 
+/**
+ * support jsx handle
 var routsJsx = require(__dirname + '/routes');
 app.get('/jsxtest' , routsJsx.index);
-
+*/
 
 /**
  * start server

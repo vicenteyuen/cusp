@@ -56,6 +56,8 @@ AppMod = {
         if (config) {
 
             var mods = [];
+            mods.push('_g');
+
 
             // --- reset modules ---
             for (var i in config.mods) {
@@ -69,13 +71,23 @@ AppMod = {
                 else {
                     mods.push(checkPreMod);
                 }
-
-
             }
 
+            // --- defined global handle --
+            requirejs(mods , function(_global){
 
+                // --- create context ---
+                var ctx = new function() {
+                    var _this = this;
 
-            requirejs(mods , config.launch);
+                    // --- define global ---
+                    _this.getGlobal = function () {
+                        return _global;
+                    }
+                };
+
+                config.launch(ctx);
+            });
 
         }
     },
@@ -88,6 +100,9 @@ AppMod = {
             baseUrl:'../..',
 
             paths:{
+                // --- global ---
+                '_g':'/js/global',
+
                 // --- jquery load ---
                 jquery: '/js/plugins/jquery/jquery-2.1.4',
                 jsPlumb: '/js/plugins/jsPlumb/jsPlumb-2.0.5',
@@ -95,7 +110,7 @@ AppMod = {
                 'bs-slider': '/js/plugins/bootstrap-slider/bootstrap-slider',
                 'jstree':'/js/plugins/jstree/jstree',
 
-                'theme-AdminLTE': '../../js/themes/AdminLTE/app'
+                'theme-AdminLTE': '/js/themes/AdminLTE/app'
             },
             shim: {
                 jsPlumb:['jquery', 'css!../../js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
