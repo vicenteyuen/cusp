@@ -25,7 +25,7 @@ i18n.configure({
 // --- defined express
 var app = express();
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views-jsx-jsx'));
 app.set('view engine', 'jsx');
 
 var options = {presets: ['react', 'es2015']}
@@ -62,9 +62,10 @@ app.use('/apps/etl',routsEtl);
 
 /**
  * support jsx handle
+ * */
 var routsJsx = require(__dirname + '/routes');
 app.get('/jsxtest' , routsJsx.index);
-*/
+
 
 /**
  * start server

@@ -7184,7 +7184,7 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
  *    - older browsers (such as IE8 and Firefox 3.6) don't support it at all
  *
  * @param {Object} parent Instance of main wysihtml5.Editor class
- * @param {Element} view Instance of wysihtml5.views.* class
+ * @param {Element} view Instance of wysihtml5.views-jsx.* class
  * @param {String} placeholderText
  *
  * @example
@@ -11971,7 +11971,7 @@ wysihtml5.commands.formatCode = {
  * TODO: the following methods still need unit test coverage
  */
 wysihtml5.views.View = Base.extend(
-  /** @scope wysihtml5.views.View.prototype */ {
+  /** @scope wysihtml5.views-jsx.View.prototype */ {
   constructor: function(parent, textareaElement, config) {
     this.parent   = parent;
     this.element  = textareaElement;
@@ -12026,7 +12026,7 @@ wysihtml5.views.View = Base.extend(
       browser   = wysihtml5.browser;
 
   wysihtml5.views.Composer = wysihtml5.views.View.extend(
-    /** @scope wysihtml5.views.Composer.prototype */ {
+    /** @scope wysihtml5.views-jsx.Composer.prototype */ {
     name: "composer",
 
     // Needed for firefox in order to display a proper caret in an empty contentEditable
@@ -13027,7 +13027,7 @@ wysihtml5.views.View = Base.extend(
   var INTERVAL = 400;
 
   wysihtml5.views.Synchronizer = Base.extend(
-    /** @scope wysihtml5.views.Synchronizer.prototype */ {
+    /** @scope wysihtml5.views-jsx.Synchronizer.prototype */ {
 
     constructor: function(editor, textarea, composer) {
       this.editor   = editor;
@@ -13118,7 +13118,7 @@ wysihtml5.views.View = Base.extend(
   });
 })(wysihtml5);
 ;wysihtml5.views.Textarea = wysihtml5.views.View.extend(
-  /** @scope wysihtml5.views.Textarea.prototype */ {
+  /** @scope wysihtml5.views-jsx.Textarea.prototype */ {
   name: "textarea",
 
   constructor: function(parent, textareaElement, config) {

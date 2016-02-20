@@ -28,18 +28,21 @@
     <script src="../../js/react/core/0.14.7/react.min.js"></script>
     <script src="../../js/react/core/0.14.7/react-dom.min.js"></script>
     <script src="../../js/babel/core/5.8.23/browser.min.js"></script>
+
     <!-- support react js -->
     <script src="../../js/react/react-bootstrap/0.28.3/react-bootstrap.min.js"></script>
-
 
     <script src="../../js/app-lib.js"></script>
     <script src="../../js/require.js" data-main="flow"></script>
 
 
 
+
+
+
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-
 <div class="wrapper">
 
     <!-- build header -->
@@ -299,6 +302,8 @@
 
     <!-- Left side column. contains the logo and sidebar -->
     <aside class="main-sidebar">
+
+
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
             <!-- Sidebar user panel -->
@@ -332,6 +337,19 @@
                     <ul class="treeview-menu">
                         <li><a href="flow.html"><i class="fa fa-circle-o"></i>流程界面</a></li>
                         <li class="active"><a href="index2.html"><i class="fa fa-circle-o"></i>操作工具</a></li>
+                    </ul>
+                </li>
+
+                <!-- load object-->
+                <li class="header">系统管理</li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>安全管理</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="/apps/system/user/managment.html"><i class="fa fa-circle-o"></i>用户管理</a></li>
+                        <li><a href="/apps/system/role/managment.html"><i class="fa fa-circle-o"></i>角色管理</a></li>
+                        <li><a href="/apps/system/permission/managment.html"><i class="fa fa-circle-o"></i>权限定义</a></li>
                     </ul>
                 </li>
 

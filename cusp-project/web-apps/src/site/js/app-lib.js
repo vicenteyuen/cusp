@@ -95,9 +95,11 @@ AppMod = {
 
 
     _globalLibsConf : function() {
+        var baseUrl = '../..';
+
         var _global = {
 
-            baseUrl:'../..',
+            baseUrl:baseUrl,
 
             paths:{
                 // --- global ---
@@ -113,11 +115,11 @@ AppMod = {
                 'theme-AdminLTE': '/js/themes/AdminLTE/app'
             },
             shim: {
-                jsPlumb:['jquery', 'css!../../js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
-                jsPlumbToolkit:['jsPlumb', 'css!../../js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
-                'bs-slider':['jquery', 'css!../../js/plugins/bootstrap-slider/slider.css'],
+                jsPlumb:['jquery', 'css!'+baseUrl+'/js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
+                jsPlumbToolkit:['jsPlumb', 'css!'+baseUrl+'/js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
+                'bs-slider':['jquery', 'css!'+baseUrl+'/js/plugins/bootstrap-slider/slider.css'],
 
-                'jstree':['jquery','css!../../js/plugins/jstree/style.css'],
+                'jstree':['jquery','css!'+baseUrl+'/js/plugins/jstree/themes/default/style.css'],
 
                 'theme-AdminLTE':['jquery']
             }

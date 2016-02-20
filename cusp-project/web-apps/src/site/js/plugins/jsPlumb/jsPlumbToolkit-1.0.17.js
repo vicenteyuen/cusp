@@ -8858,7 +8858,7 @@
 
         }
 
-// ----------------------------------------- views    -------------------------------------
+// ----------------------------------------- views-jsx    -------------------------------------
 
         var view;
         /**
@@ -9002,7 +9002,7 @@
                     _data = data,
                     i;
 
-                // enhanced views are models supporting preconfigured values, and
+                // enhanced views-jsx are models supporting preconfigured values, and
                 // functions as parameter values. This is switched on by default. If you use
                 // something that does two-way data binding, such as angular, you will
                 // probably want to switch it off, because creating a duplicate of the data here

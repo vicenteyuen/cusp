@@ -28,19 +28,20 @@ AppMod.application({
 
 
 
-        /*
+
         $("#oper-treeview").jstree({
             'plugins':[],
             'core' : {
-                'data':[
-                    {'id':'ajso', 'text':'Hello message'}
-                ]
+                'data':dataOperTree
             }
+        })
+        /*    .on('select_node.jstree',function(node,selectedNodes,event) {
+            selectedNodes.selected;
+            console.log(selected.selected);
+        })*/
 
-        });
-        */
 
-
+        /*
         $("#oper-treeview").jstree({
             'plugins':[],
             'core' : {
@@ -53,6 +54,7 @@ AppMod.application({
             }
 
         });
+        */
 
         /*
 
@@ -180,36 +182,52 @@ AppMod.application({
 /* define the flow menu object handle  */
 var dataOperTree = [
     {
-        id: '5',
-        text: "Parent 1",
-        icon: "btn-folder",
-        nodes: [
+        id: '01',
+        text: "输入",
+        children: [
             {
-                text: "Child 1",
-                nodes: [
-                    {
-                        text: "Grandchild 1"
-                    },
-                    {
-                        text: "Grandchild 2"
-                    }
-                ]
+                id:'01.01',
+                text: "Access输入"
             },
             {
-                text: "Child 2"
+                id:'01.02',
+                text: "CSV文件输入"
+            },
+            {
+                id:'01.03',
+                text: "Excel文件输入"
             }
         ]
     },
     {
-        text: "Parent 2"
+        id:'02',
+        text: "输出",
+        parent:'01',
+        children:[
+            {
+                id:'02.01',
+                text: "Access输出"
+            },
+            {
+                id:'02.02',
+                text: "Json输出"
+            },
+            {
+                id:'02.03',
+                text: "Excel输出"
+            }
+        ]
     },
     {
-        text: "Parent 3"
+        id:'03',
+        text: "转换"
     },
     {
-        text: "Parent 4"
+        id:'04',
+        text: "流程"
     },
     {
-        text: "Parent 5"
+        id:'05',
+        text: "查询"
     }
 ];

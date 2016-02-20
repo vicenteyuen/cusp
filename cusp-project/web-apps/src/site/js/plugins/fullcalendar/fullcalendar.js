@@ -2497,7 +2497,7 @@ var RowRenderer = Class.extend({
 
 
 	// Renders the HTML for a row, leveraging custom cell-HTML-renderers based on the `rowType`.
-	// Also applies the "intro" and "outro" cells, which are specified by the subclass and views.
+	// Also applies the "intro" and "outro" cells, which are specified by the subclass and views-jsx.
 	// `row` is an optional row number.
 	rowHtml: function(rowType, row) {
 		var renderCell = this.getHtmlRenderer('cell', rowType);
@@ -6094,7 +6094,7 @@ function compareForwardSlotSegs(seg1, seg2) {
 		compareSegs(seg1, seg2);
 }
 
-    /* An abstract class from which other views inherit from
+    /* An abstract class from which other views-jsx inherit from
 ----------------------------------------------------------------------------------------------------------------------*/
 
 var View = fc.View = Class.extend({
@@ -7230,7 +7230,7 @@ var View = fc.View = Class.extend({
 	function getViewSpec(requestedViewType) {
 		var allDefaultButtonText = options.defaultButtonText || {};
 		var allButtonText = options.buttonText || {};
-		var hash = options.views || {}; // the `views` option object
+		var hash = options.views || {}; // the `views-jsx` option object
 		var viewType = requestedViewType;
 		var viewOptionsChain = [];
 		var viewOptions;
@@ -7254,7 +7254,7 @@ var View = fc.View = Class.extend({
 		// iterate up a view's spec ancestor chain util we find a class to instantiate
 		while (viewType && !viewClass) {
 			viewOptions = {}; // only for this specific view in the ancestry
-			processSpecInput(fcViews[viewType]); // $.fullCalendar.views, lower precedence
+			processSpecInput(fcViews[viewType]); // $.fullCalendar.views-jsx, lower precedence
 			processSpecInput(hash[viewType]); // options at initialization, higher precedence
 			viewOptionsChain.unshift(viewOptions); // record older ancestors first
 			viewType = viewOptions.type;
@@ -7542,7 +7542,7 @@ var View = fc.View = Class.extend({
 
 		if (!viewType || !isValidViewType(viewType)) { // a general view name, or "auto"
 			viewType = viewType || 'day';
-			viewStr = header.getViewsWithButtons().join(' '); // space-separated string of all the views in the header
+			viewStr = header.getViewsWithButtons().join(' '); // space-separated string of all the views-jsx in the header
 
 			// try to match a general view name, like "week", against a specific one, like "agendaWeek"
 			match = viewStr.match(new RegExp('\\w+' + capitaliseFirstLetter(viewType)));
@@ -8936,7 +8936,7 @@ function backupEventDates(event) {
 	event._end = event.end ? event.end.clone() : null;
 }
 
-    /* An abstract class for the "basic" views, as well as month view. Renders one or more rows of day cells.
+    /* An abstract class for the "basic" views-jsx, as well as month view. Renders one or more rows of day cells.
 ----------------------------------------------------------------------------------------------------------------------*/
 // It is a manager for a DayGrid subcomponent, which does most of the heavy lifting.
 // It is responsible for managing width/height.
@@ -8972,7 +8972,7 @@ var BasicView = fcViews.basic = View.extend({
 	computeRange: function(date) {
 		var range = View.prototype.computeRange.call(this, date); // get value from the super-method
 
-		// year and month views should be aligned with weeks. this is already done for week
+		// year and month views-jsx should be aligned with weeks. this is already done for week
 		if (/year|month/.test(range.intervalUnit)) {
 			range.start.startOf('week');
 			range.start = this.skipHiddenDays(range.start);
@@ -9313,7 +9313,7 @@ fcViews.basicDay = {
 	type: 'basic',
 	duration: { days: 1 }
 };
-    /* An abstract class for all agenda-related views. Displays one more columns with time slots running vertically.
+    /* An abstract class for all agenda-related views-jsx. Displays one more columns with time slots running vertically.
 ----------------------------------------------------------------------------------------------------------------------*/
 // Is a manager for the TimeGrid subcomponent and possibly the DayGrid subcomponent (if allDaySlot is on).
 // Responsible for managing width/height.
