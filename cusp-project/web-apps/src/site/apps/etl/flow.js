@@ -24,6 +24,15 @@ AppMod.application({
         var _g = _ctx.getGlobal(),
             restApiCtx = _g.getFullRestApiContext();
 
+        var doT = _ctx.getClientTplEngine('doT');
+        var doTmp = doT.template("<h1>{{=it.name}}</h1>");
+        var res = doTmp({name:'hemo'});
+
+
+
+
+        console.log(res);
+
 
 
 

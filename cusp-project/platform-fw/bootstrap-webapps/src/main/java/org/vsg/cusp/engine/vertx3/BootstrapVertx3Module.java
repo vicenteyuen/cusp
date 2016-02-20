@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.platform.utils.ServiceInvokerManager;
 import org.vsg.cusp.platform.utils.ServiceInvokerManagerImpl;
-import org.vsg.serv.vertx3.Vertx3Provider;
 
 import com.google.inject.AbstractModule;
 
@@ -41,14 +40,15 @@ public class BootstrapVertx3Module extends AbstractModule {
 		
 		DeploymentOptions deploymentOptions = null;
 		
-		Vertx3Provider vertxProv = new Vertx3Provider(options , deploymentOptions);
-		
+		//Vertx3Provider vertxProv = new Vertx3Provider(options , deploymentOptions);
+		/*
 		Vertx vertx = vertxProv.get();		
 		// --- bind service factory ---
 		vertx.registerVerticleFactory( new ServiceVerticleFactory() );
 		
 		// --- bind object
 		this.bind(Vertx.class).toInstance(vertx);
+		*/
 		
 		//this.bind(org.vsg.cusp.apps.productmng.ProductRest.class);
 		this.bind( org.vsg.cusp.apps.system.UserRest.class );

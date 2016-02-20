@@ -57,6 +57,7 @@ AppMod = {
 
             var mods = [];
             mods.push('_g');
+            mods.push('doT');
 
 
             // --- reset modules ---
@@ -74,7 +75,16 @@ AppMod = {
             }
 
             // --- defined global handle --
-            requirejs(mods , function(_global){
+            requirejs(mods , function(_global , doT){
+                var args = arguments;
+
+                /**
+                 * defined engine mapping
+                 * @type {{doT: *}}
+                 */
+                var tplEngineMap = {
+                    'doT' : doT
+                }
 
                 // --- create context ---
                 var ctx = new function() {
@@ -84,6 +94,16 @@ AppMod = {
                     _this.getGlobal = function () {
                         return _global;
                     }
+
+                    /**
+                     *
+                     * @param engineName  --- defined the template engine for defined
+                     */
+                    _this.getClientTplEngine = function(engineName) {
+                        return tplEngineMap[engineName];
+                    }
+
+
                 };
 
                 config.launch(ctx);
@@ -107,10 +127,12 @@ AppMod = {
 
                 // --- jquery load ---
                 jquery: '/js/plugins/jquery/jquery-2.1.4',
+                doT:'/js/plugins/doT/doT',
                 jsPlumb: '/js/plugins/jsPlumb/jsPlumb-2.0.5',
                 jsPlumbToolkit: '/js/plugins/jsPlumb/jsPlumbToolkit-1.0.17',
                 'bs-slider': '/js/plugins/bootstrap-slider/bootstrap-slider',
                 'jstree':'/js/plugins/jstree/jstree',
+
 
                 'theme-AdminLTE': '/js/themes/AdminLTE/app'
             },
