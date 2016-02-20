@@ -13,6 +13,8 @@ import java.util.StringTokenizer;
 
 import javax.inject.Inject;
 
+import org.vsg.common.model.json.Result;
+
 
 /**
  * @author vison
@@ -63,6 +65,7 @@ public class ServiceInvokerManagerImpl implements ServiceInvokerManager {
 			}
 
 			
+			Result result = new Result();
 			// --- invoke class ---
 			try {
 				Class proxyCls = Thread.currentThread().getContextClassLoader().loadClass(className);
@@ -73,36 +76,23 @@ public class ServiceInvokerManagerImpl implements ServiceInvokerManager {
 				
 				Object retrn = meth.invoke(inst ,new HashMap());
 				
+				// --- handle ok ---
+				result.setSuccess( true );
+				result.setData( retrn );
 				
-				Result result = new Result();
-				result.setSucess( true );
+			} catch (ClassNotFoundException | InstantiationException | IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				result.setErrorMessage( e.getLocalizedMessage() );
+			}  catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}  catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}  finally {
+				
 				// --- calll handle value ---
-				handler.handle( result );
-
-
-				
-				
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				handler.handle( result );				
 			}
 			
 
@@ -118,7 +108,7 @@ public class ServiceInvokerManagerImpl implements ServiceInvokerManager {
 		vertx.deployVerticle(serviceName , res -> {
 			
 			Result result = new Result();
-			result.setSucess( res.succeeded() );
+			result.setSuccess( res.succeeded() );
 			// --- calll handle value ---
 			handler.handle( result );
 		

@@ -1,6 +1,6 @@
 package org.vsg.cusp.platform.utils;
 
-import javax.ws.rs.container.AsyncResponse;
+import org.vsg.common.model.json.Result;
 
 /**
  * 
