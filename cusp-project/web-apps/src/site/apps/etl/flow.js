@@ -34,6 +34,29 @@ AppMod.application({
         var tplEngine = _ctx.getClientTplEngine('doT');
 
         var menuElems = $('section.sidebar ul.sidebar-menu');
+
+        var smTmpl = document.getElementById('sidebar-menu-tpl').innerHTML;
+
+
+        $.get(restApiCtx + '/system/nav-menus',function(data,status) {
+
+            if (status == 'success') {
+                // --- parse data ---
+                var navMenus = data["data"];
+
+                // --- parse template ---
+                tplEngine.render({
+                    template:smTmpl,
+                    data:navMenus,
+                    renderCallback: function(renderResult) {
+                        console.log( renderResult );
+
+                    }
+                });
+            }
+
+        });
+        /*
         $.ajax({
             url:restApiCtx + '/system/nav-menus',
             success:function() {
@@ -44,6 +67,7 @@ AppMod.application({
             },
             dataType:"json"
         }
+        */
 
 
             /*

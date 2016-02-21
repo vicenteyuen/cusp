@@ -42,12 +42,6 @@ app.use('/resources',resourcesPath);
 app.use('/apps' , appsPath);
 
 
-/**
- * mock rest api
- */
-var restApiPath = express.static(path.join(__dirname, '/mockRestApi'));
-app.use('/restapi' , restApiPath);
-
 // 该路由使用的中间件
 router.use(function timeLog(req, res, next) {
     console.log('Time: ', Date.now());
@@ -67,10 +61,18 @@ var routsEtl = require(__dirname + '/routes/apps/elt.js');
 app.use('/apps/etl',routsEtl);
 
 /**
+ * support mock rest api
+ */
+var routsRestApi = require(__dirname + '/mockRestApi/restapi.js');
+app.use('/restapi' , routsRestApi);
+
+/**
  * support jsx handle
  * */
 var routsJsx = require(__dirname + '/routes');
 app.get('/jsxtest' , routsJsx.index);
+
+
 
 
 /**

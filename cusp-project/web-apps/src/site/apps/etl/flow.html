@@ -327,14 +327,25 @@
 
             <ul class="sidebar-menu">
                 <!-- base tree view nav -->
+                <script id="sidebar-menu-tpl" type="text/x-dot-template">
+                {{~it: value:index}}
+                  <!-- first level-->
+                  <li class="header">{{=value.text}}</li>
+                  <!-- check second node-->
+                  {{? value.nodes && value.nodes.length > 0 }}
+                    {{~value.nodes: secMenuRef:secMenuIndex}}
+                  <li class="treeview">
+                      <a href="#">
+                          <i class="fa fa-dashboard"></i> <span>仪表盘</span> <i class="fa fa-angle-left pull-right"></i>
+                      </a>
+                  </li>
+                    {{~}}
+                  {{??}}
+                    empty
+                  {{?}}
 
-                <script id="sidebar-menu-tpl" type="text/template">
-                {{ if (it.success) { }}
-                    {{ for (var i=0, l = it.data.length; i<l; i++) { }}
 
-                    {{ } }}
-
-                {{ } }
+                {{~}}
                 </script>
                 <!--
                 <li class="header">主导航栏</li>

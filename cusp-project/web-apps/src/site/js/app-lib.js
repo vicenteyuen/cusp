@@ -71,7 +71,6 @@ AppMod = {
                 // --- check args ---
                 var tpl = _me.engine.template( args['template'] );
                 var result = tpl(args['data']);
-
                 var renderCallback = args['renderCallback'];
                 renderCallback(result);
             }
