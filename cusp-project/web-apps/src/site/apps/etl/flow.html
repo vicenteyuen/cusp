@@ -30,7 +30,9 @@
     <script src="../../js/babel/core/5.8.23/browser.min.js"></script>
 
     <!-- support react js -->
+    <!--
     <script src="../../js/react/react-bootstrap/0.28.3/react-bootstrap.min.js"></script>
+    -->
 
     <script src="../../js/app-lib.js"></script>
     <script src="../../js/require.js" data-main="flow"></script>
@@ -322,9 +324,20 @@
             </form>
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
+
             <ul class="sidebar-menu">
-                <li class="header">主导航栏</li>
                 <!-- base tree view nav -->
+
+                <script id="sidebar-menu-tpl" type="text/template">
+                {{ if (it.success) { }}
+                    {{ for (var i=0, l = it.data.length; i<l; i++) { }}
+
+                    {{ } }}
+
+                {{ } }
+                </script>
+                <!--
+                <li class="header">主导航栏</li>
                 <li class="active treeview">
                     <a href="#">
                         <i class="fa fa-dashboard"></i> <span>仪表盘</span> <i class="fa fa-angle-left pull-right"></i>
@@ -335,7 +348,6 @@
                     </ul>
                 </li>
 
-                <!-- load object-->
                 <li class="header">系统管理</li>
                 <li class="treeview">
                     <a href="#">
@@ -354,6 +366,7 @@
                 <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
                 <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
                 <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+                -->
             </ul>
         </section>
         <!-- /.sidebar -->

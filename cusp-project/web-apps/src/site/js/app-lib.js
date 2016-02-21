@@ -47,18 +47,67 @@ AppMod = {
 
     },
 
+
+    _tplEngines:[],
+
+    _tplEnginesMap:{},
+
+
+    _initTplEngineMap: function() {
+        var me = this;
+
+        // --- create template engine service ---
+        var dotTplEngine = new function() {
+            var _me = this;
+
+
+            _me.setEngine = function(engine) {
+                _me.engine = engine;
+            }
+
+
+            _me.render = function(args) {
+
+                // --- check args ---
+                var tpl = _me.engine.template( args['template'] );
+                var result = tpl(args['data']);
+
+                var renderCallback = args['renderCallback'];
+                renderCallback(result);
+            }
+        };
+        me._tplEnginesMap['doT'] = dotTplEngine;
+
+
+    },
+
+
+
     application:function(config) {
         var _cnf = {
 
-        }
+        }, appMe = this;
 
         // --- check config ---
         if (config) {
 
             var mods = [];
-            mods.push('_g');
-            mods.push('doT');
+            mods.push('_g'); // first
 
+
+            // --- create tpl engines mapping ---
+            appMe._initTplEngineMap();
+
+
+            // --- set the template engine load javascript
+            for (var i in config.tplEngines) {
+                var tplEngine = config.tplEngines[i];
+
+                if (tplEngine == 'doT') {
+                    mods.push(tplEngine);
+                }
+
+            }
 
             // --- reset modules ---
             for (var i in config.mods) {
@@ -75,16 +124,18 @@ AppMod = {
             }
 
             // --- defined global handle --
-            requirejs(mods , function(_global , doT){
+            requirejs(mods , function(_global , tplEngine){
                 var args = arguments;
 
-                /**
-                 * defined engine mapping
-                 * @type {{doT: *}}
-                 */
-                var tplEngineMap = {
-                    'doT' : doT
+                var agentEngine = null, leftPos = 1;
+                for (var i = 0 ; i < config.tplEngines.length ; i++) {
+                    var engineName = config.tplEngines[i];
+
+                    agentEngine = appMe._tplEnginesMap[engineName];
+                    var currentIndex = leftPos + i ;
+                    agentEngine.setEngine(args[currentIndex]);
                 }
+
 
                 // --- create context ---
                 var ctx = new function() {
@@ -100,7 +151,7 @@ AppMod = {
                      * @param engineName  --- defined the template engine for defined
                      */
                     _this.getClientTplEngine = function(engineName) {
-                        return tplEngineMap[engineName];
+                        return appMe._tplEnginesMap[engineName];
                     }
 
 

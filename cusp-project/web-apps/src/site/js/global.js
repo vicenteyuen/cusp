@@ -8,9 +8,17 @@ define(function() {
 
         var _this = this;
 
+        /*
         var _restServer = 'localhost:8080';
         var _protocol = 'http://';
+        */
+
+        var _restServer = "";
+        var _protocol = "";
+
+
         var _restapi = '/restapi';
+
 
 
 

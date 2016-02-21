@@ -17,6 +17,12 @@ AppMod.application({
     mods: ['jstree','jsPlumbToolkit' , 'theme-AdminLTE'],
 
     /**
+     * defeind use template engine
+     *
+     */
+    tplEngines:['doT'],
+
+    /**
      * get launch ctx
      * @param _ctx
      */
@@ -24,14 +30,38 @@ AppMod.application({
         var _g = _ctx.getGlobal(),
             restApiCtx = _g.getFullRestApiContext();
 
-        var doT = _ctx.getClientTplEngine('doT');
-        var doTmp = doT.template("<h1>{{=it.name}}</h1>");
-        var res = doTmp({name:'hemo'});
+        // --- render module ---
+        var tplEngine = _ctx.getClientTplEngine('doT');
+
+        var menuElems = $('section.sidebar ul.sidebar-menu');
+        $.ajax({
+            url:restApiCtx + '/system/nav-menus',
+            success:function() {
+                alert("Success");
+            },
+            error:function() {
+                alert("Error");
+            },
+            dataType:"json"
+        }
+
+
+            /*
+
+        tplEngine.render({
+            template:"<h1>{{=it.name}}</h1>",
+            data:{name:'hello vison'},
+            renderCallback: function(renderResult) {
+
+
+            }
+        });*/
 
 
 
+       // var doTmp = doT.template("<h1>{{=it.name}}</h1>");
+       // var res = doTmp({name:'hemo'});
 
-        console.log(res);
 
 
 
@@ -43,7 +73,7 @@ AppMod.application({
             'core' : {
                 'data':dataOperTree
             }
-        })
+        });
         /*    .on('select_node.jstree',function(node,selectedNodes,event) {
             selectedNodes.selected;
             console.log(selected.selected);
@@ -174,7 +204,7 @@ AppMod.application({
 
 
 
-        $.AdminLTE.tree('.step-container');
+        //$.AdminLTE.tree('.step-container');
 
 
 

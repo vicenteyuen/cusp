@@ -39,8 +39,14 @@ var resourcesPath = express.static(path.join(__dirname, '/resources'));
 var appsPath = express.static(path.join(__dirname, '/apps'));
 app.use('/js',jsPath);
 app.use('/resources',resourcesPath);
-app.use('/apps' , appsPath)
+app.use('/apps' , appsPath);
 
+
+/**
+ * mock rest api
+ */
+var restApiPath = express.static(path.join(__dirname, '/mockRestApi'));
+app.use('/restapi' , restApiPath);
 
 // 该路由使用的中间件
 router.use(function timeLog(req, res, next) {
