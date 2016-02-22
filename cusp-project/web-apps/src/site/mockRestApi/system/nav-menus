@@ -7,7 +7,9 @@
       "id": "security-mng",
       "text": "安全管理",
       "nodes":[
-
+        {"id":"user-mng", "text":"用户管理" , "href":"#"},
+        {"id":"role-mng", "text":"角色管理" , "href":"#"},
+        {"id":"flow-interface" , "text":"流程界面" , "href":"flow.html"}
       ]
     }]
   },{

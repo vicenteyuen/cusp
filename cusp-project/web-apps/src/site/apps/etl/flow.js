@@ -34,10 +34,7 @@ AppMod.application({
         var tplEngine = _ctx.getClientTplEngine('doT');
 
         var menuElems = $('section.sidebar ul.sidebar-menu');
-
         var smTmpl = document.getElementById('sidebar-menu-tpl').innerHTML;
-
-
         $.get(restApiCtx + '/system/nav-menus',function(data,status) {
 
             if (status == 'success') {
@@ -49,8 +46,7 @@ AppMod.application({
                     template:smTmpl,
                     data:navMenus,
                     renderCallback: function(renderResult) {
-                        console.log( renderResult );
-
+                        menuElems.html(renderResult);
                     }
                 });
             }
