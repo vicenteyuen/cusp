@@ -84,7 +84,7 @@ AppMod = {
 
     application:function(config) {
         var _cnf = {
-
+            supportMVC:true,
         }, appMe = this;
 
         // --- check config ---
@@ -108,8 +108,17 @@ AppMod = {
             }
 
             // --- load mvc frameowrk --
-            mods.push('backbone');
-            mods.push('backbone-localstorage');
+
+            if (config.supportMVC != 'undefined') {
+                _cnf.supportMVC = config.supportMVC;
+            }
+            // --- load mvc ---
+            if (_cnf.supportMVC) {
+                mods.push('backbone');
+                mods.push('backbone-localstorage');
+            }
+
+
 
 
             // --- reset modules ---
@@ -139,9 +148,19 @@ AppMod = {
                     agentEngine.setEngine(args[currentIndex]);
                 }
 
+                // --- get backbone and backbone local storage ---
+                leftPos = leftPos + config.tplEngines.length;
+                var backbone = null;
+                var backboneLocalStorage = null;
+                if (_cnf.supportMVC) {
+                    backbone = args[leftPos++];
+                    // skip one variable for 'backbone-localstorage'
+                    leftPos++;
+                }
 
-                // --- parse argument to function ---
-                console.log( args );
+
+
+
 
 
 
@@ -160,6 +179,23 @@ AppMod = {
                      */
                     _this.getClientTplEngine = function(engineName) {
                         return appMe._tplEnginesMap[engineName];
+                    }
+
+                    /**
+                     * define mvc context handle
+                     */
+                    _this.getMvcContext = function() {
+                        if (!_cnf.supportMVC ) {
+                            if (window.cosole) {
+                                window.cosole.log('Application config not set support mvc');
+                            }
+                            return {};
+                        }
+
+                        if (backbone != null) {
+                            return backbone;
+                        }
+                        return null;
                     }
 
 
@@ -202,7 +238,7 @@ AppMod = {
                 'theme-AdminLTE': '/js/themes/AdminLTE/app'
             },
             shim: {
-                backbone: ['underscore'],
+                'backbone-localstorage': ['underscore', 'backbone'],
                 jsPlumb:['jquery', 'css!'+baseUrl+'/js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
                 jsPlumbToolkit:['jsPlumb', 'css!'+baseUrl+'/js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
                 'bs-slider':['jquery', 'css!'+baseUrl+'/js/plugins/bootstrap-slider/slider.css'],

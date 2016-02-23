@@ -13,14 +13,15 @@ AppMod.setConfig({
 })
 
 AppMod.application({
-    // --- module , plugin , component defined
-    mods: ['jstree','jsPlumbToolkit' , 'theme-AdminLTE'],
-
+    supportMVC:true,
     /**
      * defeind use template engine
      *
      */
     tplEngines:['doT'],
+
+    // --- module , plugin , component defined
+    mods: ['jstree','jsPlumbToolkit' , 'theme-AdminLTE'],
 
     /**
      * get launch ctx
@@ -52,6 +53,9 @@ AppMod.application({
             }
 
         });
+
+
+
         /*
         $.ajax({
             url:restApiCtx + '/system/nav-menus',
