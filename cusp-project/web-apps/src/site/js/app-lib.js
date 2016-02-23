@@ -105,8 +105,12 @@ AppMod = {
                 if (tplEngine == 'doT') {
                     mods.push(tplEngine);
                 }
-
             }
+
+            // --- load mvc frameowrk --
+            mods.push('backbone');
+            mods.push('backbone-localstorage');
+
 
             // --- reset modules ---
             for (var i in config.mods) {
@@ -134,6 +138,11 @@ AppMod = {
                     var currentIndex = leftPos + i ;
                     agentEngine.setEngine(args[currentIndex]);
                 }
+
+
+                // --- parse argument to function ---
+                console.log( args );
+
 
 
                 // --- create context ---
@@ -172,6 +181,11 @@ AppMod = {
             baseUrl:baseUrl,
 
             paths:{
+                // --- base lib ---
+                "underscore": "/js/plugins/underscore/1.8.3/underscore",
+                "backbone": "/js/plugins/backbone/1.2.3/backbone",
+                "backbone-localstorage": "/js/plugins/backbone/backbone.localStorage",
+
                 // --- global ---
                 '_g':'/js/global',
 
@@ -182,11 +196,13 @@ AppMod = {
                 jsPlumbToolkit: '/js/plugins/jsPlumb/jsPlumbToolkit-1.0.17',
                 'bs-slider': '/js/plugins/bootstrap-slider/bootstrap-slider',
                 'jstree':'/js/plugins/jstree/jstree',
+                artTemplate:'/js/plugins/artTemplate/template-debug',
 
 
                 'theme-AdminLTE': '/js/themes/AdminLTE/app'
             },
             shim: {
+                backbone: ['underscore'],
                 jsPlumb:['jquery', 'css!'+baseUrl+'/js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
                 jsPlumbToolkit:['jsPlumb', 'css!'+baseUrl+'/js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
                 'bs-slider':['jquery', 'css!'+baseUrl+'/js/plugins/bootstrap-slider/slider.css'],
