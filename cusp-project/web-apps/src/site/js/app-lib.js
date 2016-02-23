@@ -68,6 +68,20 @@ AppMod = {
 
             _me.render = function(args) {
 
+
+
+                if (!args['template']) {
+                    throw new Error('"template" variable is not defined.');
+                }
+
+                if (!args['data']) {
+                    throw new Error('"data" variable is not defined.');
+                }
+
+                if (!args['renderCallback']) {
+                    throw new Error('"renderCallback" variable is not defined.');
+                }
+
                 // --- check args ---
                 var tpl = _me.engine.template( args['template'] );
                 var result = tpl(args['data']);
