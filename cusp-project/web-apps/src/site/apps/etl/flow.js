@@ -58,7 +58,7 @@ AppMod.application({
 
         /*
         $.ajax({
-            url:restApiCtx + '/system/nav-menus',
+            url:restApiCtx + '/security/nav-menus',
             success:function() {
                 alert("Success");
             },
