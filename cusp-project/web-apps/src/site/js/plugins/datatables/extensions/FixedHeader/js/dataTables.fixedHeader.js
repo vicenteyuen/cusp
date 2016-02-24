@@ -41,8 +41,8 @@ var factory = function( $, DataTable ) {
  * Returns:  object:FixedHeader - must be called with 'new'
  * Inputs:   mixed:mTable - target table
  *  @param {object} dt DataTables instance or HTML table node. With DataTables
- *    1.10 this can also be a jquery collection (with just a single table in its
- *    result set), a jquery selector, DataTables API instance or settings
+ *    1.10 this can also be a jQuery collection (with just a single table in its
+ *    result set), a jQuery selector, DataTables API instance or settings
  *    object.
  *  @param {object} [oInit] initialisation settings, with the following
  *    properties (each optional)
@@ -951,7 +951,7 @@ FixedHeader.oDoc = {
 
 /*
  * Variable: afnScroll
- * Purpose:  Array of functions that are to be used for the scrolling comps
+ * Purpose:  Array of functions that are to be used for the scrolling components
  * Scope:    FixedHeader
  */
 FixedHeader.afnScroll = [];
@@ -990,7 +990,7 @@ FixedHeader.version = "2.1.2";
  */
 
 /*
- * Just one 'scroll' event handler in FixedHeader, which calls the required comps. This is
+ * Just one 'scroll' event handler in FixedHeader, which calls the required components. This is
  * done as an optimisation, to reduce calculation and proagation time
  */
 $(window).scroll( function () {

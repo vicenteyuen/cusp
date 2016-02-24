@@ -434,7 +434,7 @@ Responsive.prototype = {
 			details.target = 'td:first-child';
 		}
 
-		// type.target can be a string jquery selector or a column index
+		// type.target can be a string jQuery selector or a column index
 		var target   = details.target;
 		var selector = typeof target === 'string' ? target : 'td';
 

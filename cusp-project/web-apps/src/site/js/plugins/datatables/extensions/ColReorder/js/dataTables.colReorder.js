@@ -359,7 +359,7 @@ var ColReorder = function( dt, opts )
 		oDTSettings = dt.fnSettings();
 	}
 	else if ( typeof dt === 'string' ) {
-		// jquery selector
+		// jQuery selector
 		if ( $.fn.dataTable.fnIsDataTable( $(dt)[0] ) ) {
 			oDTSettings = $(dt).eq(0).dataTable().fnSettings();
 		}
@@ -371,7 +371,7 @@ var ColReorder = function( dt, opts )
 		}
 	}
 	else if ( dt instanceof jQuery ) {
-		// jquery object
+		// jQuery object
 		if ( $.fn.dataTable.fnIsDataTable( dt[0] ) ) {
 			oDTSettings = dt.eq(0).dataTable().fnSettings();
 		}
@@ -1049,7 +1049,7 @@ ColReorder.prototype = {
 		var origTable = origThead.parentNode;
 		var cloneCell = $(origCell).clone();
 
-		// This is a slightly odd combination of jquery and DOM, but it is the
+		// This is a slightly odd combination of jQuery and DOM, but it is the
 		// fastest and least resource intensive way I could think of cloning
 		// the table with just a single header cell in it.
 		this.dom.drag = $(origTable.cloneNode(false))

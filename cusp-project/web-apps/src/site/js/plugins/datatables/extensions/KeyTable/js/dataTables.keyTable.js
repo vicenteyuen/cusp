@@ -157,7 +157,7 @@ KeyTable = function ( oInit )
 
 	/*
 	 * Variable: _that
-	 * Purpose:  Scope saving for 'this' after a jquery event
+	 * Purpose:  Scope saving for 'this' after a jQuery event
 	 * Scope:    KeyTable - private
 	 */
 	var _that = null;

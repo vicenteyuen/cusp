@@ -447,7 +447,7 @@ window.ZeroClipboard_TableTools = ZeroClipboard_TableTools;
  * @class TableTools
  * @constructor
  * @param {Object} oDT DataTables instance. When using DataTables 1.10 this can
- *   also be a jquery collection, jquery selector, table node, DataTables API
+ *   also be a jQuery collection, jQuery selector, table node, DataTables API
  *   instance or DataTables settings object.
  * @param {Object} oOpts TableTools options
  * @param {String} oOpts.sSwfPath ZeroClipboard SWF path
@@ -903,7 +903,7 @@ TableTools.prototype = {
 	/**
 	 * Select row(s)
 	 *  @param {node|object|array} n The row(s) to select. Can be a single DOM
-	 *    TR node, an array of TR nodes or a jquery object.
+	 *    TR node, an array of TR nodes or a jQuery object.
 	 */
 	"fnSelect": function ( n )
 	{
@@ -922,7 +922,7 @@ TableTools.prototype = {
 	/**
 	 * Deselect row(s)
 	 *  @param {node|object|array} n The row(s) to deselect. Can be a single DOM
-	 *    TR node, an array of TR nodes or a jquery object.
+	 *    TR node, an array of TR nodes or a jQuery object.
 	 */
 	"fnDeselect": function ( n )
 	{
@@ -1773,7 +1773,7 @@ TableTools.prototype = {
 	/**
 	 * Take a data source for row selection and convert it into aoData points for the DT
 	 *   @param {*} src Can be a single DOM TR node, an array of TR nodes (including a
-	 *     a jquery object), a single aoData point from DataTables, an array of aoData
+	 *     a jQuery object), a single aoData point from DataTables, an array of aoData
 	 *     points or an array of aoData indexes
 	 *   @returns {array} An array of aoData points
 	 */
@@ -1789,7 +1789,7 @@ TableTools.prototype = {
 		}
 		else if ( typeof src.length !== 'undefined' )
 		{
-			// jquery object or an array of nodes, or aoData points
+			// jQuery object or an array of nodes, or aoData points
 			for ( i=0, iLen=src.length ; i<iLen ; i++ )
 			{
 				if ( src[i].nodeName )

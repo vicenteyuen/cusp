@@ -173,11 +173,6 @@ AppMod = {
                 }
 
 
-
-
-
-
-
                 // --- create context ---
                 var ctx = new function() {
                     var _this = this;
@@ -215,7 +210,22 @@ AppMod = {
 
                 };
 
-                config.launch(ctx);
+                var agentArgs = [];
+                agentArgs.push(ctx);
+
+
+                for (var i = leftPos ; i < args.length ; i++) {
+                    if (args[i]) {
+                        agentArgs.push( args[i] )
+                    }
+                }
+
+
+                if (typeof config.launch == 'function') {
+                    // --- call method
+                    config.launch.apply(this,agentArgs);
+                }
+
             });
 
         }
@@ -249,6 +259,10 @@ AppMod = {
                 artTemplate:'/js/plugins/artTemplate/template-debug',
 
 
+                'jquery-datatables': '/js/plugins/datatables/jquery.dataTables',
+                'dataTables-bootstrap': '/js/plugins/datatables/dataTables.bootstrap',
+                'iCheck':'/js/plugins/iCheck/icheck',
+
                 'theme-AdminLTE': '/js/themes/AdminLTE/app'
             },
             shim: {
@@ -257,7 +271,10 @@ AppMod = {
                 jsPlumbToolkit:['jsPlumb', 'css!'+baseUrl+'/js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
                 'bs-slider':['jquery', 'css!'+baseUrl+'/js/plugins/bootstrap-slider/slider.css'],
 
+                'dataTables-bootstrap':['jquery-datatables', 'css!'+baseUrl+'/js/plugins/datatables/dataTables.bootstrap.css'],
+                'iCheck':['css!'+baseUrl+'/js/plugins/iCheck/flat/blue.css'],
                 'jstree':['jquery','css!'+baseUrl+'/js/plugins/jstree/themes/default/style.css'],
+
 
                 'theme-AdminLTE':['jquery']
             }

@@ -22,7 +22,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $,require,jquery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_re_escape_regex,_empty,_intVal,_numToDecimal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidate,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer,_fnDataSource,_fnRowAttributes*/
+/*globals $,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_re_escape_regex,_empty,_intVal,_numToDecimal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidate,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer,_fnDataSource,_fnRowAttributes*/
 
 (/** @lends <global> */function( window, document, undefined ) {
 
@@ -47,14 +47,14 @@
 	"use strict";
 
 	/**
-	 * DataTables is a plug-in for the jquery Javascript library. It is a highly
+	 * DataTables is a plug-in for the jQuery Javascript library. It is a highly
 	 * flexible tool, based upon the foundations of progressive enhancement,
 	 * which will add advanced interaction controls to any HTML table. For a
 	 * full list of features please refer to
 	 * [DataTables.net](href="http://datatables.net).
 	 *
 	 * Note that the `DataTable` object is not a global variable but is aliased
-	 * to `jquery.fn.DataTable` and `jquery.fn.dataTable` through which it may
+	 * to `jQuery.fn.DataTable` and `jQuery.fn.dataTable` through which it may
 	 * be  accessed.
 	 *
 	 *  @class
@@ -2176,7 +2176,7 @@
 						j++;
 					}
 	
-					/* Replace jquery UI constants @todo depreciated */
+					/* Replace jQuery UI constants @todo depreciated */
 					if ( sAttr == "H" )
 					{
 						sAttr = classes.sJUIHeader;
@@ -2453,7 +2453,7 @@
 				$.extend( true, data, newData );
 	
 			// Remove the data property as we've resolved it already and don't want
-			// jquery to do it again (it is restored at the end of the function)
+			// jQuery to do it again (it is restored at the end of the function)
 			delete ajax.data;
 		}
 	
@@ -3093,7 +3093,7 @@
 	
 					// If it looks like there is an HTML entity in the string,
 					// attempt to decode it so sorting works as expected. Note that
-					// we could use a single line of jquery to do this, but the DOM
+					// we could use a single line of jQuery to do this, but the DOM
 					// method used here is much faster http://jsperf.com/html-decode
 					if ( cellData.indexOf && cellData.indexOf('&') !== -1 ) {
 						__filter_div.innerHTML = cellData;
@@ -4675,7 +4675,7 @@
 			var sTitle = col.sTitle.replace( /<.*?>/g, "" );
 			var th = col.nTh;
 	
-			// IE7 is throwing an error when setting these properties with jquery's
+			// IE7 is throwing an error when setting these properties with jQuery's
 			// attr() and removeAttr() methods...
 			th.removeAttribute('aria-sort');
 	
@@ -5119,7 +5119,7 @@
 	
 	
 	/**
-	 * Extend objects - very similar to jquery.extend, but deep copy objects, and
+	 * Extend objects - very similar to jQuery.extend, but deep copy objects, and
 	 * shallow copy arrays. The reason we need to do this, is that we don't want to
 	 * deep copy array init values (such as aaSorting) since the dev wouldn't be
 	 * able to override them, but we do want to deep copy arrays.
@@ -5220,7 +5220,7 @@
 	 *  @param {object} settings dataTables settings object
 	 *  @param {string} callbackArr Name of the array storage for the callbacks in
 	 *      oSettings
-	 *  @param {string} eventName Name of the jquery custom event to trigger. If
+	 *  @param {string} eventName Name of the jQuery custom event to trigger. If
 	 *      null no trigger is fired
 	 *  @param {array} args Array of arguments to pass to the callback function /
 	 *      trigger
@@ -5317,9 +5317,9 @@
 	DataTable = function( options )
 	{
 		/**
-		 * Perform a jquery selector action on the table's TR elements (from the tbody) and
-		 * return the resulting jquery object.
-		 *  @param {string|node|jQuery} sSelector jquery selector or node collection to act on
+		 * Perform a jQuery selector action on the table's TR elements (from the tbody) and
+		 * return the resulting jQuery object.
+		 *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
 		 *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
 		 *  @param {string} [oOpts.filter=none] Select TR elements that meet the current filter
 		 *    criterion ("applied") or all TR elements (i.e. no filter).
@@ -5329,7 +5329,7 @@
 		 *  @param {string} [oOpts.page=all] Limit the selection to the currently displayed page
 		 *    ("current") or not ("all"). If 'current' is given, then order is assumed to be
 		 *    'current' and filter is 'applied', regardless of what they might be given as.
-		 *  @returns {object} jquery object, filtered by the given selector.
+		 *  @returns {object} jQuery object, filtered by the given selector.
 		 *  @dtopt API
 		 *  @deprecated Since v1.10
 		 *
@@ -5360,14 +5360,14 @@
 		
 		/**
 		 * Almost identical to $ in operation, but in this case returns the data for the matched
-		 * rows - as such, the jquery selector used should match TR row nodes or TD/TH cell nodes
+		 * rows - as such, the jQuery selector used should match TR row nodes or TD/TH cell nodes
 		 * rather than any descendants, so the data can be obtained for the row/cell. If matching
 		 * rows are found, the data returned is the original data array/object that was used to
 		 * create the row (or a generated array if from a DOM source).
 		 *
 		 * This method is often useful in-combination with $ where both functions are given the
 		 * same parameters and the array indexes will match identically.
-		 *  @param {string|node|jQuery} sSelector jquery selector or node collection to act on
+		 *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
 		 *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
 		 *  @param {string} [oOpts.filter=none] Select elements that meet the current filter
 		 *    criterion ("applied") or all elements (i.e. no filter).
@@ -5418,7 +5418,7 @@
 		 * @param {boolean} [traditional=false] Set the API instance's context to be
 		 *   only the table referred to by the `DataTable.ext.iApiIndex` option, as was
 		 *   used in the API presented by DataTables 1.9- (i.e. the traditional mode),
-		 *   or if all tables captured in the jquery object should be used.
+		 *   or if all tables captured in the jQuery object should be used.
 		 * @return {DataTables.Api}
 		 */
 		this.api = function ( traditional )
@@ -6281,7 +6281,7 @@
 			
 				if ( oInit.sDom === defaults.sDom && defaults.sDom === "lfrtip" )
 				{
-					/* Set the DOM to use a layout suitable for jquery UI's theming */
+					/* Set the DOM to use a layout suitable for jQuery UI's theming */
 					oSettings.sDom = '<"H"lfr>t<"F"ip>';
 				}
 			
@@ -6631,10 +6631,10 @@
 	 * @param  {string|node|jQuery|object} mixed DataTable identifier. Can be one
 	 *   of:
 	 *
-	 *   * `string` - jquery selector. Any DataTables' matching the given selector
+	 *   * `string` - jQuery selector. Any DataTables' matching the given selector
 	 *     with be found and used.
 	 *   * `node` - `TABLE` node which has already been formed into a DataTable.
-	 *   * `jquery` - A jquery object of `TABLE` nodes.
+	 *   * `jQuery` - A jQuery object of `TABLE` nodes.
 	 *   * `object` - DataTables settings object
 	 *   * `DataTables.Api` - API instance
 	 * @return {array|null} Matching DataTables settings objects. `null` or
@@ -6665,11 +6665,11 @@
 			return mixed.settings().toArray();
 		}
 		else if ( typeof mixed === 'string' ) {
-			// jquery selector
+			// jQuery selector
 			jq = $(mixed);
 		}
 		else if ( mixed instanceof $ ) {
-			// jquery object (also DataTables instance)
+			// jQuery object (also DataTables instance)
 			jq = mixed;
 		}
 	
@@ -6686,7 +6686,7 @@
 	 * DataTables API class - used to control and interface with  one or more
 	 * DataTables enhanced tables.
 	 *
-	 * The API class is heavily based on jquery, presenting a chainable interface
+	 * The API class is heavily based on jQuery, presenting a chainable interface
 	 * that you can use to interact with tables. Each instance of the API class has
 	 * a "context" - i.e. the tables that it will operate on. This could be a single
 	 * table, all tables on a page or a sub-set thereof.
@@ -6717,10 +6717,10 @@
 	 *   used to define which DataTables enhanced tables this API will operate on.
 	 *   Can be one of:
 	 *
-	 *   * `string` - jquery selector. Any DataTables' matching the given selector
+	 *   * `string` - jQuery selector. Any DataTables' matching the given selector
 	 *     with be found and used.
 	 *   * `node` - `TABLE` node which has already been formed into a DataTable.
-	 *   * `jquery` - A jquery object of `TABLE` nodes.
+	 *   * `jQuery` - A jQuery object of `TABLE` nodes.
 	 *   * `object` - DataTables settings object
 	 * @param {array} [data] Data to initialise the Api instance with.
 	 *
@@ -6729,7 +6729,7 @@
 	 *   var api = $('#example').DataTable();
 	 *
 	 * @example
-	 *   // Initialisation using a DataTables jquery object
+	 *   // Initialisation using a DataTables jQuery object
 	 *   var api = $('#example').dataTable().api();
 	 *
 	 * @example
@@ -7177,7 +7177,7 @@
 	 * Selector for HTML tables. Apply the given selector to the give array of
 	 * DataTables settings objects.
 	 *
-	 * @param {string|integer} [selector] jquery selector string or integer
+	 * @param {string|integer} [selector] jQuery selector string or integer
 	 * @param  {array} Array of DataTables settings objects to be filtered
 	 * @return {array}
 	 * @ignore
@@ -7189,7 +7189,7 @@
 			return [ a[ selector ] ];
 		}
 	
-		// Perform a jquery selector on the table nodes
+		// Perform a jQuery selector on the table nodes
 		var nodes = $.map( a, function (el, i) {
 			return el.nTable;
 		} );
@@ -7213,7 +7213,7 @@
 	 * @name    DataTable.Api#tables
 	 * @param {string|integer} [selector] Selector to pick which tables the iterator
 	 *   should operate on. If not given, all tables in the current context are
-	 *   used. This can be given as a jquery selector (for example `':gt(0)'`) to
+	 *   used. This can be given as a jQuery selector (for example `':gt(0)'`) to
 	 *   select multiple tables or as an integer to select a single table.
 	 * @returns {DataTable.Api} Returns a new API instance if a selector is given.
 	 */
@@ -7541,7 +7541,7 @@
 			a, i, ien, j, jen,
 			selectorType = typeof selector;
 	
-		// Can't just check for isArray here, as an API or jquery instance might be
+		// Can't just check for isArray here, as an API or jQuery instance might be
 		// given with their array like look
 		if ( ! selector || selectorType === 'string' || selectorType === 'function' || selector.length === undefined ) {
 			selector = [ selector ];
@@ -7680,8 +7680,8 @@
 	 * {}          - no selector - use all available rows
 	 * {integer}   - row aoData index
 	 * {node}      - TR node
-	 * {string}    - jquery selector to apply to the TR elements
-	 * {array}     - jquery array of nodes, or simply an array of TR nodes
+	 * {string}    - jQuery selector to apply to the TR elements
+	 * {array}     - jQuery array of nodes, or simply an array of TR nodes
 	 *
 	 */
 	
@@ -7731,8 +7731,8 @@
 				}
 			}
 	
-			// Selector - jquery selector string, array of nodes or jquery object/
-			// As jquery's .filter() allows jquery objects to be passed in filter,
+			// Selector - jQuery selector string, array of nodes or jQuery object/
+			// As jQuery's .filter() allows jQuery objects to be passed in filter,
 			// it also allows arrays, so this will cope with all three options
 			return $(nodes)
 				.filter( sel )
@@ -7898,7 +7898,7 @@
 	
 	
 	_api_register( 'row.add()', function ( row ) {
-		// Allow a jquery object to be passed in - only a single row is added from
+		// Allow a jQuery object to be passed in - only a single row is added from
 		// it though - the first element in the set
 		if ( row instanceof $ && row.length ) {
 			row = row[0];
@@ -7922,7 +7922,7 @@
 		// Convert to array of TR elements
 		var rows = [];
 		var addRow = function ( r, k ) {
-			// Recursion to allow for arrays of jquery objects
+			// Recursion to allow for arrays of jQuery objects
 			if ( $.isArray( r ) || r instanceof $ ) {
 				for ( var i=0, ien=r.length ; i<ien ; i++ ) {
 					addRow( r[i], k );
@@ -8071,7 +8071,7 @@
 	// data can be:
 	//  tr
 	//  string
-	//  jquery or array of any of the above
+	//  jQuery or array of any of the above
 	_api_register( _child_mth, function ( data, klass ) {
 		var ctx = this.context;
 	
@@ -8144,7 +8144,7 @@
 	 * "{integer}:visIdx"  - visible column index (i.e. translate to column index)  (>=0 count from left, <0 count from right)
 	 * "{integer}:visible" - alias for {integer}:visIdx  (>=0 count from left, <0 count from right)
 	 * "{string}:name"     - column name
-	 * "{string}"          - jquery selector on column header nodes
+	 * "{string}"          - jQuery selector on column header nodes
 	 *
 	 */
 	
@@ -8201,7 +8201,7 @@
 				} );
 			}
 	
-			// jquery or string selector
+			// jQuery or string selector
 			var match = typeof s === 'string' ?
 				s.match( __re_column_selector ) :
 				'';
@@ -8230,7 +8230,7 @@
 				}
 			}
 			else {
-				// jquery selector on the TH elements for the columns
+				// jQuery selector on the TH elements for the columns
 				return $( nodes )
 					.filter( s )
 					.map( function () {
@@ -8454,7 +8454,7 @@
 				return [s];
 			}
 	
-			// Selector - jquery filtered cells
+			// Selector - jQuery filtered cells
 			return allCells
 				.filter( s )
 				.map( function (i, el) {
@@ -8667,8 +8667,8 @@
 	 * Attach a sort listener to an element for a given column
 	 *
 	 * @param {node|jQuery|string} node Identifier for the element(s) to attach the
-	 *   listener to. This can take the form of a single DOM node, a jquery
-	 *   collection of nodes or a jquery selector which will identify the node(s).
+	 *   listener to. This can take the form of a single DOM node, a jQuery
+	 *   collection of nodes or a jQuery selector which will identify the node(s).
 	 * @param {integer} column the column that a click on this node will sort on
 	 * @param {function} [callback] callback function when sort is run
 	 * @returns {DataTables.Api} this
@@ -8830,7 +8830,7 @@
 	/**
 	 * Check if a `<table>` node is a DataTable table already or not.
 	 *
-	 *  @param {node|jquery|string} table Table node, jquery object or jquery
+	 *  @param {node|jquery|string} table Table node, jQuery object or jQuery
 	 *      selector for the table to test. Note that if more than more than one
 	 *      table is passed on, only the first will be checked
 	 *  @returns {boolean} true the table given is a DataTable, or false otherwise
@@ -8950,7 +8950,7 @@
 	} );
 	
 	
-	// jquery functions to operate on the tables
+	// jQuery functions to operate on the tables
 	$.each( [ 'on', 'one', 'off' ], function (i, key) {
 		_api_register( key+'()', function ( /* event, handler */ ) {
 			var args = Array.prototype.slice.call(arguments);
@@ -9106,7 +9106,7 @@
 	} );
 	
 	
-	// locales method for extensions to be able to use the language object from the
+	// i18n method for extensions to be able to use the language object from the
 	// DataTable
 	_api_register( 'i18n()', function ( token, def, plural ) {
 		var ctx = this.context[0];
@@ -9140,8 +9140,8 @@
 	 * created for the tables on a given page.
 	 *
 	 * Note that the `DataTable.settings` object is aliased to
-	 * `jquery.fn.dataTableExt` through which it may be accessed and
-	 * manipulated, or `jquery.fn.dataTable.settings`.
+	 * `jQuery.fn.dataTableExt` through which it may be accessed and
+	 * manipulated, or `jQuery.fn.dataTable.settings`.
 	 *  @member
 	 *  @type array
 	 *  @default []
@@ -9499,7 +9499,7 @@
 	
 		/**
 		 * Class to be applied to the header element when sorting on this column -
-		 * when jquery UI theming is used.
+		 * when jQuery UI theming is used.
 		 *  @type string
 		 *  @default null
 		 */
@@ -9679,7 +9679,7 @@
 		 * how it is defined. These are:
 		 *
 		 * * `string` - Set the URL from where the data should be loaded from.
-		 * * `object` - Define properties for `jquery.ajax`.
+		 * * `object` - Define properties for `jQuery.ajax`.
 		 * * `function` - Custom data get function
 		 *
 		 * `string`
@@ -9692,14 +9692,14 @@
 		 * --------
 		 *
 		 * As an object, the parameters in the object are passed to
-		 * [jquery.ajax](http://api.jquery.com/jquery.ajax/) allowing fine control
+		 * [jQuery.ajax](http://api.jquery.com/jQuery.ajax/) allowing fine control
 		 * of the Ajax request. DataTables has a number of default parameters which
-		 * you can override using this option. Please refer to the jquery
+		 * you can override using this option. Please refer to the jQuery
 		 * documentation for a full description of the options available, although
 		 * the following parameters provide additional options in DataTables or
 		 * require special consideration:
 		 *
-		 * * `data` - As with jquery, `data` can be provided as an object, but it
+		 * * `data` - As with jQuery, `data` can be provided as an object, but it
 		 *   can also be used as a function to manipulate the data DataTables sends
 		 *   to the server. The function takes a single parameter, an object of
 		 *   parameters with the values that DataTables has readied for sending. An
@@ -10054,7 +10054,7 @@
 	
 	
 		/**
-		 * Enable jquery UI ThemeRoller support (required as ThemeRoller requires some
+		 * Enable jQuery UI ThemeRoller support (required as ThemeRoller requires some
 		 * slightly different and additional mark-up from what DataTables has
 		 * traditionally used).
 		 *  @type boolean
@@ -13203,7 +13203,7 @@
 		"bAjaxDataGet": true,
 	
 		/**
-		 * The last jquery XHR object that was used for server-side data gathering.
+		 * The last jQuery XHR object that was used for server-side data gathering.
 		 * This can be used for working with the XHR information in one of the
 		 * callbacks
 		 *  @type object
@@ -13326,7 +13326,7 @@
 		"_iRecordsDisplay": 0,
 	
 		/**
-		 * Flag to indicate if jquery UI marking and classes should be used.
+		 * Flag to indicate if jQuery UI marking and classes should be used.
 		 * Note that this parameter will be set by the initialisation routine. To
 		 * set a default use {@link DataTable.defaults}.
 		 *  @type boolean
@@ -13486,8 +13486,8 @@
 	 * options.
 	 *
 	 * Note that the `DataTable.ext` object is available through
-	 * `jquery.fn.dataTable.ext` where it may be accessed and manipulated. It is
-	 * also aliased to `jquery.fn.dataTableExt` for historic reasons.
+	 * `jQuery.fn.dataTable.ext` where it may be accessed and manipulated. It is
+	 * also aliased to `jQuery.fn.dataTableExt` for historic reasons.
 	 *  @namespace
 	 *  @extends DataTable.models.ext
 	 */
@@ -13501,7 +13501,7 @@
 	 * use this method to provide their own capabilities (sorting methods for
 	 * example).
 	 *
-	 * Note that this namespace is aliased to `jquery.fn.dataTableExt` for legacy
+	 * Note that this namespace is aliased to `jQuery.fn.dataTableExt` for legacy
 	 * reasons
 	 *
 	 *  @namespace
@@ -13992,7 +13992,7 @@
 	
 	
 		/**
-		 * jquery UI class container
+		 * jQuery UI class container
 		 *  @type object
 		 *  @deprecated Since v1.10
 		 */
@@ -14762,7 +14762,7 @@
 	} );
 	
 
-	// jquery access
+	// jQuery access
 	$.fn.dataTable = DataTable;
 
 	// Legacy aliases
@@ -14770,7 +14770,7 @@
 	$.fn.dataTableExt = DataTable.ext;
 
 	// With a capital `D` we return a DataTables API instance rather than a
-	// jquery object
+	// jQuery object
 	$.fn.DataTable = function ( opts ) {
 		return $(this).dataTable( opts ).api();
 	};
@@ -14789,7 +14789,7 @@
 	 * performing calculations when the table is altered at all.
 	 *  @name DataTable#draw.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 */
 
@@ -14798,7 +14798,7 @@
 	 * built-in global search, or column filters) is altered.
 	 *  @name DataTable#search.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 */
 
@@ -14806,7 +14806,7 @@
 	 * Page change event, fired when the paging of the table is altered.
 	 *  @name DataTable#page.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 */
 
@@ -14814,7 +14814,7 @@
 	 * Order event, fired when the ordering applied to the table is altered.
 	 *  @name DataTable#order.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 */
 
@@ -14823,7 +14823,7 @@
 	 * drawn, including Ajax data loaded, if Ajax data is required.
 	 *  @name DataTable#init.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} oSettings DataTables settings object
 	 *  @param {object} json The JSON object request from the server - only
 	 *    present if client-side Ajax sourced data is used</li></ol>
@@ -14836,7 +14836,7 @@
 	 * properties (for plug-ins) or modification of a DataTables core property.
 	 *  @name DataTable#stateSaveParams.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} oSettings DataTables settings object
 	 *  @param {object} json The state information to be saved
 	 */
@@ -14848,7 +14848,7 @@
 	 * state for a plug-in.
 	 *  @name DataTable#stateLoadParams.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} oSettings DataTables settings object
 	 *  @param {object} json The saved state information
 	 */
@@ -14858,7 +14858,7 @@
 	 * the settings object has been modified by the loaded data.
 	 *  @name DataTable#stateLoaded.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} oSettings DataTables settings object
 	 *  @param {object} json The saved state information
 	 */
@@ -14870,7 +14870,7 @@
 	 * finished.
 	 *  @name DataTable#processing.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} oSettings DataTables settings object
 	 *  @param {boolean} bShow Flag for if DataTables is doing processing or not
 	 */
@@ -14886,7 +14886,7 @@
 	 * success function.
 	 *  @name DataTable#xhr.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 *  @param {object} json JSON returned from the server
 	 *
@@ -14912,7 +14912,7 @@
 	 * can be used to remove bound events, added DOM nodes, etc.
 	 *  @name DataTable#destroy.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 */
 
@@ -14921,7 +14921,7 @@
 	 * page (the length) is changed.
 	 *  @name DataTable#length.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 *  @param {integer} len New length
 	 */
@@ -14930,7 +14930,7 @@
 	 * Column sizing has changed.
 	 *  @name DataTable#column-sizing.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 */
 
@@ -14938,7 +14938,7 @@
 	 * Column visibility has changed.
 	 *  @name DataTable#column-visibility.dt
 	 *  @event
-	 *  @param {event} e jquery event object
+	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 *  @param {int} column Column index
 	 *  @param {bool} vis `false` if column now hidden, or `true` if visible

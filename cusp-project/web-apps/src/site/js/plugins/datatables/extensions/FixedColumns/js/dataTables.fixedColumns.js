@@ -44,7 +44,7 @@ var factory = function( $, DataTable ) {
  *  @constructor
  *  @global
  *  @param {object} dt DataTables instance. With DataTables 1.10 this can also
- *    be a jquery collection, a jquery selector, DataTables API instance or
+ *    be a jQuery collection, a jQuery selector, DataTables API instance or
  *    settings object.
  *  @param {object} [init={}] Configuration object for FixedColumns. Options are
  *    defined by {@link FixedColumns.defaults}
@@ -182,7 +182,7 @@ var FixedColumns = function ( dt, init ) {
 			"dt": null,
 
 			/**
-			 * Left fixed column grid comps
+			 * Left fixed column grid components
 			 * @namespace
 			 */
 			"left": {
@@ -193,7 +193,7 @@ var FixedColumns = function ( dt, init ) {
 			},
 
 			/**
-			 * Right fixed column grid comps
+			 * Right fixed column grid components
 			 * @namespace
 			 */
 			"right": {
@@ -1035,7 +1035,7 @@ FixedColumns.prototype = /** @lends FixedColumns.prototype */{
 				{
 					aoFixedHeader[i][j].cell.className = aoCloneLayout[i][j].cell.className;
 
-					// If jquery UI theming is used we need to copy those elements as well
+					// If jQuery UI theming is used we need to copy those elements as well
 					$('span.DataTables_sort_icon', aoFixedHeader[i][j].cell).each( function () {
 						this.className = $('span.DataTables_sort_icon', aoCloneLayout[i][j].cell)[0].className;
 					} );
@@ -1389,7 +1389,7 @@ FixedColumns.version = "3.0.4";
  * Event fired whenever FixedColumns redraws the fixed columns (i.e. clones the table elements from the main DataTable). This will occur whenever the DataTable that the FixedColumns instance is attached does its own draw.
  * @name FixedColumns#draw.dtfc
  * @event
- * @param {event} e jquery event object
+ * @param {event} e jQuery event object
  * @param {object} o Event parameters from FixedColumns
  * @param {object} o.leftClone Instance's object dom.clone.left for easy reference. This object contains references to the left fixed clumn column's nodes
  * @param {object} o.rightClone Instance's object dom.clone.right for easy reference. This object contains references to the right fixed clumn column's nodes
