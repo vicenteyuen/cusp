@@ -46,7 +46,14 @@ AppMod.application({
         });
 
         // --- render event for ui ----
-        $("#user-list").DataTable();
+        $("#user-list").DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false
+        });
         $('.list-table input[type="checkbox"]').iCheck({
             checkboxClass: 'icheckbox_flat-blue',
             radioClass: 'iradio_flat-blue'
@@ -66,7 +73,14 @@ AppMod.application({
         });
 
 
+        $(".add-user").on("click",function() {
+
+
+        });
+
+
         // --- create model ---
+        /*
         var mvcCtx =  _ctx.getMvcContext();
         var User = mvcCtx.Collection.extend({
             url: restApiCtx+'/system/user'
@@ -86,6 +100,7 @@ AppMod.application({
                 console.log("error ok");
             }
         })
+        */
 
 
 
