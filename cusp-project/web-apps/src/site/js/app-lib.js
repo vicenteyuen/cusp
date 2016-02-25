@@ -108,6 +108,7 @@ AppMod = {
             mods.push('_g'); // first
 
 
+
             // --- create tpl engines mapping ---
             appMe._initTplEngineMap();
 
@@ -148,6 +149,9 @@ AppMod = {
                     mods.push(checkPreMod);
                 }
             }
+
+            // ---- define mods ---
+            mods.push('bootstrap');
 
             // --- defined global handle --
             requirejs(mods , function(_global , tplEngine){
@@ -210,8 +214,11 @@ AppMod = {
 
                 };
 
+
+
                 var agentArgs = [];
                 agentArgs.push(ctx);
+                agentArgs.push(appMe.getUIManager());
 
 
                 for (var i = leftPos ; i < args.length ; i++) {
@@ -231,6 +238,42 @@ AppMod = {
         }
     },
 
+    /**
+     * bind view ui
+     */
+    getUIManager:function() {
+
+        /**
+         * define ui manager
+         */
+        var UIManager = function() {
+            var _this = this;
+
+
+            // --- defind unit change view ---
+            _this.changeView = function(viewConf) {
+
+
+                console.log(viewCont);
+
+
+
+            }
+
+
+
+        };
+
+
+
+        var currentManage = new UIManager();
+
+
+        return currentManage;
+
+
+    },
+
 
 
     _globalLibsConf : function() {
@@ -248,6 +291,7 @@ AppMod = {
 
                 // --- global ---
                 '_g':'/js/global',
+                'bootstrap':'/js/bootstrap/bootstrap',
 
                 // --- jquery load ---
                 jquery: '/js/plugins/jquery/jquery-2.1.4',
@@ -270,6 +314,7 @@ AppMod = {
                 jsPlumb:['jquery', 'css!'+baseUrl+'/js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
                 jsPlumbToolkit:['jsPlumb', 'css!'+baseUrl+'/js/plugins/jsPlumb/jsPlumbToolkit-default.css'],
                 'bs-slider':['jquery', 'css!'+baseUrl+'/js/plugins/bootstrap-slider/slider.css'],
+                'bootstrap':['jquery'],
 
                 'dataTables-bootstrap':['jquery-datatables', 'css!'+baseUrl+'/js/plugins/datatables/dataTables.bootstrap.css'],
                 'iCheck':['css!'+baseUrl+'/js/plugins/iCheck/flat/blue.css'],

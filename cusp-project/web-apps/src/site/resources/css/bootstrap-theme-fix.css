@@ -16,3 +16,39 @@
 .navbar-nav > li > a{
     padding-top: 15px;
 }
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-horizontal .radio,
+.form-horizontal .checkbox,
+.form-horizontal .radio-inline,
+.form-horizontal .checkbox-inline {
+    padding-top: 7px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.form-horizontal .radio,
+.form-horizontal .checkbox {
+    min-height: 27px;
+}
+.form-horizontal .form-group {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+
+.form-control-feedback {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    display: block;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    pointer-events: none;
+}

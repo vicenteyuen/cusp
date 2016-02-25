@@ -17,7 +17,7 @@ router.get('/system/nav-menus', function(req, res) {
 
 
 // --- user mapping ---
-router.put('/system/user/123', function(req, res) {
+router.put('/system/user/:id', function(req, res) {
     // --- use bae url --
     res.writeHead(200, {
         "Content-Type":"text/json;charset:"+charset
