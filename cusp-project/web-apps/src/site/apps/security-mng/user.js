@@ -18,9 +18,10 @@ AppMod.application({
 
     // --- module , plugin , component defined
     mods: [
-        'dataTables-bootstrap','iCheck','theme-AdminLTE'],
+        'dataTables-bootstrap','iCheck',
+        'theme-AdminLTE'],
 
-    launch : function(_ctx ) {
+    launch : function(_ctx , uiManager) {
         var _g = _ctx.getGlobal(),
             restApiCtx = _g.getFullRestApiContext();
 
@@ -74,9 +75,41 @@ AppMod.application({
 
 
         $(".add-user").on("click",function() {
+<<<<<<< Upstream, based on origin/dev
 
 
         });
+=======
+            uiManager.changeView({
+                html:'',
+                title:'新增用户',
+                listeners: {
+
+                }
+            });
+            /*
+            $('#myModal').modal({
+                keyboard: true
+            });
+            */
+        });
+
+
+        var containerPlatform = {
+            template:'',
+            listeners:{
+
+            }
+        }
+
+
+        $(".change-password").on("click" , function() {
+
+
+
+        });
+
+>>>>>>> f4bc730 Merge branch 'dev' of https://github.com/visonruan/cusp.git into dev
 
 
         // --- create model ---
