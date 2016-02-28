@@ -53,6 +53,48 @@ AppMod = {
     _tplEnginesMap:{},
 
 
+    /**
+     *
+     * @private method
+     */
+    _loadFileWithXHR: function(srcUrl) {
+        var xhrReq = null;
+        if (window.XMLHttpRequest) {
+            xhrReq = new XMLHttpRequest();
+        } else if (window.ActiveXObject) {
+            xhrReq = new ActiveXObject("Microsoft.XMLHTTP");
+        } else {
+            if (window.console) {
+                console.log("XMLHttpRequest not supported!");
+            }
+            return ;
+        }
+
+        xhrReq.onreadystatechange = function() {
+            if ( xhrReq.readyState != 4 ) {
+                return;
+            }
+            if (xhrReq.status != 200) {
+                if (window.console) {
+                    console.log('Failed to retrive the template! Error : '+xhrReq.status);
+                }
+            }
+            if ( xhrReq.readyState == 4 ) {
+                if (xhrReq.status == 200) {
+
+                    var tplContent = xhrReq.responseText;
+                    console.log('get content: ' + tplContent);
+
+
+                }
+            }
+        }
+
+
+
+
+    },
+
     _initTplEngineMap: function() {
         var me = this;
 
@@ -68,11 +110,34 @@ AppMod = {
 
             _me.render = function(args) {
 
+                if (args['template'] || args['templateId']) {
+
+                    if (args['templateId']) {
+
+                        // --- parse id ---
+                        var tplDom = document.getElementById(args['templateId']);
+                        var tplType = tplDom.getAttribute('type');
+
+                        if (tplType == 'text/x-dot-template') {
+                            var srcUrl = tplDom.getAttribute('src');
+                            // --- check content under dom element
+                            me._loadFileWithXHR(srcUrl);
+
+                        }
 
 
+
+                    }
+
+
+                } else {
+                    throw new Error('"template or templateId " variable is not defined.');
+                }
+                /*
                 if (!args['template']) {
                     throw new Error('"template" variable is not defined.');
                 }
+                */
 
                 if (!args['data']) {
                     throw new Error('"data" variable is not defined.');
@@ -83,10 +148,12 @@ AppMod = {
                 }
 
                 // --- check args ---
+                /*
                 var tpl = _me.engine.template( args['template'] );
                 var result = tpl(args['data']);
                 var renderCallback = args['renderCallback'];
                 renderCallback(result);
+                */
             }
         };
         me._tplEnginesMap['doT'] = dotTplEngine;
@@ -251,10 +318,8 @@ AppMod = {
 
 
             // --- defind unit change view ---
-            _this.changeView = function(viewConf) {
+            _this.openDialog = function(viewConf) {
 
-
-                console.log(viewCont);
 
 
 

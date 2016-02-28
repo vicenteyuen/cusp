@@ -21,7 +21,7 @@ AppMod.application({
         'dataTables-bootstrap','iCheck',
         'theme-AdminLTE'],
 
-    launch : function(_ctx , uiManager) {
+    launch : function(_ctx , _uiManager) {
         var _g = _ctx.getGlobal(),
             restApiCtx = _g.getFullRestApiContext();
 
@@ -74,74 +74,36 @@ AppMod.application({
         });
 
 
-        $(".add-user").on("click",function() {
-<<<<<<< Upstream, based on origin/dev
-
+        _uiManager.openDialog({
+            html:"",
+            title:"新增用户"
 
         });
-=======
-            uiManager.changeView({
-                html:'',
-                title:'新增用户',
-                listeners: {
 
-                }
-            });
-            /*
+        tplEngine.render({
+            templateId:'user-info-tpl',
+            data:{},
+            renderCallback: function(renderResult) {
+
+            }
+        });
+       // var smTmpl = document.getElementById('sidebar-menu-tpl');
+
+
+        $(".add-user").on("click",function() {
             $('#myModal').modal({
                 keyboard: true
+            }).on('shown.bs.modal', function (e) {
+
+                $(".btn-save").on('click' , function() {
+
+                })
+
+
+
             });
-            */
-        });
-
-
-        var containerPlatform = {
-            template:'',
-            listeners:{
-
-            }
-        }
-
-
-        $(".change-password").on("click" , function() {
-
 
 
         });
-
->>>>>>> f4bc730 Merge branch 'dev' of https://github.com/visonruan/cusp.git into dev
-
-
-        // --- create model ---
-        /*
-        var mvcCtx =  _ctx.getMvcContext();
-        var User = mvcCtx.Collection.extend({
-            url: restApiCtx+'/system/user'
-        });
-
-        var user = new User();
-        user.create({
-            id:"123",
-            name:"person name"
-        });
-
-        Backbone.sync("create", user , {
-            success: function() {
-                console.log('ok');
-            },
-            error: function() {
-                console.log("error ok");
-            }
-        })
-        */
-
-
-
-
-
-
-
-
-
     }
 })
