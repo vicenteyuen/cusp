@@ -57,7 +57,7 @@ AppMod = {
      *
      * @private method
      */
-    _loadFileWithXHR: function(srcUrl) {
+    _loadFileWithXHR: function(srcUrl , callback) {
         var xhrReq = null;
         if (window.XMLHttpRequest) {
             xhrReq = new XMLHttpRequest();
@@ -83,12 +83,17 @@ AppMod = {
                 if (xhrReq.status == 200) {
 
                     var tplContent = xhrReq.responseText;
-                    console.log('get content: ' + tplContent);
-
-
+                    if (callback) {
+                        callback(tplContent);
+                    }
                 }
             }
         }
+
+
+        // ---- send request ---
+        xhrReq.open("GET", srcUrl, true);
+        xhrReq.send({});
 
 
 
@@ -110,6 +115,7 @@ AppMod = {
 
             _me.render = function(args) {
 
+                var orgTpl = null;
                 if (args['template'] || args['templateId']) {
 
                     if (args['templateId']) {
@@ -119,15 +125,37 @@ AppMod = {
                         var tplType = tplDom.getAttribute('type');
 
                         if (tplType == 'text/x-dot-template') {
+
+                            var renderCallback = args['renderCallback'];
+
+
                             var srcUrl = tplDom.getAttribute('src');
+                            if (srcUrl) {
+                                me._loadFileWithXHR(srcUrl,renderCallback);
+                            } else {
+                                // --- parse url content ---
+                                orgTpl = tplDom.innerHTML;
+
+                               // _me.engine.template( args['template'] );
+                                var tpl = _me.engine.template( orgTpl );
+                                var result = tpl(args['data']);
+
+                                renderCallback(result);
+                            }
+
+
                             // --- check content under dom element
-                            me._loadFileWithXHR(srcUrl);
+                            //
 
                         }
 
 
-
                     }
+
+                    else {
+                        tpl = _me.engine.template( args['template'] );
+                    }
+
 
 
                 } else {
@@ -146,6 +174,12 @@ AppMod = {
                 if (!args['renderCallback']) {
                     throw new Error('"renderCallback" variable is not defined.');
                 }
+
+                if (tpl) {
+
+
+                }
+
 
                 // --- check args ---
                 /*

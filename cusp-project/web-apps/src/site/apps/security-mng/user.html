@@ -328,7 +328,6 @@
                         <a href="#">
                             <i class="fa fa-dashboard"></i> <span>{{=secMenuRef.text}}</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
-
                         {{? secMenuRef.nodes && secMenuRef.nodes.length > 0 }}
                         <ul class="treeview-menu">
                             {{~secMenuRef.nodes: thiMenuRef:thiMenuIndex}}
@@ -337,14 +336,11 @@
 
                         </ul>
                         {{?}}
-
                     </li>
                     {{~}}
                     {{??}}
                     empty
                     {{?}}
-
-
                     {{~}}
                 </script>
             </ul>
@@ -497,7 +493,7 @@
     </footer>
 
     <!-- modal -->
-    <script id="user-info-tpl" type="text/x-dot-template" src="tpl/dot/user_info.tpl">
+    <script id="user-info-tpl" type="text/x-dot-template" src="tpl/user_info.dtpl">
     </script>
 
     <!-- modal component-->

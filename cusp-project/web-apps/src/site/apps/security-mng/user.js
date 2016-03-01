@@ -29,7 +29,7 @@ AppMod.application({
         var tplEngine = _ctx.getClientTplEngine('doT');
 
         var menuElems = $('section.sidebar ul.sidebar-menu');
-        var smTmpl = document.getElementById('sidebar-menu-tpl').innerHTML;
+        //var smTmpl = document.getElementById('sidebar-menu-tpl').innerHTML;
         $.get(restApiCtx + '/system/nav-menus',function(data,status) {
 
             if (status == 'success') {
@@ -37,7 +37,8 @@ AppMod.application({
                 var navMenus = data["data"];
                 // --- parse template ---
                 tplEngine.render({
-                    template:smTmpl,
+                    templateId:'sidebar-menu-tpl',
+                    //template:smTmpl,
                     data:navMenus,
                     renderCallback: function(renderResult) {
                         menuElems.html(renderResult);
@@ -73,6 +74,32 @@ AppMod.application({
             $(this).data("clicks", !clicks);
         });
 
+        // ---- create user object ---
+
+        var bbMvc = _ctx.getMvcContext();
+
+
+
+        var User = bbMvc.Model.extend({
+            urlRoot : restApiCtx + '/users'
+        });
+
+        var UserInfoView = bbMvc.View.extend({
+
+        });
+
+        var Users = bbMvc.Collection.extend({
+            url: restApiCtx + '/users',
+            parse:function(data) {
+
+            }
+        });
+
+
+
+
+
+
 
         _uiManager.openDialog({
             html:"",
@@ -80,22 +107,27 @@ AppMod.application({
 
         });
 
-        tplEngine.render({
-            templateId:'user-info-tpl',
-            data:{},
-            renderCallback: function(renderResult) {
-
-            }
-        });
-       // var smTmpl = document.getElementById('sidebar-menu-tpl');
 
 
         $(".add-user").on("click",function() {
+            // --- render api ---
+            tplEngine.render({
+                templateId:'user-info-tpl',
+                data:{},
+                renderCallback: function(renderResult) {
+                    console.log('call result : ' + renderResult);
+                }
+            });
+
+
             $('#myModal').modal({
                 keyboard: true
             }).on('shown.bs.modal', function (e) {
 
                 $(".btn-save").on('click' , function() {
+                    var currentUser = new User();
+
+                    console.log( currentUser );
 
                 })
 
