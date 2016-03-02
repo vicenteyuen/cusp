@@ -91,20 +91,46 @@ AppMod = {
 
             // --- defined global handle --
             requirejs(mods , function(_global , tplEngine){
-                var args = arguments;
-
-                var agentEngine = null, leftPos = 1;
 
                 // --- load defined framework ---
-                var observer = appMe._getObserver();
+                var Observer = appMe._getObserver();
+                var observer = new Observer();
+                //
+                observer.addLoadMod({
+                    mods:['fw/context'],
+                    method:function(ctx) {
+                        ctx.initCtx();
+                    }
+                });
+
+                observer.addLoadMod({
+                    mods:['fw/uimanager'],
+                    method:function(uimanager) {
+
+                    }
+                });
+
+                observer.notifyCallback(function(passArgs) {
+
+                    if (typeof config.launch == 'function') {
+                        // --- call method --
+                        config.launch.apply(appMe,passArgs);
+                    }
+
+
+                });
+
+
+                // --- load mothod
+                observer.load();
 
 
 
 
 
 
+/*
 
-                var agentArgs = [];
 
                 var ctx = require('fw/context');
                 ctx.initCtx();
@@ -127,6 +153,7 @@ AppMod = {
                     // --- call method
                     config.launch.apply(this,agentArgs);
                 }
+                */
 
             });
 
@@ -139,8 +166,68 @@ AppMod = {
      */
     _getObserver : function() {
 
+        var _this = this;
+
 
         var Observer = function() {
+
+            var _observerSelf = this,refArrays = [];
+
+            var _refCallback = null;
+
+            this.addLoadMod = function(ref) {
+                refArrays.push(ref);
+            }
+
+
+
+            this.notifyCallback = function(funRef) {
+                _refCallback = funRef;
+            }
+
+
+
+            this.load = function() {
+
+                var totalCount = refArrays.length;
+                var loadedMark = 0;
+
+                var passargs = new Array(2);
+
+                for (var i = 0 ; i < totalCount ; i++) {
+                    var refMod = refArrays[i];
+                    require(refMod['mods'],function() {
+
+                        refMod['method'].apply(_this,arguments);
+
+
+                        var modName = refMod['mods'][0];
+                        if (modName === 'fw/context') {
+                            passargs[0] = arguments[0];
+                        }else if (modName === 'fw/uimanager') {
+                            passargs[1] = arguments[0];
+                        }
+
+
+                        // --- check current value status ---
+                        loadedMark++;
+
+                        if (loadedMark == totalCount) {
+                            // --- fire notifycall back ---
+                            if (_refCallback) {
+                                // --- call method ---
+                                _refCallback(passargs);
+                            }
+                        }
+
+
+
+                    });
+                }
+
+            }
+
+
 
         };
 
