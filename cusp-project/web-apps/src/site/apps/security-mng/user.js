@@ -4,22 +4,23 @@
 
 AppMod.setConfig({
 
+    impTplEngines:['doT'],
+
+    paths:{
+        'UserInfo':'mvc/UserInfo'
+    }
+
 })
 
 
 AppMod.application({
 
     supportMVC:true,
-    /**
-     * defeind use template engine
-     *
-     */
-    tplEngines:['doT'],
 
     // --- module , plugin , component defined
     mods: [
         'dataTables-bootstrap','iCheck',
-        'theme-AdminLTE'],
+        'theme-AdminLTE','UserInfo'],
 
     launch : function(_ctx , _uiManager) {
         var _g = _ctx.getGlobal(),
@@ -74,68 +75,50 @@ AppMod.application({
             $(this).data("clicks", !clicks);
         });
 
-        // ---- create user object ---
 
-        var bbMvc = _ctx.getMvcContext();
-
-
-
-        var User = bbMvc.Model.extend({
-            urlRoot : restApiCtx + '/users'
-        });
-
-        var UserInfoView = bbMvc.View.extend({
-
-        });
-
-        var Users = bbMvc.Collection.extend({
-            url: restApiCtx + '/users',
-            parse:function(data) {
-
-            }
-        });
+        console.log(_uiManager);
 
 
 
 
-
-
-
-        _uiManager.openDialog({
-            html:"",
-            title:"新增用户"
-
-        });
-
-
-
+        // --- defind application event ----
         $(".add-user").on("click",function() {
+            // --- call application event --
+
             // --- render api ---
             tplEngine.render({
                 templateId:'user-info-tpl',
                 data:{},
                 renderCallback: function(renderResult) {
-                    console.log('call result : ' + renderResult);
+
+                    /*
+                     * define dialog
+                     */
+                    _uiManager.openDialog({
+                        html:renderResult,
+                        title:"新增用户",
+                        handlers: {
+                            'ui:rendered' : function(e) {
+
+                                // --- get reference object --
+                                $(".btn-save").on('click' , function() {
+                                    var currentUser = new User();
+
+
+                                })
+
+
+
+                            }
+                        }
+
+                    });
+
                 }
             });
 
-
-            $('#myModal').modal({
-                keyboard: true
-            }).on('shown.bs.modal', function (e) {
-
-                $(".btn-save").on('click' , function() {
-                    var currentUser = new User();
-
-                    console.log( currentUser );
-
-                })
-
-
-
-            });
-
-
         });
+
+
     }
 })
