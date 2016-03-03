@@ -75,58 +75,49 @@ AppMod.application({
 
 
 
-
-        // --- defind application event ----
-        /*
-        $(".add-user").on("click",function() {
-            // --- call application event --
-
-            // --- render api ---
-            tplEngine.render({
-                templateId:'user-info-tpl',
-                data:{},
-                renderCallback: function(renderResult) {
-
-
-                    _uiManager.openDialog({
-                        html:renderResult,
-                        title:"新增用户",
-                        handlers: {
-                            'ui:rendered' : function(e) {
-
-                                // --- get reference object --
-                                $(".btn-save").on('click' , function(refComp) {
-                                    var currentUser = new User();
-
-
-
-
-
-                                })
-
-
-
-                            }
-                        }
-
-                    });
-
-                }
-            });
-
-        });
-        */
-
-
     },
 
+    events: function(_ctx , _uiManager) {
 
+        // --- render module ---
+        var tplEngine = _ctx.getClientTplEngine('doT'), mvcManager = _ctx.getMvcManager();
 
-    events: function() {
+        var User = mvcManager.getModelClass('UserInfo');
+
 
         var listeners = {
-            'btn:add-user':function(e) {
+            'btn:add-user':{
+                'deps':[],
+                'event':function(comp,e) {
+                    tplEngine.render({
+                        templateId:'user-info-tpl',
+                        data:{},
+                        renderCallback: function(renderResult) {
 
+
+                            _uiManager.openDialog({
+                                html:renderResult,
+                                title:"新增用户",
+                                handlers: {
+                                    'ui:rendered' : function(e) {
+
+                                        // --- get reference object --
+                                        $(".btn-save").on('click' , function(refComp) {
+                                            var currentUser = new User();
+
+
+                                        })
+
+
+
+                                    }
+                                }
+
+                            });
+
+                        }
+                    });
+                }
             }
 
 

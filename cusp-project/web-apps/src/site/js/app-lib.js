@@ -90,10 +90,7 @@ AppMod = {
             mods.push('bootstrap');
 
 
-            // --- load config ----
-            if (config['events']) {
-                appMe._loadRunningEvents(config['events']);
-            }
+
 
 
 
@@ -120,6 +117,12 @@ AppMod = {
 
                 observer.notifyCallback(function(passArgs) {
 
+                    // --- load config ----
+                    if (typeof config['events']  == "function" ) {
+                        var eventAll = config.events.apply(appMe,passArgs);
+                        appMe._loadRunningEvents(eventAll);
+                    }
+
 
                     if (typeof config.launch == 'function') {
                         // --- call method --
@@ -139,17 +142,55 @@ AppMod = {
         }
     },
 
-    _eventFun : null,
+    _eventFun : {},
 
-    _loadRunningEvents: function (eventFun) {
-        if ( typeof eventFun == "function") {
-            this._eventFun = eventFun();
+    _loadRunningEvents: function (eventAll) {
+        for (var i in eventAll) {
+            if (typeof eventAll[i] == "function") {
+
+                this._eventFun[i] = {
+                    deps:[],
+                    event:eventAll[i]
+                }
+
+            }
+            else if (typeof eventAll[i] == "object") {
+                var ref = eventAll[i];
+                this._eventFun[i] = {
+                    deps:ref['deps'],
+                    event:ref['event']
+                }
+            }
+
         }
     },
 
 
     getEventRef: function (eventRef) {
-        return this._eventFun[eventRef];
+
+        var ref = this._eventFun[eventRef];
+
+
+        var proxyEvent = function(event) {
+
+            var comp = this;
+            var event = ref['event'];
+
+            // ----require call ---
+            require(ref['deps'],function() {
+
+                event(comp , event);
+
+            });
+
+
+        };
+
+
+
+
+
+        return proxyEvent;
     },
 
     /**
