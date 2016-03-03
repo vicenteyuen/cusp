@@ -2,8 +2,10 @@
  * Created by ruanweibiao on 2016-02-19.
  * define and build framework
  */
-define('fw/context',['_g','backbone','backbone-localstorage'],function(_g , _backbone) {
+define('fw/context',['_g','fw/mvcmanager'],function(_g , _mvcmanager) {
     var _this = this;
+
+
 
     var context = new function() {
 
@@ -18,9 +20,10 @@ define('fw/context',['_g','backbone','backbone-localstorage'],function(_g , _bac
             return _g;
         }
 
-        this.getMvcContext = function() {
-            return _backbone;
+        this.getMvcManager = function() {
+            return _mvcmanager;
         }
+
 
 
         // --- define use template ---
@@ -34,7 +37,7 @@ define('fw/context',['_g','backbone','backbone-localstorage'],function(_g , _bac
             }
 
             // --- load by demand ---
-            var tplEngCore = requirejs(engineName);
+            var tplEngCore = require(engineName);
 
             return tplEngCore;
         }

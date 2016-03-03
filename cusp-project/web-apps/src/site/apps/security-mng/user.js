@@ -15,7 +15,6 @@ AppMod.setConfig({
 
 AppMod.application({
 
-    supportMVC:true,
 
     // --- module , plugin , component defined
     mods: [
@@ -25,29 +24,21 @@ AppMod.application({
     launch : function(_ctx , _uiManager) {
 
         var _g = _ctx.getGlobal(),
-            restApiCtx = _g.getFullRestApiContext();
+            restApiCtx = _g.getFullRestApiContext(),
+            mvcManager = _ctx.getMvcManager();
 
         // --- render module ---
         var tplEngine = _ctx.getClientTplEngine('doT');
 
-        var menuElems = $('section.sidebar ul.sidebar-menu');
-        //var smTmpl = document.getElementById('sidebar-menu-tpl').innerHTML;
-        $.get(restApiCtx + '/system/nav-menus',function(data,status) {
+        // --- render navigertor menu handle ---
+        _uiManager.renderNavMenu();
 
-            if (status == 'success') {
-                // --- parse data ---
-                var navMenus = data["data"];
-                // --- parse template ---
-                tplEngine.render({
-                    templateId:'sidebar-menu-tpl',
-                    //template:smTmpl,
-                    data:navMenus,
-                    renderCallback: function(renderResult) {
-                        menuElems.html(renderResult);
-                    }
-                });
-            }
+        // -- render content header element
+        _uiManager.renderContentHeader({
+            title:'用户管理'
         });
+
+
 
         // --- render event for ui ----
         $("#user-list").DataTable({
@@ -77,11 +68,16 @@ AppMod.application({
         });
 
 
+        var User = mvcManager.getModelClass('UserInfo');
+
+        var btnAddUser = this.getEventRef('btn:add-user');
+        $(".add-user").on("click",btnAddUser);
 
 
 
 
         // --- defind application event ----
+        /*
         $(".add-user").on("click",function() {
             // --- call application event --
 
@@ -91,9 +87,7 @@ AppMod.application({
                 data:{},
                 renderCallback: function(renderResult) {
 
-                    /*
-                     * define dialog
-                     */
+
                     _uiManager.openDialog({
                         html:renderResult,
                         title:"新增用户",
@@ -101,8 +95,11 @@ AppMod.application({
                             'ui:rendered' : function(e) {
 
                                 // --- get reference object --
-                                $(".btn-save").on('click' , function() {
+                                $(".btn-save").on('click' , function(refComp) {
                                     var currentUser = new User();
+
+
+
 
 
                                 })
@@ -118,7 +115,26 @@ AppMod.application({
             });
 
         });
+        */
 
+
+    },
+
+
+
+    events: function() {
+
+        var listeners = {
+            'btn:add-user':function(e) {
+
+            }
+
+
+
+        }
+
+        return listeners;
 
     }
+
 })

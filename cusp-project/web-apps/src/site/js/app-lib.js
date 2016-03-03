@@ -89,6 +89,14 @@ AppMod = {
             // ---- define mods ---
             mods.push('bootstrap');
 
+
+            // --- load config ----
+            if (config['events']) {
+                appMe._loadRunningEvents(config['events']);
+            }
+
+
+
             // --- defined global handle --
             requirejs(mods , function(_global , tplEngine){
 
@@ -115,7 +123,7 @@ AppMod = {
 
                     if (typeof config.launch == 'function') {
                         // --- call method --
-                        config.launch.apply(this,passArgs);
+                        config.launch.apply(appMe,passArgs);
                     }
 
 
@@ -129,6 +137,19 @@ AppMod = {
             });
 
         }
+    },
+
+    _eventFun : null,
+
+    _loadRunningEvents: function (eventFun) {
+        if ( typeof eventFun == "function") {
+            this._eventFun = eventFun();
+        }
+    },
+
+
+    getEventRef: function (eventRef) {
+        return this._eventFun[eventRef];
     },
 
     /**
@@ -247,6 +268,7 @@ AppMod = {
                 // --- global ---
                 '_g':'/js/global',
                 'fw/uimanager': '/js/fw/uimanager',
+                'fw/mvcmanager': '/js/fw/mvcmanager',
                 'fw/context':'/js/fw/context',
                 'bootstrap':'/js/bootstrap/bootstrap',
 

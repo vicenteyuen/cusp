@@ -4,6 +4,8 @@
 
 AppMod.setConfig({
 
+    impTplEngines:['doT']
+
     /*
     paths:{
         'comps/treeview': '../../js/react-plugin/treeview/tv'
@@ -13,12 +15,10 @@ AppMod.setConfig({
 })
 
 AppMod.application({
-    supportMVC:true,
     /**
      * defeind use template engine
      *
      */
-    tplEngines:['doT'],
 
     // --- module , plugin , component defined
     mods: ['jstree','jsPlumbToolkit' , 'theme-AdminLTE'],
@@ -27,68 +27,22 @@ AppMod.application({
      * get launch ctx
      * @param _ctx
      */
-    launch : function(_ctx) {
+    launch : function(_ctx, _uiManager) {
         var _g = _ctx.getGlobal(),
-            restApiCtx = _g.getFullRestApiContext();
+            restApiCtx = _g.getFullRestApiContext(),
+            mvcManager = _ctx.getMvcManager();
 
         // --- render module ---
         var tplEngine = _ctx.getClientTplEngine('doT');
 
-        var menuElems = $('section.sidebar ul.sidebar-menu');
-        var smTmpl = document.getElementById('sidebar-menu-tpl').innerHTML;
-        $.get(restApiCtx + '/system/nav-menus',function(data,status) {
 
-            if (status == 'success') {
-                // --- parse data ---
-                var navMenus = data["data"];
+        // --- render navigertor menu handle ---
+        _uiManager.renderNavMenu();
 
-                // --- parse template ---
-                tplEngine.render({
-                    template:smTmpl,
-                    data:navMenus,
-                    renderCallback: function(renderResult) {
-                        menuElems.html(renderResult);
-                    }
-                });
-            }
-
+        // -- render content header element
+        _uiManager.renderContentHeader({
+            title:'ETL管理'
         });
-
-
-
-        /*
-        $.ajax({
-            url:restApiCtx + '/security/nav-menus',
-            success:function() {
-                alert("Success");
-            },
-            error:function() {
-                alert("Error");
-            },
-            dataType:"json"
-        }
-        */
-
-
-            /*
-
-        tplEngine.render({
-            template:"<h1>{{=it.name}}</h1>",
-            data:{name:'hello vison'},
-            renderCallback: function(renderResult) {
-
-
-            }
-        });*/
-
-
-
-       // var doTmp = doT.template("<h1>{{=it.name}}</h1>");
-       // var res = doTmp({name:'hemo'});
-
-
-
-
 
 
 

@@ -351,16 +351,10 @@
     <!-- content area -->
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
+
         <section class="content-header">
-            <h1>
-                用户管理
-                <small>Version 0.1</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
-                <li class="active">用户管理</li>
-            </ol>
+            <!-- Content Header (Page header) -->
+            <script id="content-nav-header-tpl" type="text/x-dot-template" src="../comps/tpl/content-nav-header.dtpl"></script>
         </section>
 
         <!-- Main content -->
@@ -387,10 +381,6 @@
                                      <input type="text" class="form-control input-sm" placeholder="Search Mail">
                                      <span class="glyphicon glyphicon-search form-control-feedback"></span>
                                  </div>
-
-
-
-
 
                                 <!-- /.btn-group -->
                                 <div class="box-tools pull-right">
@@ -500,32 +490,6 @@
     <div class="modal fade" tabindex="-1" role="dialog" id="myModal" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <!--
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">新增用户</h4>
-            </div>
-            <div class="modal-body">
-                       <form>
-                        <div class="form-group">
-                            <label for="loginAccount" class="control-label">用户帐号</label>
-                            <input type="text" class="form-control" id="loginAccount" placeholder="输入登陆用户名">
-                        </div>
-                        <div class="form-group">
-                            <label for="chineseName" class="control-label">真实姓名</label>
-                            <input type="text" class="form-control" id="chineseName" placeholder="中文名称">
-                        </div>
-                        <div class="form-group">
-                            <label for="staffNo" class="control-label">员工编号</label>
-                            <input type="text" class="form-control" id="staffNo" placeholder="员工编号">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-close" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary btn-save">保存</button>
-                </div>
-                    -->
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->

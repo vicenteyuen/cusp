@@ -1,0 +1,8 @@
+    <h1>
+    {{=it.title}}
+    <small>Version 0.1</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>主页</a></li>
+        <li class="active">{{=it.title}}</li>
+    </ol>
