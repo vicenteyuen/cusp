@@ -112,9 +112,10 @@ AppMod = {
 
                 observer.notifyCallback(function(passArgs) {
 
+
                     if (typeof config.launch == 'function') {
                         // --- call method --
-                        config.launch.apply(appMe,passArgs);
+                        config.launch.apply(this,passArgs);
                     }
 
 
@@ -124,36 +125,6 @@ AppMod = {
                 // --- load mothod
                 observer.load();
 
-
-
-
-
-
-/*
-
-
-                var ctx = require('fw/context');
-                ctx.initCtx();
-                agentArgs.push(ctx);
-
-                require(['fw/uimanager'],function(uimanager) {
-                    agentArgs.push(uimanager);
-                });
-
-
-                // --- all define mapping ---
-                for (var i = leftPos ; i < args.length ; i++) {
-                    if (args[i]) {
-                        agentArgs.push( args[i] )
-                    }
-                }
-
-
-                if (typeof config.launch == 'function') {
-                    // --- call method
-                    config.launch.apply(this,agentArgs);
-                }
-                */
 
             });
 
@@ -192,38 +163,60 @@ AppMod = {
                 var totalCount = refArrays.length;
                 var loadedMark = 0;
 
-                var passargs = new Array(2);
 
-                for (var i = 0 ; i < totalCount ; i++) {
-                    var refMod = refArrays[i];
-                    require(refMod['mods'],function() {
+                var modResultMap = {};
 
-                        refMod['method'].apply(_this,arguments);
+                var loadMod = null;
+                while (refArrays.length > 0) {
+                    loadMod = refArrays.pop();
+
+                    setTimeout(function(curOneLoadMod) {
+
+                        require(curOneLoadMod.mods,function() {
+
+                            //refMod['method'].apply(_this,arguments);
+                            var modName = curOneLoadMod.mods[0];
+
+                            modResultMap[modName] = arguments[0];
+
+                            // --- check current value status ---
+                            loadedMark++;
+
+                            if (loadedMark == totalCount) {
+                                // --- fire notifycall back ---
+                                if (_refCallback) {
+                                    var passargs = [];
+
+                                    var args = modResultMap['fw/context'];
+                                    if (args) {
+                                        passargs.push(args);
+                                    }
+
+                                    args = modResultMap['fw/uimanager'];
+                                    if (args) {
+                                        passargs.push(args);
+                                    }
 
 
-                        var modName = refMod['mods'][0];
-                        if (modName === 'fw/context') {
-                            passargs[0] = arguments[0];
-                        }else if (modName === 'fw/uimanager') {
-                            passargs[1] = arguments[0];
-                        }
 
-
-                        // --- check current value status ---
-                        loadedMark++;
-
-                        if (loadedMark == totalCount) {
-                            // --- fire notifycall back ---
-                            if (_refCallback) {
-                                // --- call method ---
-                                _refCallback(passargs);
+                                    // --- call method ---
+                                    _refCallback(passargs);
+                                }
                             }
-                        }
 
 
 
-                    });
+                        });
+
+
+
+
+
+                    }, 0, loadMod);
+
                 }
+
+
 
             }
 

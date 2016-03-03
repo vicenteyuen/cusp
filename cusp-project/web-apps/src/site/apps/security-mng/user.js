@@ -24,8 +24,6 @@ AppMod.application({
 
     launch : function(_ctx , _uiManager) {
 
-        console.log(_ctx );
-
         var _g = _ctx.getGlobal(),
             restApiCtx = _g.getFullRestApiContext();
 
