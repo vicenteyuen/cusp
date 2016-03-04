@@ -123,10 +123,16 @@ AppMod = {
                         appMe._loadRunningEvents(eventAll);
                     }
 
+                    // --- init method ---
+                    if (typeof config.init == 'function') {
+                        // --- call method --
+                        config.init.apply(config,passArgs);
+                    }
+
 
                     if (typeof config.launch == 'function') {
                         // --- call method --
-                        config.launch.apply(appMe,passArgs);
+                        config.launch.apply(config,passArgs);
                     }
 
 
@@ -166,6 +172,42 @@ AppMod = {
     },
 
 
+    delegateEvent: function(ref) {
+
+        var event = null;
+
+        if ( typeof ref == 'object') {
+            event = ref['event'];
+        }
+        else if (typeof ref == 'function') {
+            event = null;
+        } else {
+            throw Error("Could not define event and event is not null.");
+        }
+
+
+        var delEvent = function(e) {
+
+            var comp = this;
+            var event = ref['event'];
+
+            // ----require call ---
+            require(ref['deps'],function() {
+
+                event(comp , e);
+
+            });
+
+
+        };
+
+        return delEvent;
+
+
+    },
+
+
+
     getEventRef: function (eventRef) {
 
         var ref = this._eventFun[eventRef];
@@ -185,10 +227,6 @@ AppMod = {
 
 
         };
-
-
-
-
 
         return proxyEvent;
     },
@@ -247,7 +285,7 @@ AppMod = {
                             if (loadedMark == totalCount) {
                                 // --- fire notifycall back ---
                                 if (_refCallback) {
-                                    var passargs = [];
+                                    var passargs = [_this];
 
                                     var args = modResultMap['fw/context'];
                                     if (args) {

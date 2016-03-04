@@ -2,17 +2,17 @@
  * Created by ruanweibiao on 2016-03-02.
  * @parameter userinfo
  */
-define('UserInfo',['fw/context'], function(_ctx) {
+define('Users',['fw/context'], function(_ctx) {
     var _g = _ctx.getGlobal(),
         restApiCtx = _g.getFullRestApiContext(), mvcmanager = _ctx.getMvcManager(),backbone = mvcmanager.getEngineCore();
 
 
     // --- define module and event define ---
     var User = backbone.Model.extend({
-        urlRoot : restApiCtx + '/users'
+        urlRoot : restApiCtx + '/user'
     });
 
-    mvcmanager.addModelClass(User,'UserInfo');
+    mvcmanager.addModelClass(User,'User');
 
     var Users = backbone.Collection.extend({
         url: restApiCtx + '/users',
@@ -20,6 +20,7 @@ define('UserInfo',['fw/context'], function(_ctx) {
 
         }
     });
+    mvcmanager.addModelClass(Users,'Users');
 
 
 

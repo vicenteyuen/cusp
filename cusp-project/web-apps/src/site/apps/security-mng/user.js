@@ -7,23 +7,32 @@ AppMod.setConfig({
     impTplEngines:['doT'],
 
     paths:{
-        'UserInfo':'mvc/UserInfo'
+        'Users':'mvc/Users'
     }
 
 })
 
-
+/**
+ * running application
+ */
 AppMod.application({
 
 
     // --- module , plugin , component defined
     mods: [
         'dataTables-bootstrap','iCheck',
-        'theme-AdminLTE','UserInfo'],
+        'theme-AdminLTE','Users'],
 
-    launch : function(_ctx , _uiManager) {
 
-        var _g = _ctx.getGlobal(),
+    init: function(appMod, _ctx , _uiManager) {
+        this.eventDef = this.events(appMod, _ctx , _uiManager);
+    },
+
+    eventDef : {},
+
+    launch : function(appMod, _ctx , _uiManager) {
+
+        var _me = this, _g = _ctx.getGlobal(),
             restApiCtx = _g.getFullRestApiContext(),
             mvcManager = _ctx.getMvcManager();
 
@@ -67,62 +76,75 @@ AppMod.application({
             $(this).data("clicks", !clicks);
         });
 
-
-        var User = mvcManager.getModelClass('UserInfo');
-
-        var btnAddUser = this.getEventRef('btn:add-user');
-        $(".add-user").on("click",btnAddUser);
-
-
+        // --- render event handle ---
+        $(".add-user").on("click",appMod.delegateEvent(_me.eventDef['btn:add-user']) );
 
     },
 
-    events: function(_ctx , _uiManager) {
+
+
+    // --- event define ---
+    events: function(appMod ,_ctx , _uiManager) {
+
+        var _me = this;
 
         // --- render module ---
         var tplEngine = _ctx.getClientTplEngine('doT'), mvcManager = _ctx.getMvcManager();
 
-        var User = mvcManager.getModelClass('UserInfo');
+        // --- load class type ---
+        var User = mvcManager.getModelClass('User');
+        var Users = mvcManager.getModelClass('Users');
+
+        var listeners = {};
 
 
-        var listeners = {
-            'btn:add-user':{
-                'deps':[],
-                'event':function(comp,e) {
-                    tplEngine.render({
-                        templateId:'user-info-tpl',
-                        data:{},
-                        renderCallback: function(renderResult) {
+        // --- defind all event ---
+        listeners['btn:add-user'] = {
+            'deps':[],
+            'event':function(comp,e) {
 
+                tplEngine.render({
+                    templateId:'user-info-tpl',
+                    data:{},
+                    renderCallback: function(renderResult) {
+                        _uiManager.openDialog({
+                            html:renderResult,
+                            title:"新增用户",
+                            handlers: {
+                                // --- render handle ---
+                                'ui:rendered' : function(comp , e) {
 
-                            _uiManager.openDialog({
-                                html:renderResult,
-                                title:"新增用户",
-                                handlers: {
-                                    'ui:rendered' : function(e) {
-
-                                        // --- get reference object --
-                                        $(".btn-save").on('click' , function(refComp) {
-                                            var currentUser = new User();
-
-
-                                        })
-
-
-
-                                    }
+                                    // --- get reference object --
+                                    $(".btn-save").on('click' , appMod.delegateEvent(_me.eventDef['btn:add-user:do']) );
                                 }
+                            }
 
-                            });
+                        });
 
-                        }
-                    });
-                }
+                    }
+                });
             }
+        };
 
 
+        // --- define layout event ---
+        listeners['btn:add-user:do'] = {
+            'deps':[],
+            'event':function(comp,e) {
+                var data = {
+                    loginAccount: $("#loginAccount").val(),
+                    chineseName : $("#chineseName").val(),
+                    staffNo : $("#staffNo").val()
+                };
 
-        }
+                var newUser = new User();
+                newUser.set(data);
+
+                newUser.save();
+            }
+        };
+
+
 
         return listeners;
 

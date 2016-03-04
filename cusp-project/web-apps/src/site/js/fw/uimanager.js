@@ -45,13 +45,23 @@ define('fw/uimanager',['_g','doT'],function(_g , tplEngine) {
             // --- open dialog ---
             diaElems.modal({
                 keyboard: true
-            }).on('shown.bs.modal', function (e) {
+            }).on('shown.bs.modal', function (modal_eve) {
+
                 // --- proxy delegate --
-                _defHandlers['ui:rendered'](e);
+                _defHandlers['ui:rendered'](this , modal_eve);
 
 
             });
+        };
+
+
+        this.widget = {};
+
+
+        this.widget.tablegrid = function(conf) {
+
         }
+
 
 
 

@@ -9,15 +9,15 @@
     <form>
     <div class="form-group">
                             <label for="loginAccount" class="control-label">用户帐号</label>
-                            <input type="text" class="form-control" id="loginAccount" placeholder="输入登陆用户名1">
+                            <input type="text" class="form-control" id="loginAccount" placeholder="输入登陆用户名">
                         </div>
                         <div class="form-group">
-                            <label for="chineseName" class="control-label">真实姓名</label>
-                            <input type="text" class="form-control" id="chineseName" placeholder="中文名称1">
+                            <label for="chineseName" class="control-label">中文名称</label>
+                            <input type="text" class="form-control" id="chineseName" placeholder="中文名称">
                         </div>
                         <div class="form-group">
                             <label for="staffNo" class="control-label">员工编号</label>
-                            <input type="text" class="form-control" id="staffNo" placeholder="员工编号1">
+                            <input type="text" class="form-control" id="staffNo" placeholder="员工编号">
                         </div>
                     </form>
 </div>

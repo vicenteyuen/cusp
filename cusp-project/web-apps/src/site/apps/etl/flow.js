@@ -27,7 +27,7 @@ AppMod.application({
      * get launch ctx
      * @param _ctx
      */
-    launch : function(_ctx, _uiManager) {
+    launch : function(_app, _ctx, _uiManager) {
         var _g = _ctx.getGlobal(),
             restApiCtx = _g.getFullRestApiContext(),
             mvcManager = _ctx.getMvcManager();
