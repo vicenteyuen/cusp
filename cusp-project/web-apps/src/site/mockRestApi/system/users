@@ -1,0 +1,7 @@
+{
+  "success":true,
+  "data":[
+    {"id":"01", "loginAccount":"a001" , "chineseName":"陈一", "staffNo":"80121222"},
+    {"id":"02", "loginAccount":"a002" , "chineseName":"陈二", "staffNo":"80121222"},
+  ]
+}

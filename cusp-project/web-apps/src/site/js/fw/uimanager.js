@@ -1,7 +1,7 @@
 /**
  * Created by ruanweibiao on 2016-03-02.
  */
-define('fw/uimanager',['_g','doT'],function(_g , tplEngine) {
+define('fw/uimanager',['_g','doT', 'widget/tablegrid'],function(_g , tplEngine) {
     var _this = this;
 
     var UIManager = new function() {
@@ -55,15 +55,19 @@ define('fw/uimanager',['_g','doT'],function(_g , tplEngine) {
         };
 
 
-        this.widget = {};
+        this.renderWidget = function(widgetName , config , callback) {
 
+            // --- call config ---
 
-        this.widget.tablegrid = function(conf) {
+            require([widgetName], function(widgetBuilder) {
+                widgetBuilder.init(config);
+                var widget = widgetBuilder.build();
+                if (callback) {
+                    callback(widget);
+                }
+            });
 
-        }
-
-
-
+        };
 
         this.renderContentHeader = function(conf) {
             // --- init content base tools ---

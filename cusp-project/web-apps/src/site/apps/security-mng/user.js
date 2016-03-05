@@ -23,13 +23,17 @@ AppMod.application({
         'dataTables-bootstrap','iCheck',
         'theme-AdminLTE','Users'],
 
-
+    eventDef : {},
     init: function(appMod, _ctx , _uiManager) {
         this.eventDef = this.events(appMod, _ctx , _uiManager);
     },
 
-    eventDef : {},
-
+    /**
+     * launch application
+     * @param appMod
+     * @param _ctx
+     * @param _uiManager
+     */
     launch : function(appMod, _ctx , _uiManager) {
 
         var _me = this, _g = _ctx.getGlobal(),
@@ -48,16 +52,30 @@ AppMod.application({
         });
 
 
+        // ---- render every event ---
+        var tablegrid = null;
+        _uiManager.renderWidget('widget/tablegrid' , {
+            type:'datatable',
+            renderElem:$("#user-list"),
+            wconf:{
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "ajax":{
+                    "url":restApiCtx + "/system/users"
+                }
+            }
+        } , function(widget) {
+            tablegrid = widget;
+        });
+
+
+
 
         // --- render event for ui ----
-        $("#user-list").DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false
-        });
         $('.list-table input[type="checkbox"]').iCheck({
             checkboxClass: 'icheckbox_flat-blue',
             radioClass: 'iradio_flat-blue'

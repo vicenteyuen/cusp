@@ -366,7 +366,12 @@ AppMod = {
                 'dataTables-bootstrap': '/js/plugins/datatables/dataTables.bootstrap',
                 'iCheck':'/js/plugins/iCheck/icheck',
 
+                'widget/tablegrid': '/js/fw/widget/tablegrid',
+
+
                 'theme-AdminLTE': '/js/themes/AdminLTE/app'
+
+
             },
             shim: {
                 'backbone-localstorage': ['underscore', 'backbone'],
