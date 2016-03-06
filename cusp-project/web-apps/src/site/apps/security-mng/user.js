@@ -81,8 +81,8 @@ AppMod.application({
                         }
                     },
                     {
-                        "targets":[6],
-                        "data":"id",
+                        "targets":[5],
+                        "data":"status",
                         "render": function(data , type , full) {
                             var html = '<div class="tools"><i class="fa fa-edit"></i><i class="fa fa-trash-o"></i></div>';
                             return html

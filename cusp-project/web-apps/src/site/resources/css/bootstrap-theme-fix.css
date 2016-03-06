@@ -125,8 +125,13 @@ label {
     float: right;
     color: #dd4b39;
 }
+
+tr:hover .tools {
+    display: inline-block;
+}
+
 .todo-list > li .tools > .fa,
 .todo-list > li .tools > .glyphicon,
 .todo-list > li .tools > .ion {
     margin-right: 5px;
-
+}
