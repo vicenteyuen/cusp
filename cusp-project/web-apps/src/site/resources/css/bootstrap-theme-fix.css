@@ -118,3 +118,15 @@ input[type="radio"] {
 label {
     font-weight: 700;
 }
+
+/*  redefine  .table > td */
+.tools {
+    display: none;
+    float: right;
+    color: #dd4b39;
+}
+.todo-list > li .tools > .fa,
+.todo-list > li .tools > .glyphicon,
+.todo-list > li .tools > .ion {
+    margin-right: 5px;
+

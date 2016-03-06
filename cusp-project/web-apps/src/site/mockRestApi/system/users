@@ -1,7 +1,7 @@
 {
   "success":true,
   "data":[
-    {"id":"01", "loginAccount":"a001" , "chineseName":"陈一", "staffNo":"80121222"},
-    {"id":"02", "loginAccount":"a002" , "chineseName":"陈二", "staffNo":"80121222"},
+    {"id":"01", "loginAccount":"a001" , "chineseName":"陈一", "staffNo":"80121222" , "contact":"1391124309" , "status":0},
+    {"id":"02", "loginAccount":"a002" , "chineseName":"陈二", "staffNo":"80121222" , "contact":"1391124308" , "status":1}
   ]
 }

@@ -64,6 +64,31 @@ AppMod.application({
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
+                "columns":[
+                    {"data":"id" , "bSortable":false},
+                    {"data":"loginAccount"},
+                    {"data":"chineseName"},
+                    {"data":"staffNo"},
+                    {"data":"contact"},
+                    {"data":"status"}
+                ],
+                "columnDefs":[
+                    {
+                        "targets":[0],
+                        "data":"id",
+                        "render": function(data , type , full) {
+                            return '<input type="checkbox" value="" name="">'
+                        }
+                    },
+                    {
+                        "targets":[6],
+                        "data":"id",
+                        "render": function(data , type , full) {
+                            var html = '<div class="tools"><i class="fa fa-edit"></i><i class="fa fa-trash-o"></i></div>';
+                            return html
+                        }
+                    }
+                ],
                 "ajax":{
                     "url":restApiCtx + "/system/users"
                 }
@@ -71,6 +96,10 @@ AppMod.application({
         } , function(widget) {
             tablegrid = widget;
         });
+
+
+
+        // --- init data ---
 
 
 
