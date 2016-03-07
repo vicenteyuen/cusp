@@ -104,6 +104,56 @@ define('fw/uimanager',['_g','doT', 'widget/tablegrid'],function(_g , tplEngine) 
         }
 
 
+        this.getRenderedRowTools = function(iconClsArray) {
+
+            var templateHtml = '<div class="tools">';
+            templateHtml = templateHtml + '{{~it : value : index }}' + '<i class="fa {{=value["iconCls"]}}"></i>' + '{{~}}',
+            templateHtml = templateHtml+'</div>';
+
+            var tools = null;
+
+            tplEngine.render({
+                template:templateHtml,
+                data:iconClsArray,
+                renderCallback:function(result) {
+                    tools = result;
+                }
+            });
+
+            return tools;
+
+        }
+
+
+        this.getTableCheckSelectedPlugin = function(conf) {
+
+            if (!conf['name']) {
+                throw Error('Field "name" is not empty.');
+            }
+
+            var _rawVal = conf['raw'];
+            if (!_rawVal) {
+                _rawVal = '';
+            }
+
+            var _val = conf['value'];
+            var appendHtml = '';
+            if ( _val == _rawVal ) {
+                appendHtml = 'checked="checked" ';
+            }
+
+
+            var compType = conf['type'];
+            var html = '';
+            if (compType == 'radio') {
+                html = '<input type="radio" name="'+conf['name']+'" value="'+_rawVal+'" '+appendHtml +' />';
+            } else {
+                html = '<input type="checkbox" value="'+_rawVal+'" name="'+ conf['name'] +'" '+appendHtml +' />';
+            }
+            return html;
+
+        }
+
     };
 
 

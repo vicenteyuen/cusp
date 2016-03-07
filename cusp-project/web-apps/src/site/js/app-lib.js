@@ -381,7 +381,7 @@ AppMod = {
                 'bootstrap':['jquery'],
 
                 'dataTables-bootstrap':['jquery-datatables', 'css!'+baseUrl+'/js/plugins/datatables/dataTables.bootstrap.css'],
-                'iCheck':['css!'+baseUrl+'/js/plugins/iCheck/flat/blue.css'],
+                'iCheck':['css!'+baseUrl+'/js/plugins/iCheck/minimal/_all.css'],
                 'jstree':['jquery','css!'+baseUrl+'/js/plugins/jstree/themes/default/style.css'],
 
 

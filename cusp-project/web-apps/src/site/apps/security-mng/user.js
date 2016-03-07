@@ -70,21 +70,39 @@ AppMod.application({
                     {"data":"chineseName"},
                     {"data":"staffNo"},
                     {"data":"contact"},
-                    {"data":"status"}
+                    {"data":"status" , "bSortable":false}
                 ],
                 "columnDefs":[
                     {
                         "targets":[0],
                         "data":"id",
                         "render": function(data , type , full) {
-                            return '<input type="checkbox" value="" name="">'
+
+                            var checkedHtml = _uiManager.getTableCheckSelectedPlugin({
+                                name:'id',
+                                raw:data
+                            });
+                            return checkedHtml;
                         }
                     },
                     {
                         "targets":[5],
                         "data":"status",
                         "render": function(data , type , full) {
-                            var html = '<div class="tools"><i class="fa fa-edit"></i><i class="fa fa-trash-o"></i></div>';
+
+                            // --- load render item tools ---
+                            var result = _uiManager.getRenderedRowTools([
+                                {iconCls:'fa-edit'},{iconCls:'fa-trash-o'}
+                            ]);
+
+                            var statsHtml = 0;
+                            if (data == 0) {
+                                statsHtml = '<span class="label label-success">启用</span>';
+                            } else if ( data == 1 ) {
+                                statsHtml = '<span class="label label-warning">禁用</span>';
+                            }
+
+                            var html = statsHtml + result;
                             return html
                         }
                     }
@@ -95,6 +113,38 @@ AppMod.application({
             }
         } , function(widget) {
             tablegrid = widget;
+
+            tablegrid.on('init.dt' , function(comp) {
+                $('.list-table input[type="checkbox"]').iCheck({
+                    checkboxClass: 'icheckbox_minimal-blue',
+                    radioClass: 'iradio_minimal-blue'
+                });
+            });
+
+
+
+            // --- render event for ui ----
+            /*
+            $('.list-table input[type="checkbox"]').iCheck({
+                checkboxClass: 'icheckbox_minima-blue',
+                radioClass: 'iradio_minima-blue'
+            });
+            */
+            /*
+            $(".checkbox-toggle").click(function () {
+                var clicks = $(this).data('clicks');
+                if (clicks) {
+                    //Uncheck all checkboxes
+                    $(".list-table input[type='checkbox']").iCheck("uncheck");
+                    $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+                } else {
+                    //Check all checkboxes
+                    $(".list-table input[type='checkbox']").iCheck("check");
+                    $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+                }
+                $(this).data("clicks", !clicks);
+            });
+            */
         });
 
 
@@ -103,25 +153,6 @@ AppMod.application({
 
 
 
-
-        // --- render event for ui ----
-        $('.list-table input[type="checkbox"]').iCheck({
-            checkboxClass: 'icheckbox_flat-blue',
-            radioClass: 'iradio_flat-blue'
-        });
-        $(".checkbox-toggle").click(function () {
-            var clicks = $(this).data('clicks');
-            if (clicks) {
-                //Uncheck all checkboxes
-                $(".list-table input[type='checkbox']").iCheck("uncheck");
-                $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
-            } else {
-                //Check all checkboxes
-                $(".list-table input[type='checkbox']").iCheck("check");
-                $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
-            }
-            $(this).data("clicks", !clicks);
-        });
 
         // --- render event handle ---
         $(".add-user").on("click",appMod.delegateEvent(_me.eventDef['btn:add-user']) );

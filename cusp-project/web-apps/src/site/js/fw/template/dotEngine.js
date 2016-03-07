@@ -87,42 +87,21 @@ define('doT',['template/doT'],function(dotEngine) {
                             renderCallback(result);
                         }
 
-
-                        // --- check content under dom element
-                        //
-
                     }
-
 
                 }
 
                 else {
-                    tpl = _me.engine.template( args['template'] );
+                    var renderCallback = args['renderCallback'];
+                    tpl = dotEngine.template( args['template'] );
+                    var result = tpl(args['data']);
+
+                    renderCallback(result);
                 }
-
-
-
             } else {
                 throw new Error('"template or templateId " variable is not defined.');
             }
-            /*
-             if (!args['template']) {
-             throw new Error('"template" variable is not defined.');
-             }
-             */
 
-            if (!args['data']) {
-                throw new Error('"data" variable is not defined.');
-            }
-
-            if (!args['renderCallback']) {
-                throw new Error('"renderCallback" variable is not defined.');
-            }
-
-            if (tpl) {
-
-
-            }
 
         }
     };
