@@ -92,7 +92,7 @@ AppMod.application({
 
                             // --- load render item tools ---
                             var result = _uiManager.getRenderedRowTools([
-                                {iconCls:'fa-edit'},{iconCls:'fa-trash-o'}
+                                {iconCls:'fa-edit', value:data},{iconCls:'fa-trash-o' , value:data},{iconCls:'fa-user-secret' , value:data}
                             ]);
 
                             var statsHtml = 0;
@@ -119,32 +119,29 @@ AppMod.application({
                     checkboxClass: 'icheckbox_minimal-blue',
                     radioClass: 'iradio_minimal-blue'
                 });
+                $(".checkbox-toggle").click(function () {
+                    var clicks = $(this).data('clicks');
+                    if (clicks) {
+                        //Uncheck all checkboxes
+                        $(".list-table input[type='checkbox']").iCheck("uncheck");
+                        $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+                    } else {
+                        //Check all checkboxes
+                        $(".list-table input[type='checkbox']").iCheck("check");
+                        $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+                    }
+                    $(this).data("clicks", !clicks);
+                });
+
+
+
+                $("#user-list .tools .fa-edit").on("click",appMod.delegateEvent(_me.eventDef['btn:edit-user']) );
+
             });
 
 
 
-            // --- render event for ui ----
-            /*
-            $('.list-table input[type="checkbox"]').iCheck({
-                checkboxClass: 'icheckbox_minima-blue',
-                radioClass: 'iradio_minima-blue'
-            });
-            */
-            /*
-            $(".checkbox-toggle").click(function () {
-                var clicks = $(this).data('clicks');
-                if (clicks) {
-                    //Uncheck all checkboxes
-                    $(".list-table input[type='checkbox']").iCheck("uncheck");
-                    $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
-                } else {
-                    //Check all checkboxes
-                    $(".list-table input[type='checkbox']").iCheck("check");
-                    $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
-                }
-                $(this).data("clicks", !clicks);
-            });
-            */
+
         });
 
 
@@ -152,10 +149,12 @@ AppMod.application({
         // --- init data ---
 
 
-
-
         // --- render event handle ---
         $(".add-user").on("click",appMod.delegateEvent(_me.eventDef['btn:add-user']) );
+
+
+
+
 
     },
 
@@ -223,6 +222,56 @@ AppMod.application({
         };
 
 
+        // --- defind all event ---
+        listeners['btn:edit-user'] = {
+            'deps':[],
+            'event':function(comp,e) {
+
+                //var id = comp.attr('data-value');
+                console.log(e);
+
+
+
+                tplEngine.render({
+                    templateId:'user-info-tpl',
+                    data:{},
+                    renderCallback: function(renderResult) {
+                        _uiManager.openDialog({
+                            html:renderResult,
+                            title:"更新用户",
+                            handlers: {
+                                // --- render handle ---
+                                'ui:rendered' : function(comp , e) {
+
+                                    // --- get reference object --
+                                    $(".btn-save").on('click' , appMod.delegateEvent(_me.eventDef['btn:edit-user:do']) );
+                                }
+                            }
+
+                        });
+
+                    }
+                });
+            }
+        };
+
+        // --- define layout event ---
+        listeners['btn:edit-user:do'] = {
+            'deps':[],
+            'event':function(comp,e) {
+                var data = {
+                    loginAccount: $("#loginAccount").val(),
+                    chineseName : $("#chineseName").val(),
+                    staffNo : $("#staffNo").val()
+                };
+                /*
+                var newUser = new User();
+                newUser.set(data);
+
+                newUser.save();
+                */
+            }
+        };
 
         return listeners;
 

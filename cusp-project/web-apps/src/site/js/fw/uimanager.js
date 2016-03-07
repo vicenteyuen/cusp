@@ -107,7 +107,7 @@ define('fw/uimanager',['_g','doT', 'widget/tablegrid'],function(_g , tplEngine) 
         this.getRenderedRowTools = function(iconClsArray) {
 
             var templateHtml = '<div class="tools">';
-            templateHtml = templateHtml + '{{~it : value : index }}' + '<i class="fa {{=value["iconCls"]}}"></i>' + '{{~}}',
+            templateHtml = templateHtml + '{{~it : value : index }}' + '<i class="fa {{=value["iconCls"]}}" data-value="{{=value["value"]}}" ></i>' + '{{~}}',
             templateHtml = templateHtml+'</div>';
 
             var tools = null;

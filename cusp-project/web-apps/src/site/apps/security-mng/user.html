@@ -317,32 +317,7 @@
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
-                <script id="sidebar-menu-tpl" type="text/x-dot-template">
-                    {{~it: value:index}}
-                    <!-- first level-->
-                    <li class="header">{{=value.text}}</li>
-                    <!-- check second node-->
-                    {{? value.nodes && value.nodes.length > 0 }}
-                    {{~value.nodes: secMenuRef:secMenuIndex}}
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-dashboard"></i> <span>{{=secMenuRef.text}}</span> <i class="fa fa-angle-left pull-right"></i>
-                        </a>
-                        {{? secMenuRef.nodes && secMenuRef.nodes.length > 0 }}
-                        <ul class="treeview-menu">
-                            {{~secMenuRef.nodes: thiMenuRef:thiMenuIndex}}
-                            <li><a href="{{=thiMenuRef.href}}"><i class="fa fa-circle-o"></i>{{=thiMenuRef.text}}</a></li>
-                            {{~}}
-
-                        </ul>
-                        {{?}}
-                    </li>
-                    {{~}}
-                    {{??}}
-                    empty
-                    {{?}}
-                    {{~}}
-                </script>
+                <script id="sidebar-menu-tpl" type="text/x-dot-template" src="../comps/tpl/sidebar-menu.dtpl"></script>
             </ul>
         </section>
         <!-- /.sidebar -->
@@ -407,7 +382,7 @@
                                 <table id="user-list" class="table no-margin">
                                     <thead>
                                     <tr>
-                                        <th><button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></button></th>
+                                        <th width="10rem"><button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></button></th>
                                         <th>用户帐号</th>
                                         <th>真实名字</th>
                                         <th>员工编号</th>
