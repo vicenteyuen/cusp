@@ -25,6 +25,15 @@ router.put('/system/user/:id', function(req, res) {
     res.end( fs.readFileSync(path.join(__dirname, './system/user/create') ));
 });
 
+// --- user mapping ---
+router.get('/system/user/:id', function(req, res) {
+    // --- use bae url --
+    res.writeHead(200, {
+        "Content-Type":"text/json;charset:"+charset
+    });
+    res.end( fs.readFileSync(path.join(__dirname, './system/user/user') ));
+});
+
 
 // --- user mapping ---
 router.get('/system/users', function(req, res) {
@@ -33,6 +42,15 @@ router.get('/system/users', function(req, res) {
         "Content-Type":"text/json;charset:"+charset
     });
     res.end( fs.readFileSync(path.join(__dirname, './system/users') ));
+});
+
+// --- user mapping ---
+router.post('/system/users', function(req, res) {
+    // --- use bae url --
+    res.writeHead(200, {
+        "Content-Type":"text/json;charset:"+charset
+    });
+    res.end( fs.readFileSync(path.join(__dirname, './system/user/create') ));
 });
 
 

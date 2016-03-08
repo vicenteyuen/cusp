@@ -1,4 +1,5 @@
 {
   "success":true,
-  "data":{}
+  "data":{},
+  "msg":"成功创建用户信息"
 }

@@ -68,7 +68,7 @@ input[type="radio"] {
 }
 
 .form-control {
-
+    border:1px solid #ccc;
 }
 
 .form-control-feedback {

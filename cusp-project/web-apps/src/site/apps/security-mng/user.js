@@ -7,7 +7,9 @@ AppMod.setConfig({
     impTplEngines:['doT'],
 
     paths:{
-        'Users':'mvc/Users'
+        'User':'mvc/model/User',
+        'Users':'mvc/model/Users',
+        'UserForm':'mvc/view/UserForm'
     }
 
 })
@@ -21,7 +23,7 @@ AppMod.application({
     // --- module , plugin , component defined
     mods: [
         'dataTables-bootstrap','iCheck',
-        'theme-AdminLTE','Users'],
+        'theme-AdminLTE','Users', 'UserForm'],
 
     eventDef : {},
     init: function(appMod, _ctx , _uiManager) {
@@ -51,6 +53,7 @@ AppMod.application({
             title:'用户管理'
         });
 
+        // --- render table dal --
 
         // ---- render every event ---
         var tablegrid = null;
@@ -136,13 +139,11 @@ AppMod.application({
 
 
                 $("#user-list .tools .fa-edit").on("click",appMod.delegateEvent(_me.eventDef['btn:edit-user']) );
+                $("#user-list .tools .fa-trash-o").on("click",appMod.delegateEvent(_me.eventDef['btn:remove-user']) );
+                $("#user-list .tools .fa-user-secret").on("click",appMod.delegateEvent(_me.eventDef['btn:change-pwd']) );
 
             });
-
-
-
-
-        });
+       });
 
 
 
@@ -151,7 +152,6 @@ AppMod.application({
 
         // --- render event handle ---
         $(".add-user").on("click",appMod.delegateEvent(_me.eventDef['btn:add-user']) );
-
 
 
 
@@ -171,6 +171,7 @@ AppMod.application({
         // --- load class type ---
         var User = mvcManager.getModelClass('User');
         var Users = mvcManager.getModelClass('Users');
+        var UserForm = mvcManager.getViewlClass("UserForm");
 
         var listeners = {};
 
@@ -179,58 +180,54 @@ AppMod.application({
         listeners['btn:add-user'] = {
             'deps':[],
             'event':function(comp,e) {
-
-                tplEngine.render({
-                    templateId:'user-info-tpl',
-                    data:{},
-                    renderCallback: function(renderResult) {
-                        _uiManager.openDialog({
-                            html:renderResult,
-                            title:"新增用户",
-                            handlers: {
-                                // --- render handle ---
-                                'ui:rendered' : function(comp , e) {
-
-                                    // --- get reference object --
-                                    $(".btn-save").on('click' , appMod.delegateEvent(_me.eventDef['btn:add-user:do']) );
-                                }
-                            }
-
-                        });
-
-                    }
+                var form = new UserForm({
+                    el: comp,
+                    model:new User()
                 });
+                form.addUser();
             }
         };
 
-
-        // --- define layout event ---
-        listeners['btn:add-user:do'] = {
+        listeners['btn:edit-user'] = {
             'deps':[],
             'event':function(comp,e) {
-                var data = {
-                    loginAccount: $("#loginAccount").val(),
-                    chineseName : $("#chineseName").val(),
-                    staffNo : $("#staffNo").val()
-                };
+                var id = $(comp).attr('data-value');
+                var form = new UserForm({
+                    el: comp,
+                    model:new User({
+                        id:id
+                    })
+                });
+                form.editUser();
 
-                var newUser = new User();
-                newUser.set(data);
-
-                newUser.save();
             }
         };
 
 
         // --- defind all event ---
-        listeners['btn:edit-user'] = {
+        listeners['btn:remove-user'] = {
             'deps':[],
             'event':function(comp,e) {
 
-                //var id = comp.attr('data-value');
-                console.log(e);
+                var id = $(comp).attr('data-value');
+                var form = new UserForm({
+                    el: comp,
+                    model:new User({
+                        id:id
+                    })
+                });
+                form.delUser();
+
+            }
+        };
 
 
+        // --- defind all event ---
+        listeners['btn:change-pwd'] = {
+            'deps':[],
+            'event':function(comp,e) {
+
+                var id = $(comp).attr('data-value');
 
                 tplEngine.render({
                     templateId:'user-info-tpl',
@@ -242,6 +239,14 @@ AppMod.application({
                             handlers: {
                                 // --- render handle ---
                                 'ui:rendered' : function(comp , e) {
+                                    // --- load data ---
+                                    var existedUser = new User({
+                                        id:id
+                                    });
+
+                                    existedUser.fetch();
+
+
 
                                     // --- get reference object --
                                     $(".btn-save").on('click' , appMod.delegateEvent(_me.eventDef['btn:edit-user:do']) );
@@ -255,23 +260,13 @@ AppMod.application({
             }
         };
 
-        // --- define layout event ---
-        listeners['btn:edit-user:do'] = {
-            'deps':[],
-            'event':function(comp,e) {
-                var data = {
-                    loginAccount: $("#loginAccount").val(),
-                    chineseName : $("#chineseName").val(),
-                    staffNo : $("#staffNo").val()
-                };
-                /*
-                var newUser = new User();
-                newUser.set(data);
 
-                newUser.save();
-                */
-            }
-        };
+
+
+
+
+
+
 
         return listeners;
 

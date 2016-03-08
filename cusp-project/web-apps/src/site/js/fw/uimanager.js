@@ -49,10 +49,17 @@ define('fw/uimanager',['_g','doT', 'widget/tablegrid'],function(_g , tplEngine) 
 
                 // --- proxy delegate --
                 _defHandlers['ui:rendered'](this , modal_eve);
-
-
             });
         };
+
+        this.closeDialog = function(dialogRef) {
+            if (!dialogRef) {
+                return;
+            }
+
+            $(dialogRef).modal('toggle');
+        }
+
 
 
         this.renderWidget = function(widgetName , config , callback) {
