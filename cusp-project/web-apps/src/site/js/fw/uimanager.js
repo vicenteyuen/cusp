@@ -60,7 +60,8 @@ define('fw/uimanager',['_g','doT', 'widget/tablegrid'],function(_g , tplEngine) 
                 _defHandlers['ui:rendered'](this , modal_eve);
             }).on('hidden.bs.modal' , function(modal_eve) {
 
-
+                // --- remove mapping element  ---
+                $(this).remove();
             });
         };
 
@@ -72,9 +73,31 @@ define('fw/uimanager',['_g','doT', 'widget/tablegrid'],function(_g , tplEngine) 
             $(dialogRef).modal('toggle');
 
             // --- delete element ---
-            //$(dialogRef).remove();
-
         }
+
+        // --- define message dialog
+        this.showMessageDialog = function(dialogRef) {
+
+
+            if (dialogRef['type'] == 'info') {
+
+            }
+            else if (dialogRef['type'] == 'warning') {
+
+            }
+            else if (dialogRef['type'] == 'primary') {
+
+            }
+            else if (dialogRef['type'] == 'success') {
+
+            }
+            else if (dialogRef['type'] == 'error') {
+
+            }
+        }
+
+
+
 
 
 
