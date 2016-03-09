@@ -45,17 +45,23 @@ define('UserForm',['fw/context','fw/uimanager',
                             'ui:rendered' : function(comp , e) {
                                 _thisView.dialogRef = comp;
 
+
+                                $(".btn-close").on('click' , function(evt) {
+                                    _uiManager.closeDialog(_thisView.dialogRef);
+                                });
                                 // --- get reference object --
                                 if (_thisView.actionType == 0) {
 
                                     $(".btn-save").on('click' , function(evt) {
                                         _thisView.doAddUser.call(_thisView, this , evt);
                                     });
+
                                 }
                                 else if (_thisView.actionType == 1) {
                                     $(".btn-save").on('click' , function(evt) {
                                         _thisView.doEditUser.call(_thisView, this , evt);
                                     });
+
                                 }
 
                             }

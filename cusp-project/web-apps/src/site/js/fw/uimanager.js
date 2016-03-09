@@ -9,6 +9,15 @@ define('fw/uimanager',['_g','doT', 'widget/tablegrid'],function(_g , tplEngine) 
         var restApiCtx = _g.getFullRestApiContext();
 
         this.openDialog = function(viewConf) {
+
+            // --- create dialog html ---
+            var dialogInitConf = {
+                id:'myModal'
+            };
+            var dialogHtml = '<div class="modal fade" tabindex="-1" role="dialog" id="'+dialogInitConf.id+'" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"></div></div></div>';
+            $('body').append(dialogHtml);
+
+
             var diaElems = $('div[role="dialog"].modal');
             if (diaElems.length > 1) {
                 throw Error('Found more than 1 dialog under html');
@@ -49,6 +58,9 @@ define('fw/uimanager',['_g','doT', 'widget/tablegrid'],function(_g , tplEngine) 
 
                 // --- proxy delegate --
                 _defHandlers['ui:rendered'](this , modal_eve);
+            }).on('hidden.bs.modal' , function(modal_eve) {
+
+
             });
         };
 
@@ -58,6 +70,10 @@ define('fw/uimanager',['_g','doT', 'widget/tablegrid'],function(_g , tplEngine) 
             }
 
             $(dialogRef).modal('toggle');
+
+            // --- delete element ---
+            //$(dialogRef).remove();
+
         }
 
 
@@ -65,7 +81,6 @@ define('fw/uimanager',['_g','doT', 'widget/tablegrid'],function(_g , tplEngine) 
         this.renderWidget = function(widgetName , config , callback) {
 
             // --- call config ---
-
             require([widgetName], function(widgetBuilder) {
                 widgetBuilder.init(config);
                 var widget = widgetBuilder.build();
