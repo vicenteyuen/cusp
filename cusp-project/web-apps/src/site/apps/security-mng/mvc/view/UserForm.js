@@ -104,14 +104,27 @@ define('UserForm',['fw/context','fw/uimanager',
             var _thisView = this;
             _thisView.actionType = 2;
 
-            // --- fetch model first ---
-            this.model.destroy({
-                success:function(model , response) {
 
-                },
-                error : function(model , response) {
+            var confirmMsg = "是否删除数据 [" + _thisView.model.get('id') + "]? ";;
 
+            _uiManager.showMsgDialog({
+                type:'info',
+                buttons:['yes','no'],
+                content:confirmMsg,
+                btnCallback: {
+                    'yes':function(comp , evt) {
+                        // --- fetch model first ---
+                        _thisView.model.destroy({
+                            success:function(model , response) {
+
+                            },
+                            error : function(model , response) {
+
+                            }
+                        });
+                    }
                 }
+
             });
             /*
             $.when(this.model.fetch()).done(function() {

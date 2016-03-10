@@ -57,8 +57,8 @@ define('doT',['template/doT'],function(dotEngine) {
         this.render = function(args) {
 
             var orgTpl = null;
-            if (args['template'] || args['templateId']) {
-
+            if (args['template']
+                || args['templateId'] || args['tplHtml']  ) {
                 if (args['templateId']) {
 
                     // --- parse id ---
@@ -91,11 +91,17 @@ define('doT',['template/doT'],function(dotEngine) {
 
                 }
 
-                else {
+                else if (args['template']) {
                     var renderCallback = args['renderCallback'];
                     tpl = dotEngine.template( args['template'] );
                     var result = tpl(args['data']);
 
+                    renderCallback(result);
+                }
+                else {
+                    var renderCallback = args['renderCallback'];
+                    tpl = dotEngine.template( args['tplHtml'] );
+                    var result = tpl(args['data']);
                     renderCallback(result);
                 }
             } else {

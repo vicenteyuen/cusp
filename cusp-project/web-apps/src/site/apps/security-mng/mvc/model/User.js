@@ -10,6 +10,7 @@ define('User',['fw/context'], function(_ctx ) {
     var User = backbone.Model.extend({
         idAttribute: "id",
         defaults:{
+            id:'',
             chineseName:"",
             loginAccount:"",
             staffNo:"",

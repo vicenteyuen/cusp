@@ -1,99 +1,42 @@
 /**
  * Created by ruanweibiao on 2016-03-02.
  */
-define('fw/uimanager',['_g','doT', 'widget/tablegrid'],function(_g , tplEngine) {
+define('fw/uimanager',['_g','doT', 'widget/tablegrid' ,  'widget/dialog'],function(_g , tplEngine , tablegrid ) {
     var _this = this;
 
     var UIManager = new function() {
 
         var restApiCtx = _g.getFullRestApiContext();
 
+        // --- inner init method
+        var dialogWidget = null, dialogConfig = {};
+
+        (function(){
+            require(['widget/dialog'], function(widgetBuilder) {
+                widgetBuilder.init(dialogConfig);
+                dialogWidget = widgetBuilder.build();
+            });
+        }());
+
+
         this.openDialog = function(viewConf) {
 
             // --- create dialog html ---
-            var dialogInitConf = {
-                id:'myModal'
-            };
-            var dialogHtml = '<div class="modal fade" tabindex="-1" role="dialog" id="'+dialogInitConf.id+'" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"></div></div></div>';
-            $('body').append(dialogHtml);
+            dialogWidget.openCommonDialog(viewConf);
 
 
-            var diaElems = $('div[role="dialog"].modal');
-            if (diaElems.length > 1) {
-                throw Error('Found more than 1 dialog under html');
-            }
-
-            var modalBodyElems = diaElems.find('div.modal-content');
-            var containElems = modalBodyElems.children();
-            if (containElems.length > 0) {
-                // --- clear contain first ---
-                containElems.remove();
-            }
-
-
-            // --- append html ---
-            var htmlContent = viewConf['html'];
-            if (!htmlContent) {
-                htmlContent = '';
-            }
-            modalBodyElems.html(htmlContent);
-
-
-            var _defHandlers = {
-                'ui:rendered' : function(){}
-            }
-
-            if (viewConf['handlers']) {
-                // ---reset handlers --
-                if (viewConf['handlers']['ui:rendered']) {
-                    _defHandlers['ui:rendered'] = viewConf['handlers']['ui:rendered'];
-                }
-            }
-
-
-            // --- open dialog ---
-            diaElems.modal({
-                keyboard: true
-            }).on('shown.bs.modal', function (modal_eve) {
-
-                // --- proxy delegate --
-                _defHandlers['ui:rendered'](this , modal_eve);
-            }).on('hidden.bs.modal' , function(modal_eve) {
-
-                // --- remove mapping element  ---
-                $(this).remove();
-            });
         };
 
         this.closeDialog = function(dialogRef) {
-            if (!dialogRef) {
-                return;
-            }
-
-            $(dialogRef).modal('toggle');
+            dialogWidget.closeDialog(dialogRef);
 
             // --- delete element ---
         }
 
         // --- define message dialog
-        this.showMessageDialog = function(dialogRef) {
+        this.showMsgDialog = function(dialogRef) {
+            dialogWidget.showMsgDialog(dialogRef);
 
-
-            if (dialogRef['type'] == 'info') {
-
-            }
-            else if (dialogRef['type'] == 'warning') {
-
-            }
-            else if (dialogRef['type'] == 'primary') {
-
-            }
-            else if (dialogRef['type'] == 'success') {
-
-            }
-            else if (dialogRef['type'] == 'error') {
-
-            }
         }
 
 

@@ -54,107 +54,109 @@ AppMod.application({
         });
 
         // --- render table dal --
+        var Users = mvcManager.getModelClass('Users');
+        var users = new Users();
 
-        // ---- render every event ---
-        var tablegrid = null;
-        _uiManager.renderWidget('widget/tablegrid' , {
-            type:'datatable',
-            renderElem:$("#user-list"),
-            wconf:{
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "columns":[
-                    {"data":"id" , "bSortable":false},
-                    {"data":"loginAccount"},
-                    {"data":"chineseName"},
-                    {"data":"staffNo"},
-                    {"data":"contact"},
-                    {"data":"status" , "bSortable":false}
-                ],
-                "columnDefs":[
-                    {
-                        "targets":[0],
-                        "data":"id",
-                        "render": function(data , type , full) {
+        // --- load all users ---
+        users.fetch({
+            success:function(collection , response , options) {
+                // --- render data  grid ---
+                var tablegrid = null;
+                _uiManager.renderWidget('widget/tablegrid' , {
+                    type:'datatable',
+                    renderElem:$("#user-list"),
+                    wconf:{
+                        "paging": true,
+                        data:collection.toJSON(),
+                        "lengthChange": false,
+                        "searching": false,
+                        "ordering": true,
+                        "info": true,
+                        "autoWidth": false,
+                        "columns":[
+                            {"data":"id" , "bSortable":false},
+                            {"data":"loginAccount"},
+                            {"data":"chineseName"},
+                            {"data":"staffNo"},
+                            {"data":"contact"},
+                            {"data":"status" , "bSortable":false}
+                        ],
+                        "columnDefs":[
+                            {
+                                "targets":[0],
+                                "data":"id",
+                                "render": function(data , type , full) {
 
-                            var checkedHtml = _uiManager.getTableCheckSelectedPlugin({
-                                name:'id',
-                                raw:data
-                            });
-                            return checkedHtml;
-                        }
-                    },
-                    {
-                        "targets":[5],
-                        "data":"status",
-                        "render": function(data , type , full) {
+                                    var checkedHtml = _uiManager.getTableCheckSelectedPlugin({
+                                        name:'id',
+                                        raw:data
+                                    });
+                                    return checkedHtml;
+                                }
+                            },
+                            {
+                                "targets":[5],
+                                "data":"status",
+                                "render": function(data , type , full) {
 
-                            // --- load render item tools ---
-                            var result = _uiManager.getRenderedRowTools([
-                                {iconCls:'fa-edit', value:data},{iconCls:'fa-trash-o' , value:data},{iconCls:'fa-user-secret' , value:data}
-                            ]);
+                                    // --- load render item tools ---
+                                    var result = _uiManager.getRenderedRowTools([
+                                        {iconCls:'fa-edit', value:data},{iconCls:'fa-trash-o' , value:data},{iconCls:'fa-user-secret' , value:data}
+                                    ]);
 
-                            var statsHtml = 0;
-                            if (data == 0) {
-                                statsHtml = '<span class="label label-success">启用</span>';
-                            } else if ( data == 1 ) {
-                                statsHtml = '<span class="label label-warning">禁用</span>';
+                                    var statsHtml = 0;
+                                    if (data == 0) {
+                                        statsHtml = '<span class="label label-success">启用</span>';
+                                    } else if ( data == 1 ) {
+                                        statsHtml = '<span class="label label-warning">禁用</span>';
+                                    }
+
+                                    var html = statsHtml + result;
+                                    return html
+                                }
                             }
-
-                            var html = statsHtml + result;
-                            return html
-                        }
+                        ]
                     }
-                ],
-                "ajax":{
-                    "url":restApiCtx + "/system/users"
-                }
+                } , function(widget) {
+                    tablegrid = widget;
+
+                    tablegrid.on('init.dt' , function(comp) {
+                        $('.list-table input[type="checkbox"]').iCheck({
+                            checkboxClass: 'icheckbox_minimal-blue',
+                            radioClass: 'iradio_minimal-blue'
+                        });
+                        $(".checkbox-toggle").click(function () {
+                            var clicks = $(this).data('clicks');
+                            if (clicks) {
+                                //Uncheck all checkboxes
+                                $(".list-table input[type='checkbox']").iCheck("uncheck");
+                                $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+                            } else {
+                                //Check all checkboxes
+                                $(".list-table input[type='checkbox']").iCheck("check");
+                                $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+                            }
+                            $(this).data("clicks", !clicks);
+                        });
+
+
+
+                        $("#user-list .tools .fa-edit").on("click",appMod.delegateEvent(_me.eventDef['btn:edit-user']) );
+                        $("#user-list .tools .fa-trash-o").on("click",appMod.delegateEvent(_me.eventDef['btn:remove-user']) );
+                        $("#user-list .tools .fa-user-secret").on("click",appMod.delegateEvent(_me.eventDef['btn:change-pwd']) );
+
+                    });
+                });
+
+
             }
-        } , function(widget) {
-            tablegrid = widget;
-
-            tablegrid.on('init.dt' , function(comp) {
-                $('.list-table input[type="checkbox"]').iCheck({
-                    checkboxClass: 'icheckbox_minimal-blue',
-                    radioClass: 'iradio_minimal-blue'
-                });
-                $(".checkbox-toggle").click(function () {
-                    var clicks = $(this).data('clicks');
-                    if (clicks) {
-                        //Uncheck all checkboxes
-                        $(".list-table input[type='checkbox']").iCheck("uncheck");
-                        $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
-                    } else {
-                        //Check all checkboxes
-                        $(".list-table input[type='checkbox']").iCheck("check");
-                        $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
-                    }
-                    $(this).data("clicks", !clicks);
-                });
+        });
 
 
-
-                $("#user-list .tools .fa-edit").on("click",appMod.delegateEvent(_me.eventDef['btn:edit-user']) );
-                $("#user-list .tools .fa-trash-o").on("click",appMod.delegateEvent(_me.eventDef['btn:remove-user']) );
-                $("#user-list .tools .fa-user-secret").on("click",appMod.delegateEvent(_me.eventDef['btn:change-pwd']) );
-
-            });
-       });
-
-
-
-        // --- init data ---
 
 
         // --- render event handle ---
         $(".add-user").on("click",appMod.delegateEvent(_me.eventDef['btn:add-user']) );
-
-
-
 
     },
 

@@ -366,6 +366,7 @@ AppMod = {
                 'dataTables-bootstrap': '/js/plugins/datatables/dataTables.bootstrap',
                 'iCheck':'/js/plugins/iCheck/icheck',
 
+                'widget/dialog': '/js/fw/widget/dialog',
                 'widget/tablegrid': '/js/fw/widget/tablegrid',
 
 
