@@ -67,7 +67,7 @@ AppMod.application({
                     renderElem:$("#user-list"),
                     wconf:{
                         "paging": true,
-                        data:collection.toJSON(),
+                        'data':collection.toJSON(),
                         "lengthChange": false,
                         "searching": false,
                         "ordering": true,
@@ -121,6 +121,7 @@ AppMod.application({
                     tablegrid = widget;
 
                     tablegrid.on('init.dt' , function(comp) {
+
                         $('.list-table input[type="checkbox"]').iCheck({
                             checkboxClass: 'icheckbox_minimal-blue',
                             radioClass: 'iradio_minimal-blue'
@@ -138,6 +139,8 @@ AppMod.application({
                             }
                             $(this).data("clicks", !clicks);
                         });
+
+                        console.log(123);
 
 
 
