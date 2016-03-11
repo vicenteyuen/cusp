@@ -147,7 +147,30 @@ AppMod.application({
             });
 
             $("#user-list .tools .fa-edit").on("click",appMod.delegateEvent(_me.eventDef['btn:edit-user']) );
-            $("#user-list .tools .fa-trash-o").on("click",appMod.delegateEvent(_me.eventDef['btn:remove-user']) );
+
+            $("#user-list .tools .fa-trash-o").on("click",appMod.delegateEvent({
+                'deps':[],
+                'event':function(comp,e) {
+
+                    var id = $(comp).attr('data-value');
+
+                    var existedUser = users.get(id);
+
+                    if (existedUser) {
+                        var form = new UserForm({
+                            el: comp,
+                            model:existedUser
+                        });
+                        form.delUser();
+                    }
+
+
+
+
+
+                }
+            }));
+
             $("#user-list .tools .fa-user-secret").on("click",appMod.delegateEvent(_me.eventDef['btn:change-pwd']) );
 
         };
@@ -205,23 +228,6 @@ AppMod.application({
             }
         };
 
-
-        // --- defind all event ---
-        listeners['btn:remove-user'] = {
-            'deps':[],
-            'event':function(comp,e) {
-
-                var id = $(comp).attr('data-value');
-                var form = new UserForm({
-                    el: comp,
-                    model:new User({
-                        id:id
-                    })
-                });
-                form.delUser();
-
-            }
-        };
 
 
         // --- defind all event ---

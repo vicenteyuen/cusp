@@ -105,7 +105,7 @@ define('UserForm',['fw/context','fw/uimanager',
             _thisView.actionType = 2;
 
 
-            var confirmMsg = "是否删除数据 [" + _thisView.model.get('id') + "]? ";;
+            var confirmMsg = "是否删除数据 [" + _thisView.model.get('loginAccount') + "]? ";;
 
             _uiManager.showMsgDialog({
                 type:'info',
