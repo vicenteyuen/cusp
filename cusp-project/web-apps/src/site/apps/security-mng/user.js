@@ -57,106 +57,103 @@ AppMod.application({
         var Users = mvcManager.getModelClass('Users');
         var users = new Users();
 
-        // --- load all users ---
-        users.fetch({
-            success:function(collection , response , options) {
-                // --- render data  grid ---
-                var tablegrid = null;
-                _uiManager.renderWidget('widget/tablegrid' , {
-                    type:'datatable',
-                    renderElem:$("#user-list"),
-                    wconf:{
-                        "paging": true,
-                        'data':collection.toJSON(),
-                        "lengthChange": false,
-                        "searching": false,
-                        "ordering": true,
-                        "info": true,
-                        "autoWidth": false,
-                        "columns":[
-                            {"data":"id" , "bSortable":false},
-                            {"data":"loginAccount"},
-                            {"data":"chineseName"},
-                            {"data":"staffNo"},
-                            {"data":"contact"},
-                            {"data":"status" , "bSortable":false}
-                        ],
-                        "columnDefs":[
-                            {
-                                "targets":[0],
-                                "data":"id",
-                                "render": function(data , type , full) {
+        // --- call running ---
+        var def1 = $.Deferred();
 
-                                    var checkedHtml = _uiManager.getTableCheckSelectedPlugin({
-                                        name:'id',
-                                        raw:data
-                                    });
-                                    return checkedHtml;
-                                }
-                            },
-                            {
-                                "targets":[5],
-                                "data":"status",
-                                "render": function(data , type , full) {
+        var code1 = function() {
+            // --- load all users ---
+            var tablegrid = null;
+            _uiManager.renderWidget('widget/tablegrid' , {
+                type:'datatable',
+                renderElem:$("#user-list"),
+                wconf:{
+                    "paging": true,
+                    "data":users.toJSON(),
+                    "lengthChange": false,
+                    "searching": false,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "columns":[
+                        {"data":"id" , "bSortable":false},
+                        {"data":"loginAccount"},
+                        {"data":"chineseName"},
+                        {"data":"staffNo"},
+                        {"data":"contact"},
+                        {"data":"status" , "bSortable":false}
+                    ],
+                    "columnDefs":[
+                        {
+                            "targets":[0],
+                            "data":"id",
+                            "render": function(data , type , full) {
 
-                                    // --- load render item tools ---
-                                    var result = _uiManager.getRenderedRowTools([
-                                        {iconCls:'fa-edit', value:data},{iconCls:'fa-trash-o' , value:data},{iconCls:'fa-user-secret' , value:data}
-                                    ]);
-
-                                    var statsHtml = 0;
-                                    if (data == 0) {
-                                        statsHtml = '<span class="label label-success">启用</span>';
-                                    } else if ( data == 1 ) {
-                                        statsHtml = '<span class="label label-warning">禁用</span>';
-                                    }
-
-                                    var html = statsHtml + result;
-                                    return html
-                                }
+                                var checkedHtml = _uiManager.getTableCheckSelectedPlugin({
+                                    name:'id',
+                                    raw:data
+                                });
+                                return checkedHtml;
                             }
-                        ]
-                    }
-                } , function(widget) {
-                    tablegrid = widget;
+                        },
+                        {
+                            "targets":[5],
+                            "data":"status",
+                            "render": function(data , type , full) {
 
-                    tablegrid.on('init.dt' , function(comp) {
+                                // --- load render item tools ---
+                                var result = _uiManager.getRenderedRowTools([
+                                    {iconCls:'fa-edit', value:data},{iconCls:'fa-trash-o' , value:data},{iconCls:'fa-user-secret' , value:data}
+                                ]);
 
-                        $('.list-table input[type="checkbox"]').iCheck({
-                            checkboxClass: 'icheckbox_minimal-blue',
-                            radioClass: 'iradio_minimal-blue'
-                        });
-                        $(".checkbox-toggle").click(function () {
-                            var clicks = $(this).data('clicks');
-                            if (clicks) {
-                                //Uncheck all checkboxes
-                                $(".list-table input[type='checkbox']").iCheck("uncheck");
-                                $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
-                            } else {
-                                //Check all checkboxes
-                                $(".list-table input[type='checkbox']").iCheck("check");
-                                $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+                                var statsHtml = 0;
+                                if (data == 0) {
+                                    statsHtml = '<span class="label label-success">启用</span>';
+                                } else if ( data == 1 ) {
+                                    statsHtml = '<span class="label label-warning">禁用</span>';
+                                }
+
+                                var html = statsHtml + result;
+                                return html
                             }
-                            $(this).data("clicks", !clicks);
-                        });
+                        }
+                    ]
+                }
+            } , function(widget) {
+                def1.resolve();
+            });
+            return def1.promise();
 
-                        console.log(123);
-
-
-
-                        $("#user-list .tools .fa-edit").on("click",appMod.delegateEvent(_me.eventDef['btn:edit-user']) );
-                        $("#user-list .tools .fa-trash-o").on("click",appMod.delegateEvent(_me.eventDef['btn:remove-user']) );
-                        $("#user-list .tools .fa-user-secret").on("click",appMod.delegateEvent(_me.eventDef['btn:change-pwd']) );
-
-                    });
-                });
+        };
 
 
-            }
-        });
+        var code2 = function() {
+
+            $('.list-table input[type="checkbox"]').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+            $(".checkbox-toggle").click(function () {
+                var clicks = $(this).data('clicks');
+                if (clicks) {
+                    //Uncheck all checkboxes
+                    $(".list-table input[type='checkbox']").iCheck("uncheck");
+                    $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+                } else {
+                    //Check all checkboxes
+                    $(".list-table input[type='checkbox']").iCheck("check");
+                    $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+                }
+                $(this).data("clicks", !clicks);
+            });
+
+            $("#user-list .tools .fa-edit").on("click",appMod.delegateEvent(_me.eventDef['btn:edit-user']) );
+            $("#user-list .tools .fa-trash-o").on("click",appMod.delegateEvent(_me.eventDef['btn:remove-user']) );
+            $("#user-list .tools .fa-user-secret").on("click",appMod.delegateEvent(_me.eventDef['btn:change-pwd']) );
+
+        };
 
 
-
+        $.when( users.fetch() ).then(code1).done( code2 );
 
         // --- render event handle ---
         $(".add-user").on("click",appMod.delegateEvent(_me.eventDef['btn:add-user']) );

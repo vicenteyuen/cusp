@@ -24,7 +24,9 @@ define('widget/tablegrid',['_g','doT'],function() {
 
 
         this.build = function() {
-            return renderElem.DataTable(wconf);
+
+            var elem = renderElem.DataTable(wconf);
+            return elem;
         }
 
 
