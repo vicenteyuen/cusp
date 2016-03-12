@@ -25,6 +25,56 @@ define('widget/tablegrid',['_g','doT'],function() {
 
         this.build = function() {
 
+            if (wconf["cols"] && wconf["cols"] instanceof Array) {
+                var _conf = wconf["cols"];
+
+                var _columns = [];
+                var _columnsRef = [];
+
+                for (var i in _conf) {
+
+                    var col = {
+                        data:_conf[i].field,
+                        bSortable:false
+                    };
+
+                    if (_conf[i].render) {
+                        var render = _conf[i].render;
+
+                        col.render = function(value , type , record, rowModel) {
+
+                            /*
+                            if (type == 'type') {
+
+                                var rowIndex = rowModel.row;
+                                var colIndex = rowModel.col;
+
+                                var result = render(value, record, rowIndex, colIndex);
+                                return result;
+                            }
+                            else {
+                                return value;
+                            }*/
+
+                            return value;
+
+
+                        }
+
+                    }
+                    _columns.push(col);
+
+                }
+
+
+
+
+                delete wconf["cols"];
+                wconf['columns'] = _columns;
+            }
+
+
+
             var elem = renderElem.DataTable(wconf);
             return elem;
         }

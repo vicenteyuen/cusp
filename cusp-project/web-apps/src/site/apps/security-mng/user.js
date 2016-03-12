@@ -74,6 +74,37 @@ AppMod.application({
                     "ordering": true,
                     "info": true,
                     "autoWidth": false,
+                    "cols":[
+                        { "field":"id" , "render":function(value, record, rowIndex, i) {
+
+
+                            var checkedHtml = _uiManager.getTableCheckSelectedPlugin({
+                                name:'id',
+                                raw:record
+                            });
+                            return 5;
+                        }},
+                        {"title":"用户帐号" , "field":"loginAccount"},
+                        {"title":"中文名字" , "field":"chineseName"},
+                        {"title":"员工编号" , "field":"staffNo" },
+                        {"title":"联系方式" , "field":"contact" },
+                        {"title":"状态" ,
+                            "field":"status" ,
+                            "render":function(value, record, rowIndex, i) {
+                                var result = _uiManager.getRenderedRowTools([
+                                    {iconCls:'fa-edit', value:record.id},{iconCls:'fa-trash-o' , value:record.id},{iconCls:'fa-user-secret' , value:record.id}
+                                ]);
+                                var statsHtml = 0;
+                                if (value == 0) {
+                                     statsHtml = '<span class="label label-success">启用</span>';
+                                } else if ( value == 1 ) {
+                                     statsHtml = '<span class="label label-warning">禁用</span>';
+                                 }
+                                var html = statsHtml + result;
+                            return html;
+                        }}
+                    ]
+                    /*,
                     "columns":[
                         {"data":"id" , "bSortable":false},
                         {"data":"loginAccount"},
@@ -99,10 +130,10 @@ AppMod.application({
                             "targets":[5],
                             "data":"status",
                             "render": function(data , type , full) {
-
+                                var model = users.at(rowIndex);
                                 // --- load render item tools ---
                                 var result = _uiManager.getRenderedRowTools([
-                                    {iconCls:'fa-edit', value:data},{iconCls:'fa-trash-o' , value:data},{iconCls:'fa-user-secret' , value:data}
+                                    {iconCls:'fa-edit', value:model.id},{iconCls:'fa-trash-o' , value:model.id},{iconCls:'fa-user-secret' , value:model.id}
                                 ]);
 
                                 var statsHtml = 0;
@@ -116,7 +147,7 @@ AppMod.application({
                                 return html
                             }
                         }
-                    ]
+                    ]*/
                 }
             } , function(widget) {
                 def1.resolve();
@@ -154,7 +185,7 @@ AppMod.application({
 
                     var id = $(comp).attr('data-value');
 
-                    var existedUser = users.get(id);
+                    var existedUser = users.get(id.toString());
 
                     if (existedUser) {
                         var form = new UserForm({
