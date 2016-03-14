@@ -28,7 +28,7 @@ define('fw/mvcmanager',['backbone'],function(_backbone, _backlocal) {
         }
 
 
-        this.getViewlClass = function(clsName) {
+        this.getViewClass = function(clsName) {
             return _viewMap[clsName];
 
         };

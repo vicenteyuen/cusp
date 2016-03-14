@@ -29,44 +29,44 @@ define('widget/tablegrid',['_g','doT'],function() {
                 var _conf = wconf["cols"];
 
                 var _columns = [];
-                var _columnsRef = [];
 
                 for (var i in _conf) {
 
                     var col = {
                         data:_conf[i].field,
-                        bSortable:false
+                        bSortable:false,
+                        render : _conf[i].render ? true:false
                     };
 
-                    if (_conf[i].render) {
-                        var render = _conf[i].render;
 
-                        col.render = function(value , type , record, rowModel) {
+                    // ---- define render event ---
+                    col.render = function(value , type , record, rowModel) {
 
-                            /*
-                            if (type == 'type') {
+                        if (type == 'display') {
 
-                                var rowIndex = rowModel.row;
-                                var colIndex = rowModel.col;
+                            var rowIndex = rowModel.row;
+                            var colIndex = rowModel.col;
+                            var render = _conf[i].render;
 
-                                var result = render(value, record, rowIndex, colIndex);
+
+                            if (colIndex == i) {
+
+                                console.log(_conf[i]);
+
+                                var result = _conf[i].render(value, record, rowIndex, colIndex);
                                 return result;
                             }
-                            else {
-                                return value;
-                            }*/
-
-                            return value;
-
-
                         }
+                        return value;
+
 
                     }
-                    _columns.push(col);
+
+                    _columns[i] = col;
+
 
                 }
-
-
+                console.log(_columns);
 
 
                 delete wconf["cols"];

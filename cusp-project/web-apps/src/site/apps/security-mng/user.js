@@ -55,6 +55,8 @@ AppMod.application({
 
         // --- render table dal --
         var Users = mvcManager.getModelClass('Users');
+        var UserForm = mvcManager.getViewClass('UserForm');
+
         var users = new Users();
 
         // --- call running ---
@@ -76,8 +78,6 @@ AppMod.application({
                     "autoWidth": false,
                     "cols":[
                         { "field":"id" , "render":function(value, record, rowIndex, i) {
-
-
                             var checkedHtml = _uiManager.getTableCheckSelectedPlugin({
                                 name:'id',
                                 raw:record
@@ -104,51 +104,7 @@ AppMod.application({
                             return html;
                         }}
                     ]
-                    /*,
-                    "columns":[
-                        {"data":"id" , "bSortable":false},
-                        {"data":"loginAccount"},
-                        {"data":"chineseName"},
-                        {"data":"staffNo"},
-                        {"data":"contact"},
-                        {"data":"status" , "bSortable":false}
-                    ],
-                    "columnDefs":[
-                        {
-                            "targets":[0],
-                            "data":"id",
-                            "render": function(data , type , full) {
-
-                                var checkedHtml = _uiManager.getTableCheckSelectedPlugin({
-                                    name:'id',
-                                    raw:data
-                                });
-                                return checkedHtml;
-                            }
-                        },
-                        {
-                            "targets":[5],
-                            "data":"status",
-                            "render": function(data , type , full) {
-                                var model = users.at(rowIndex);
-                                // --- load render item tools ---
-                                var result = _uiManager.getRenderedRowTools([
-                                    {iconCls:'fa-edit', value:model.id},{iconCls:'fa-trash-o' , value:model.id},{iconCls:'fa-user-secret' , value:model.id}
-                                ]);
-
-                                var statsHtml = 0;
-                                if (data == 0) {
-                                    statsHtml = '<span class="label label-success">启用</span>';
-                                } else if ( data == 1 ) {
-                                    statsHtml = '<span class="label label-warning">禁用</span>';
-                                }
-
-                                var html = statsHtml + result;
-                                return html
-                            }
-                        }
-                    ]*/
-                }
+                  }
             } , function(widget) {
                 def1.resolve();
             });
@@ -184,9 +140,7 @@ AppMod.application({
                 'event':function(comp,e) {
 
                     var id = $(comp).attr('data-value');
-
-                    var existedUser = users.get(id.toString());
-
+                    var existedUser = users.get('' +id);
                     if (existedUser) {
                         var form = new UserForm({
                             el: comp,
@@ -227,7 +181,7 @@ AppMod.application({
         // --- load class type ---
         var User = mvcManager.getModelClass('User');
         var Users = mvcManager.getModelClass('Users');
-        var UserForm = mvcManager.getViewlClass("UserForm");
+        var UserForm = mvcManager.getViewClass("UserForm");
 
         var listeners = {};
 
