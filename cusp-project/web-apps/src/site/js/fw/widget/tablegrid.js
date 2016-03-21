@@ -35,11 +35,11 @@ define('widget/tablegrid',['_g','doT'],function() {
                     var col = {
                         data:_conf[i].field,
                         bSortable:false,
-                        render : _conf[i].render ? true:false
                     };
 
 
                     // ---- define render event ---
+                    /*
                     col.render = function(value , type , record, rowModel) {
 
                         if (type == 'display') {
@@ -51,8 +51,6 @@ define('widget/tablegrid',['_g','doT'],function() {
 
                             if (colIndex == i) {
 
-                                console.log(_conf[i]);
-
                                 var result = _conf[i].render(value, record, rowIndex, colIndex);
                                 return result;
                             }
@@ -61,16 +59,48 @@ define('widget/tablegrid',['_g','doT'],function() {
 
 
                     }
+                    */
 
                     _columns[i] = col;
-
-
                 }
-                console.log(_columns);
+
+                // --- redefine render ---
+                var _columnRefs = [];
+                for (var i in _conf) {
+                    var colRef = {};
+
+                    // --- define render ---
+                    if (_conf[i].render && typeof(_conf[i].render) == 'function' ) {
+                        colRef['targets'] = parseInt(i , 10);
+                        colRef['render'] = function( value, type, record , rowModel) {
+
+                            if (type == 'display') {
+
+                                var rowIndex = rowModel.row;
+                                var colIndex = rowModel.col;
+                                var render = _conf[i].render;
+
+                                // --- count render ---
+                                var result = _conf[colIndex].render(value, record, rowIndex, colIndex);
+                                return result;
+                            }
+                            return value;
+                        }
+
+                        _columnRefs.push(colRef);
+
+
+                    }
+                }
+
+
+
+
 
 
                 delete wconf["cols"];
                 wconf['columns'] = _columns;
+                wconf['columnDefs'] = _columnRefs;
             }
 
 

@@ -82,7 +82,7 @@ AppMod.application({
                                 name:'id',
                                 raw:record
                             });
-                            return 5;
+                            return checkedHtml;
                         }},
                         {"title":"用户帐号" , "field":"loginAccount"},
                         {"title":"中文名字" , "field":"chineseName"},
