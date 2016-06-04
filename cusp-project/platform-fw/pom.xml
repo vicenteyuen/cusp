@@ -8,8 +8,8 @@
   </parent>
   <artifactId>platform-fw</artifactId>
   <packaging>pom</packaging>
-  <name>平台定义的框框</name>
-  <description>使用预定义好的框架模�?</description>
+  <name>平台定义的框架</name>
+  <description>使用预定义好的框架模</description>
   <modules>
   	<module>bootstrap</module>
     <module>utils</module>
@@ -18,7 +18,7 @@
   <properties>
   	<vertx.version>3.2.0</vertx.version>
   	<undertow.version>1.3.14.Final</undertow.version>
-  	<rapidoid.version>5.0.11</rapidoid.version>
+  	<rapidoid.version>5.1.5</rapidoid.version>
   	<guice.version>4.0</guice.version>
   	<slf4j.version>1.7.7</slf4j.version>
   	<logback.version>1.1.2</logback.version>
