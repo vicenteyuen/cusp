@@ -1,4 +1,4 @@
-package org.vsg.cusp.bootstrap;
+package org.vsg.cusp.startup;
 
 public final class ServerConst {
 	
