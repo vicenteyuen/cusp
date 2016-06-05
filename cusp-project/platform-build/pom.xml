@@ -42,38 +42,10 @@
   </profiles>
   
   
-  <build>
- 	<plugins>
- 	  <plugin>
-  	  	 <groupId>org.apache.maven.plugins</groupId>
-  	  	 <artifactId>maven-assembly-plugin</artifactId>
-  	  	 <version>2.6</version>
-  	  	 <executions>
-  	  	  <execution>
- 			<id>platform-build</id>
-  	  	   	<phase>package</phase>
-  	  	   	<configuration>
-  	  	   	  <descriptors>
-  	  	   	  	<descriptor>src/build-platform.xml</descriptor>
-  	  	   	  </descriptors>
-  	  	   	</configuration>
-  	  	   	<goals>
-  	  	   	  <goal>single</goal>
-  	  	   	</goals>
-  	  	   </execution>
-  	  	 </executions> 	  
- 	  </plugin>
- 	</plugins>
-  </build>
   <dependencies>
   	<dependency>
   		<groupId>org.vsg</groupId>
   		<artifactId>bootstrap</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.vsg</groupId>
-  		<artifactId>vertx3-serv-provider</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>

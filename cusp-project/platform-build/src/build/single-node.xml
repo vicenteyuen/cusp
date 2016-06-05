@@ -10,10 +10,7 @@
     
     <baseDirectory>.</baseDirectory>
     <!-- set dependency module lib -->
-    
- 
     <dependencySets>
-    	<!-- bootstrap lib -->
     	<dependencySet>
     		<scope>runtime</scope>
     		<unpack>false</unpack>
@@ -25,23 +22,13 @@
     			<include>org.vsg:bootstrap</include>
     		</includes>
     	</dependencySet>
-    	    
-    	<!-- web component -->
-    	<dependencySet>
-    		<scope>runtime</scope>
-    		<unpack>false</unpack>
-    		<useTransitiveFiltering>true</useTransitiveFiltering>
-    		<useStrictFiltering>true</useStrictFiltering> 
-    		<outputDirectory>/lib</outputDirectory>
-    		<fileMode>666</fileMode>
-    		<!-- 
-    		<includes>
-    			<include>org.vsg:vertx3-serv-provider</include>
-    		</includes>
-    		 -->
-    	</dependencySet>
-    </dependencySets>
+    </dependencySets>        
+    
+ 
+
      <!-- 
+     
+ 
     <moduleSets>
     	<moduleSet>
     		<includes>
@@ -55,7 +42,11 @@
     	</moduleSet>    
     </moduleSets>
      --> 
-    <fileSets>  
+    <fileSets>
+        <fileSet>  
+            <directory>src/bin</directory>  
+            <outputDirectory>/bin</outputDirectory>  
+        </fileSet>      
         <fileSet>  
             <directory>src/conf</directory>  
             <outputDirectory>/conf</outputDirectory>  
