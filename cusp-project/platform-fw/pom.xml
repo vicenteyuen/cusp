@@ -12,8 +12,9 @@
   <description>使用预定义好的框架模</description>
   <modules>
   	<module>bootstrap</module>
-    <module>utils</module>
-    <module>bootstrap-webapps</module>
+    
+    
+    <module>core-runtime</module>
   </modules>
   <properties>
   	<vertx.version>3.2.0</vertx.version>
