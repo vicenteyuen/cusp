@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 
 public class ClassLoaderFactory {
 
-	private static Logger log = LoggerFactory.getLogger(ClassLoaderFactory.class);
+    private static final Log log = LogFactory.getLog(ClassLoaderFactory.class);
 
     // --------------------------------------------------------- Public Methods
 
@@ -213,7 +213,7 @@ public class ClassLoaderFactory {
 
                 File home = new File (Bootstrap.getDaemonHome());
                 home = home.getCanonicalFile();
-                File base = new File (Bootstrap.getCatalinaBase());
+                File base = new File (Bootstrap.getCuspBase());
                 base = base.getCanonicalFile();
                 File defaultValue = new File(base, "lib");
 

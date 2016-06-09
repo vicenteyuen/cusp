@@ -1,5 +1,7 @@
 package org.vsg.cusp.startup;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -9,32 +11,35 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.vsg.cusp.startup.ClassLoaderFactory.Repository;
 import org.vsg.cusp.startup.ClassLoaderFactory.RepositoryType;
 
 public class Bootstrap {
 
-	private static Logger log = LoggerFactory.getLogger(Bootstrap.class);
+    private static final Log log = LogFactory.getLog(Bootstrap.class);
 
     /**
      * Daemon object used by main.
      */
     private static Bootstrap daemon = null;
 
-    //private static final File catalinaBaseFile;
-    //private static final File catalinaHomeFile;
+    private static final File cuspBase;
+    private static final File cuspHomeFile;
 
     private static final Pattern PATH_PATTERN = Pattern.compile("(\".*?\")|(([^,])*)");
+    
+
 
     static {
-    	/*
+
         // Will always be non-null
         String userDir = System.getProperty("user.dir");
 
         // Home first
-        String home = System.getProperty(Globals.CATALINA_HOME_PROP);
+        String home = System.getProperty("cusp.home");
+
         File homeFile = null;
 
         if (home != null) {
@@ -70,27 +75,11 @@ public class Bootstrap {
                 homeFile = f.getAbsoluteFile();
             }
         }
+        
+        cuspHomeFile = homeFile;
+        cuspBase = cuspHomeFile;
+        
 
-        catalinaHomeFile = homeFile;
-        System.setProperty(
-                Globals.CATALINA_HOME_PROP, catalinaHomeFile.getPath());
-
-        // Then base
-        String base = System.getProperty(Globals.CATALINA_BASE_PROP);
-        if (base == null) {
-            catalinaBaseFile = catalinaHomeFile;
-        } else {
-            File baseFile = new File(base);
-            try {
-                baseFile = baseFile.getCanonicalFile();
-            } catch (IOException ioe) {
-                baseFile = baseFile.getAbsoluteFile();
-            }
-            catalinaBaseFile = baseFile;
-        }
-        System.setProperty(
-                Globals.CATALINA_BASE_PROP, catalinaBaseFile.getPath());
-                */
     }
 
     // -------------------------------------------------------------- Variables
@@ -126,23 +115,19 @@ public class Bootstrap {
         }
     }
     
-    static String getCatalinaBase() {
-    	return "";
-    }
 
 
     private ClassLoader createClassLoader(String name, ClassLoader parent)
         throws Exception {
-    	
-    	String value = null;
 
-
-        //String value = CatalinaProperties.getProperty(name + ".loader");
+    	String value = CuspProperties.getProperty(name + ".loader");
+       
         if ((value == null) || (value.equals("")))
             return parent;
 
         value = replace(value);
-
+        
+        
         List<Repository> repositories = new ArrayList<>();
 
         String[] repositoryPaths = getPaths(value);
@@ -150,7 +135,6 @@ public class Bootstrap {
         for (String repository : repositoryPaths) {
             // Check for a JAR URL repository
             try {
-                @SuppressWarnings("unused")
                 URL url = new URL(repository);
                 repositories.add(
                         new Repository(repository, RepositoryType.URL));
@@ -158,6 +142,7 @@ public class Bootstrap {
             } catch (MalformedURLException e) {
                 // Ignore
             }
+
 
             // Local repository
             if (repository.endsWith("*.jar")) {
@@ -189,7 +174,7 @@ public class Bootstrap {
         // Implementation is copied from ClassLoaderLogManager.replace(),
         // but added special processing for catalina.home and catalina.base.
         String result = str;
-    	/*
+
 
         int pos_start = str.indexOf("${");
         if (pos_start >= 0) {
@@ -206,10 +191,10 @@ public class Bootstrap {
                 String replacement;
                 if (propName.length() == 0) {
                     replacement = null;
-                } else if (Globals.CATALINA_HOME_PROP.equals(propName)) {
-                    replacement = getCatalinaHome();
-                } else if (Globals.CATALINA_BASE_PROP.equals(propName)) {
-                    replacement = getCatalinaBase();
+                } else if ("cusp.home".equals(propName)) {
+                    replacement = getCuspHome();
+                } else if ("cusp.base".equals(propName)) {
+                    replacement = getCuspBase();
                 } else {
                     replacement = System.getProperty(propName);
                 }
@@ -223,7 +208,7 @@ public class Bootstrap {
             builder.append(str, pos_end + 1, str.length());
             result = builder.toString();
         }
-        */
+
         return result;
     }
     
@@ -242,15 +227,14 @@ public class Bootstrap {
         initClassLoaders();
 
         Thread.currentThread().setContextClassLoader(catalinaLoader);
-        
-        System.out.println("base load : " + catalinaLoader);
+
 
         //SecurityClassLoad.securityClassLoad(catalinaLoader);
 
         // Load our startup class and call its process() method
         if (log.isDebugEnabled())
             log.debug("Loading startup class");
-        Class<?> startupClass = catalinaLoader.loadClass("org.apache.catalina.startup.Catalina");
+        Class<?> startupClass = catalinaLoader.loadClass("org.vsg.cusp.core.StandardServerMonitor");
         Object startupInstance = startupClass.newInstance();
 
         // Set the shared extensions class loader
@@ -553,5 +537,25 @@ public class Bootstrap {
             result.add(path);
         }
         return result.toArray(new String[result.size()]);
+    }
+    
+    /**
+     * Obtain the name of configured home (binary) directory. Note that home and
+     * base may be the same (and are by default).
+     * @return the catalina home
+     */
+    public static String getCuspHome() {
+        return cuspHomeFile.getPath();
+    }
+
+
+    /**
+     * Obtain the name of the configured base (instance) directory. Note that
+     * home and base may be the same (and are by default). If this is not set
+     * the value returned by {@link #getCuspHome()} will be used.
+     * @return the catalina base
+     */
+    public static String getCuspBase() {
+        return cuspBase.getPath();
     }
 }
