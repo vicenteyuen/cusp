@@ -13,15 +13,20 @@
     <dependencySets>
     	<dependencySet>
     		<scope>runtime</scope>
-    		<unpack>false</unpack>
-    		<useTransitiveFiltering>true</useTransitiveFiltering>
-    		<useStrictFiltering>true</useStrictFiltering> 
     		<outputDirectory>/bin/bootlib</outputDirectory>
-    		<fileMode>666</fileMode>
     		<includes>
-    			<include>org.vsg:bootstrap</include>
+    			<include>org.vsg:bootstrap:jar</include>
+    			<include>org.apache.tomcat.embed:tomcat-embed-logging-juli:jar</include>
     		</includes>
     	</dependencySet>
+    	<dependencySet>
+    		<scope>runtime</scope>
+    		<outputDirectory>/lib</outputDirectory>
+    		<excludes>
+    			<exclude>org.vsg:bootstrap:jar</exclude>
+    			<exclude>org.apache.tomcat.embed:tomcat-embed-logging-juli:jar</exclude>
+    		</excludes>
+    	</dependencySet>    	
     </dependencySets>        
     
  

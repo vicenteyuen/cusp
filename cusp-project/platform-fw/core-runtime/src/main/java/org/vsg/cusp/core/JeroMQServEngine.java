@@ -3,6 +3,10 @@
  */
 package org.vsg.cusp.core;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
@@ -11,10 +15,17 @@ import org.zeromq.ZMQ.Socket;
  * @author Vicente Yuen
  *
  */
-public class JeroMQServEngine implements ServEngine {
+public class JeroMQServEngine implements ServEngine , Runnable {
 	
+	private static Logger logger = LoggerFactory.getLogger(JeroMQServEngine.class);	
 	
-	
+	private Map<String, String> arguments;	
+
+	@Override
+	public void init(Map<String, String> arguments) {
+		// TODO Auto-generated method stub
+		this.arguments = arguments;		
+	}
 
 	/* (non-Javadoc)
 	 * @see org.vsg.cusp.core.ServEngine#start()
@@ -22,8 +33,26 @@ public class JeroMQServEngine implements ServEngine {
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
-		
+		Thread threadHook = new Thread(this);
+		threadHook.start();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vsg.cusp.core.ServEngine#stop()
+	 */
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+
+
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
         Context context = ZMQ.context(1);
+        
+        logger.info("boot start mq : " + 5559);
 
         //  Socket facing clients
         Socket frontend = context.socket(ZMQ.ROUTER);
@@ -39,16 +68,9 @@ public class JeroMQServEngine implements ServEngine {
         //  We never get here but clean up anyhow
         frontend.close();
         backend.close();
-        context.term();
+        context.term();		
 	}
 
-	/* (non-Javadoc)
-	 * @see org.vsg.cusp.core.ServEngine#stop()
-	 */
-	@Override
-	public void stop() {
-		// TODO Auto-generated method stub
-
-	}
-
+	
+	
 }

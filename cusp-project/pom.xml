@@ -6,10 +6,10 @@
   <packaging>pom</packaging>
   <modules>
   	<module>platform-fw</module>
-  	<module>platform-maven-plugin</module>
+  	
   	<module>platform-build</module>
-  	<module>platform-apps</module>
-  	<module>web-apps</module>
+  	
+  	
   </modules>
   <properties>
   	<guice.version>4.0</guice.version>
@@ -40,7 +40,7 @@
   		</dependency>
   	</dependencies>
   </dependencyManagement>
-  <name>Custom Unified Service Platform</name>
+  <name>自定义统一平台服务 Custom Unified Service Platform</name>
   <description>自定义统一平台服务
 服务平台为微服务平台</description>
 </project>

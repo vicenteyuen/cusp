@@ -36,6 +36,16 @@
   		<groupId>org.rapidoid</groupId>
   		<artifactId>rapidoid-gui</artifactId>
   		<version>${rapidoid.version}</version>
-  	</dependency>  	
+  	</dependency>
+  	<dependency>
+  		<groupId>com.alibaba</groupId>
+  		<artifactId>fastjson</artifactId>
+  		<version>1.2.12</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>commons-io</groupId>
+  		<artifactId>commons-io</artifactId>
+  		<version>2.5</version>
+  	</dependency>
   </dependencies>
 </project>
