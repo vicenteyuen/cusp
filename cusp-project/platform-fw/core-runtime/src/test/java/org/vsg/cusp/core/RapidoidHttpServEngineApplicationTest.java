@@ -15,6 +15,8 @@ public class RapidoidHttpServEngineApplicationTest {
 		arguments.put("port", "8100");
 		
 		engine.init(arguments);
+
+		
 		engine.start();
 	}
 	
