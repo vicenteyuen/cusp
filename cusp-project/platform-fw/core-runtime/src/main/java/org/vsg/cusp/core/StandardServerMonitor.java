@@ -124,12 +124,11 @@ public class StandardServerMonitor {
         boolean isConfig = true;
 
         if (args.length < 1) {
-
             return false;
         }
 
         for (int i = 0; i < args.length; i++) {
-            if (isConfig) {
+        	if (isConfig) {
                 configFile = args[i];
                 isConfig = false;
             } else if (args[i].equals("-config")) {
