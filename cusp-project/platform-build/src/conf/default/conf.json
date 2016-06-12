@@ -11,5 +11,9 @@
       "host":"localhost",
       "port":"5100"
     }
-  }]
+  }],
+  "server":{
+    "port":"7101",
+    "cmd-shutdown":"SHUTDOWN"
+  }
 }

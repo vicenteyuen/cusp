@@ -22,7 +22,7 @@ public class StandardServerMonitorTest {
 	public void loadConfigurationForEngine() throws Exception {
 		URL url = this.getClass().getResource("/test/conf.json");
 
-		String[] args = new String[]{url.toString()};
+		String[] args = new String[]{"start","-conf_file="+url.getFile()};
 		
 		StandardServerMonitor ssm = new StandardServerMonitor();
 		ssm.setParentClassLoader( Thread.currentThread().getContextClassLoader() );

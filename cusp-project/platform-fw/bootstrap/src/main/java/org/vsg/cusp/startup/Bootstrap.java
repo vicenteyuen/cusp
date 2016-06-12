@@ -267,7 +267,7 @@ public class Bootstrap {
     	for (String arg : arguments) {
     		argumentsList.add(arg);
     	}
-    	argumentsList.add("-profile="+profile);
+    	argumentsList.add("-conf_file="+this.cuspBase+"/conf/"+profile+"/conf.json");
 
         // Call the load() method
         String methodName = "load";
@@ -358,8 +358,7 @@ public class Bootstrap {
     public void stopServer()
         throws Exception {
 
-        Method method =
-            catalinaDaemon.getClass().getMethod("stopServer", (Class []) null);
+        Method method = catalinaDaemon.getClass().getMethod("stopServer", (Class []) null);
         method.invoke(catalinaDaemon, (Object []) null);
 
     }
@@ -373,6 +372,15 @@ public class Bootstrap {
     public void stopServer(String[] arguments)
         throws Exception {
 
+    	String profile = System.getProperty("profile","default");
+    	
+    	List<String> argumentsList = new Vector<String>();
+    	for (String arg : arguments) {
+    		argumentsList.add(arg);
+    	}
+    	argumentsList.add("-conf_file="+this.cuspBase+"/conf/"+profile+"/conf.json");
+    	
+    	
         Object param[];
         Class<?> paramTypes[];
         if (arguments==null || arguments.length==0) {
@@ -382,7 +390,7 @@ public class Bootstrap {
             paramTypes = new Class[1];
             paramTypes[0] = arguments.getClass();
             param = new Object[1];
-            param[0] = arguments;
+            param[0] = argumentsList.toArray(new String[0]);
         }
         Method method =
             catalinaDaemon.getClass().getMethod("stopServer", paramTypes);
