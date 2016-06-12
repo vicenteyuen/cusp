@@ -305,7 +305,7 @@ goto setArgs
 rem Execute Java with the applicable properties
 if not "%JPDA%" == "" goto doJpda
 if not "%SECURITY_POLICY_FILE%" == "" goto doSecurity
-%_EXECJAVA% -classpath "%CLASSPATH%" -Dcusp.home="%CUSP_HOME%" -Dcusp.base="%CUSP_BASE%" %MAINCLASS% %ACTION%
+%_EXECJAVA% -classpath "%CLASSPATH%" -Dcusp.home="%CUSP_HOME%" -Dcusp.base="%CUSP_BASE%" -Dprofile="default" %MAINCLASS% %ACTION%
 rem %_EXECJAVA% %JAVA_OPTS% %CATALINA_OPTS% %DEBUG_OPTS% -Djava.endorsed.dirs="%JAVA_ENDORSED_DIRS%" -classpath "%CLASSPATH%" -Dcatalina.base="%CUSP_BASE%" -Dcatalina.home="%CUSP_HOME%" -Djava.io.tmpdir="%CATALINA_TMPDIR%" %MAINCLASS% %CMD_LINE_ARGS% %ACTION%
 goto end
 :doSecurity

@@ -85,7 +85,7 @@ AppMod.application({
                             return checkedHtml;
                         }},
                         {"title":"用户帐号" , "field":"loginAccount"},
-                        {"title":"中文名字" , "field":"chineseName"},
+                        {"title":"中文名字" , "field":"chineseName" , width:'20rem'},
                         {"title":"员工编号" , "field":"staffNo" },
                         {"title":"联系方式" , "field":"contact" },
                         {"title":"状态" ,
