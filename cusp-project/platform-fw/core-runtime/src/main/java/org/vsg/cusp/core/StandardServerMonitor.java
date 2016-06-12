@@ -1,16 +1,15 @@
 package org.vsg.cusp.core;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import org.apache.commons.io.IOUtils;
 
@@ -49,8 +48,9 @@ public class StandardServerMonitor {
         long t1 = System.nanoTime();
         
         try {
-        	URL url = new URL(this.configFile);
-        	JSONObject jObj = (JSONObject)JSON.parse( IOUtils.toString(url.toURI() , "utf-8") );
+        	this.configFile = System.getProperty("cusp.base") + "/conf/" + this.currentProfile + "/conf.json";
+        	File file = new File(this.configFile);
+        	JSONObject jObj = (JSONObject)JSON.parse( IOUtils.toString(file.toURI() , "utf-8") );
         	
         	JSONArray engines = jObj.getJSONArray("engines");
         	for (Iterator<JSONObject> engineIter = (Iterator<JSONObject>)(Iterator)engines.iterator(); engineIter.hasNext();) {
@@ -78,9 +78,6 @@ public class StandardServerMonitor {
         	}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -119,15 +116,24 @@ public class StandardServerMonitor {
     
     private String configFile;
     
+    private String currentProfile;
+    
     protected boolean arguments(String args[]) {
 
-        boolean isConfig = true;
+        //boolean isConfig = true;
 
         if (args.length < 1) {
             return false;
         }
 
+
         for (int i = 0; i < args.length; i++) {
+        	// --- parse profile ---
+        	if (args[i].startsWith("-profile=")) {
+        		currentProfile = args[i].replace("-profile=", "");
+        	}
+        	
+        	/*
         	if (isConfig) {
                 configFile = args[i];
                 isConfig = false;
@@ -148,7 +154,9 @@ public class StandardServerMonitor {
 
                 return false;
             }
+        	*/
         }
+
 
         return true;
     }

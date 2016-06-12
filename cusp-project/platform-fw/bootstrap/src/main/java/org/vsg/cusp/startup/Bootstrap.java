@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -259,6 +260,14 @@ public class Bootstrap {
      */
     private void load(String[] arguments)
         throws Exception {
+    	
+    	String profile = System.getProperty("profile","default");
+    	
+    	List<String> argumentsList = new Vector<String>();
+    	for (String arg : arguments) {
+    		argumentsList.add(arg);
+    	}
+    	argumentsList.add("-profile="+profile);
 
         // Call the load() method
         String methodName = "load";
@@ -270,8 +279,10 @@ public class Bootstrap {
         } else {
             paramTypes = new Class[1];
             paramTypes[0] = arguments.getClass();
+            
+            
             param = new Object[1];
-            param[0] = arguments;
+            param[0] = argumentsList.toArray(new String[0]);
         }
         
         Method method =

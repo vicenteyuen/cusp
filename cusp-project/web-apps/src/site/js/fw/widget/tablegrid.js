@@ -37,6 +37,13 @@ define('widget/tablegrid',['_g','doT'],function() {
                         bSortable:false,
                     };
 
+                    if (_conf[i].title) {
+                        col.title = _conf[i].title;
+                    }
+                    if (_conf[i].width) {
+                        col.width = _conf[i].width;
+                    }
+
 
                     // ---- define render event ---
                     /*
@@ -92,10 +99,6 @@ define('widget/tablegrid',['_g','doT'],function() {
 
                     }
                 }
-
-
-
-
 
 
                 delete wconf["cols"];
