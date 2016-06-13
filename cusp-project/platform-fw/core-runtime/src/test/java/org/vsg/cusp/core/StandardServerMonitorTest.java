@@ -24,7 +24,7 @@ public class StandardServerMonitorTest {
 
 		String[] args = new String[]{"start","-conf_file="+url.getFile()};
 		
-		StandardServerMonitor ssm = new StandardServerMonitor();
+		CustomUnifiedServicePlatform ssm = new CustomUnifiedServicePlatform();
 		ssm.setParentClassLoader( Thread.currentThread().getContextClassLoader() );
 		ssm.load(args);
 		

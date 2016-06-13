@@ -235,7 +235,7 @@ public class Bootstrap {
         // Load our startup class and call its process() method
         if (log.isDebugEnabled())
             log.debug("Loading startup class");
-        Class<?> startupClass = catalinaLoader.loadClass("org.vsg.cusp.core.StandardServerMonitor");
+        Class<?> startupClass = catalinaLoader.loadClass("org.vsg.cusp.core.CustomUnifiedServicePlatform");
         Object startupInstance = startupClass.newInstance();
 
         // Set the shared extensions class loader

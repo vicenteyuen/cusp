@@ -28,9 +28,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-public class StandardServerMonitor implements Lifecycle {
+public class CustomUnifiedServicePlatform implements Lifecycle {
 	
-	private static Logger log = LoggerFactory.getLogger( StandardServerMonitor.class );
+	private static Logger log = LoggerFactory.getLogger( CustomUnifiedServicePlatform.class );
 
 	private boolean await;
 
@@ -42,7 +42,7 @@ public class StandardServerMonitor implements Lifecycle {
 		this.await = await;
 	}
 
-	protected ClassLoader parentClassLoader = StandardServerMonitor.class.getClassLoader();
+	protected ClassLoader parentClassLoader = CustomUnifiedServicePlatform.class.getClassLoader();
     
 	public void setParentClassLoader(ClassLoader parentClassLoader) {
         this.parentClassLoader = parentClassLoader;
