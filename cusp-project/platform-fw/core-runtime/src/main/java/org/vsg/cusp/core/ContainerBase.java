@@ -5,6 +5,9 @@ package org.vsg.cusp.core;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Vicente Yuen
  *
@@ -14,10 +17,30 @@ public class ContainerBase {
 
 	protected ClassLoader parentClassLoader;
 	
+	
+	private static Logger logger = LoggerFactory.getLogger( ContainerBase.class );
+	
 	// --- start container base 
 	
 	public void init() {
 		
+		File microCompsFolder = new File(cuspHome , "mico-comps");
+		
+		if (!microCompsFolder.exists()) {
+			logger.error("Could not found folder \"mico-comps\".");
+			return ;
+		}
+		
+		// --- share folder ---
+		File shareLibFolder = new File(microCompsFolder , "share");
+		
+		// --- load the share libs ---
+		getShareClassLoader(shareLibFolder);
+	}
+	
+	
+	public ClassLoader getShareClassLoader(File shareLibFolder) {
+		return null;
 	}
 	
 	
