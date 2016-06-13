@@ -1,13 +1,20 @@
 package org.vsg.cusp.core;
 
-import org.junit.Test;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class JeroMQServEngineTest {
 	
-	@Test
-	public void test_01_start() throws Exception {
-		JeroMQServEngine engine = new JeroMQServEngine();
-		engine.start();
-	}
 
+	public static void main(String[] args) {
+		
+		Map<String,String> arguments = new LinkedHashMap<String,String>();
+		
+		JeroMQServEngine engine = new JeroMQServEngine();
+		
+		engine.init( arguments );
+		
+		engine.start();		
+	}	
+	
 }

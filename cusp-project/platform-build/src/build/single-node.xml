@@ -55,6 +55,23 @@
         <fileSet>  
             <directory>src/conf</directory>  
             <outputDirectory>/conf</outputDirectory>  
-        </fileSet>                     
+        </fileSet>
+        
+        <!-- append file -->
+        <!-- product -->
+        <fileSet>  
+            <directory>../platform-apps/product-mng/product-pub-runtime/target/</directory>  
+            <outputDirectory>/mico-comps/share</outputDirectory>
+            <includes>
+            	<include>**/*.jar</include>
+            </includes>  
+        </fileSet>
+        <fileSet>  
+            <directory>../platform-apps/product-mng/product-pri-runtime/target/</directory>  
+            <outputDirectory>/mico-comps/comp_product</outputDirectory>
+            <includes>
+            	<include>**/*.jar</include>
+            </includes>  
+        </fileSet>                             
     </fileSets>  
 </assembly>

@@ -12,6 +12,7 @@
   <description>使用预定义好的框架模</description>
   <modules>
   	<module>bootstrap</module>
+    <module>cusp-api</module>
     <module>core-runtime</module>
   </modules>
   <properties>

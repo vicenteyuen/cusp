@@ -5,6 +5,8 @@ package org.vsg.cusp.core;
 
 import java.util.Map;
 
+import org.rapidoid.ioc.IoC;
+import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.net.Server;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
@@ -43,17 +45,31 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 	 */
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
-		if (null != serv) {
-			// --- shutdown server ---
-			if (serv.isActive()) {
-				serv.shutdown();
+		
+		try {
+			setup.shutdown();
+
+			
+			if (null != serv) {
+				// --- shutdown server ---
+				if (serv.isActive()) {
+					serv.shutdown();
+				}
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		
+		
+		
 
 	}
 	
 	private Server serv;
+	
+	Setup setup = On.setup();	
 
 	@Override
 	public void run() {
@@ -63,10 +79,10 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 
 		try {
 
-			Setup setup = On.setup();
 			setup.address(host);
 			setup.port(port);
 			
+
 			serv = setup.listen();
 			logger.info("listen http port : [" + port + "].");
 		} catch (Exception e) {

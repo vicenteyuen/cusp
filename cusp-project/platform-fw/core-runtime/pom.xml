@@ -42,5 +42,10 @@
   		<artifactId>commons-io</artifactId>
   		<version>2.5</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.vsg</groupId>
+  		<artifactId>cusp-api</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
 </project>

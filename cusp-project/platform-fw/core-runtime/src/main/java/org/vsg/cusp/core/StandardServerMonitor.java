@@ -208,6 +208,17 @@ public class StandardServerMonitor implements Lifecycle {
         	
 			lock.lock();
 			
+			// --- start and boot container ---
+			ContainerBase cb = new ContainerBase();
+			// --- set parent class loader ---
+			File cuspHome = new File(System.getProperty("cusp.home"));
+			
+			cb.setCuspHome(cuspHome);
+			cb.setParentClassLoader( parentClassLoader );
+			cb.init();
+			
+			
+			
 			Iterator<ServEngine> engineIter =  engines.iterator();
 			while (engineIter.hasNext()){
 				ServEngine engineItem =  engineIter.next();
@@ -228,10 +239,8 @@ public class StandardServerMonitor implements Lifecycle {
 			stop();
 		}
 		
-		System.out.println("current message stop server. " );
-		
-		
-
+		// --- exist program ---
+		Runtime.getRuntime().exit(0);
 	}
 	
     private volatile ServerSocket awaitSocket = null;
