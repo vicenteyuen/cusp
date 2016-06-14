@@ -20,6 +20,15 @@ public class JeroMQServEngine implements ServEngine , Runnable {
 	private static Logger logger = LoggerFactory.getLogger(JeroMQServEngine.class);	
 	
 	private Map<String, String> arguments;	
+	
+	
+	private Container container;		
+
+	@Override
+	public void setRunningContainer(Container container) {
+		// TODO Auto-generated method stub
+		this.container = container;
+	}
 
 	@Override
 	public void init(Map<String, String> arguments) {

@@ -84,6 +84,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
         		ServEngine inst =  servEngineCls.newInstance();
         		inst.init(argsMap);
         		
+        		
         		this.engines.add( inst );
         	}
         	
@@ -222,6 +223,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 			Iterator<ServEngine> engineIter =  engines.iterator();
 			while (engineIter.hasNext()){
 				ServEngine engineItem =  engineIter.next();
+				engineItem.setRunningContainer(cb);
 				engineItem.start();
 			}
 			

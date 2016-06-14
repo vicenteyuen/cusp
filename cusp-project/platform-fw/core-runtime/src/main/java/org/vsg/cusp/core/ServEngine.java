@@ -19,5 +19,7 @@ public interface ServEngine {
 	void stop();
 	
 	void init(Map<String,String> arguments);
+	
+	void setRunningContainer(Container container);
 
 }

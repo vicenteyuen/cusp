@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +17,16 @@ import org.slf4j.LoggerFactory;
  * @author Vicente Yuen
  *
  */
-public class ContainerBase {
+public class ContainerBase implements Container{
 	
 
 	protected ClassLoader parentClassLoader;
 	
 	
 	private static Logger logger = LoggerFactory.getLogger( ContainerBase.class );
+	
+	
+	private Map<String,ClassLoader> supportCompClsMapping = new LinkedHashMap<String,ClassLoader>();
 	
 	// --- start container base 
 	
@@ -39,18 +44,45 @@ public class ContainerBase {
 		
 		try {
 			// --- load the share libs ---
-			ClassLoader clsLoader = getShareClassLoader(shareLibFolder);
+			ClassLoader shareLibClassLoader = getFolderClassLoader(shareLibFolder , parentClassLoader);
 			
-			Class cls = clsLoader.loadClass("org.vsg.cusp.product.pub.TestClass");
+			File[] subFolder = microCompsFolder.listFiles(new FileFilter() {
 
+				@Override
+				public boolean accept(File pathname) {
+					// TODO Auto-generated method stub
+					if (!pathname.isDirectory()) {
+						return false;
+					}
+					String folderName = pathname.getName();
+					if (folderName.equalsIgnoreCase("share")) {
+						return false;
+					}
+					return true;
+				}
+				
+			});
+			
+			
+			// --- load component class loader ---
+			for (File compFolder : subFolder) {
+				ClassLoader compClassLoader = getFolderClassLoader(compFolder , shareLibClassLoader);
+				supportCompClsMapping.put(compFolder.getName(), compClassLoader);
+			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
+	@Override
+	public Map<String,ClassLoader> getComponentsClassLoader() {
+		return this.supportCompClsMapping;
+	}
 	
-	public ClassLoader getShareClassLoader(File shareLibFolder) throws Exception {
+	
+	public ClassLoader getFolderClassLoader(File shareLibFolder , ClassLoader parentClassLoader) throws Exception {
 		
 		File[] files = shareLibFolder.listFiles(new FileFilter() {
 
@@ -70,12 +102,12 @@ public class ContainerBase {
 
 		}
 		
-		URLClassLoader urlClsLoader = new URLClassLoader(jarUrls , this.parentClassLoader);
+		URLClassLoader urlClsLoader = new URLClassLoader(jarUrls , parentClassLoader);
 
 		return urlClsLoader;
 	}
 	
-	
+	@Override
 	public ClassLoader getParentClassLoader() {
         if (parentClassLoader != null)
             return (parentClassLoader);

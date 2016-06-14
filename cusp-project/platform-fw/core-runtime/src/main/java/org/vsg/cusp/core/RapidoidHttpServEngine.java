@@ -4,9 +4,8 @@
 package org.vsg.cusp.core;
 
 import java.util.Map;
+import java.util.Set;
 
-import org.rapidoid.ioc.IoC;
-import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.net.Server;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
@@ -23,6 +22,15 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 	
 	private Map<String, String> arguments;
 	
+	private Container container;	
+	
+	
+	@Override
+	public void setRunningContainer(Container container) {
+		// TODO Auto-generated method stub
+		this.container = container;
+	}
+
 	@Override
 	public void init(Map<String, String> arguments) {
 		// TODO Auto-generated method stub
@@ -82,6 +90,12 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 			setup.address(host);
 			setup.port(port);
 			
+			Map<String,ClassLoader> compsClsLoader =   this.container.getComponentsClassLoader();
+			Set<Map.Entry<String, ClassLoader>> entries = compsClsLoader.entrySet();
+			for (Map.Entry<String, ClassLoader> entry : entries ) {
+				scanComponentsClass(entry.getKey() , entry.getValue());
+			}
+			
 
 			serv = setup.listen();
 			logger.info("listen http port : [" + port + "].");
@@ -92,6 +106,13 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 		
 
 	}
+	
+	private void scanComponentsClass(String compName , ClassLoader clsLoader) {
+		
+		
+
+	}
+	
 
 	
 

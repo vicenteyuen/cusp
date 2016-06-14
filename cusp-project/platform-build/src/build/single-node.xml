@@ -59,6 +59,7 @@
         
         <!-- append file -->
         <!-- product -->
+        <!-- 
         <fileSet>  
             <directory>../platform-apps/product-mng/product-pub-runtime/target/</directory>  
             <outputDirectory>/mico-comps/share</outputDirectory>
@@ -72,6 +73,7 @@
             <includes>
             	<include>**/*.jar</include>
             </includes>  
-        </fileSet>                             
+        </fileSet>
+         -->                             
     </fileSets>  
 </assembly>
