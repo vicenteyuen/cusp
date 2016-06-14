@@ -9,8 +9,9 @@
   <artifactId>product-mng</artifactId>
   <packaging>pom</packaging>
   <modules>
-  <module>product-biz-api</module>
-  <module>product-pub-runtime</module>
-  <module>product-pri-runtime</module>
+    <module>product-biz-api</module>
+    <module>product-pub-runtime</module>
+    <module>product-pri-runtime</module>
+    <module>build</module>
   </modules>
 </project>

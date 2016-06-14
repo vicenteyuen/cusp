@@ -46,6 +46,7 @@
     	<groupId>org.vsg</groupId>
     	<artifactId>bootstrap</artifactId>
     	<version>${platfrom-framework.version}</version>
+    	<optional>true</optional>
     </dependency>    
   </dependencies>
   
