@@ -9,28 +9,9 @@
   <packaging>pom</packaging>
   <name>构建项目</name>
   <description>生成相关项目文件</description>
+
   <build>
  	<plugins>
-	 	<plugin>
-	  	  <groupId>org.apache.maven.plugins</groupId>
-	  	  <artifactId>maven-assembly-plugin</artifactId>
-	  	  <version>2.6</version>
-	  	  <executions>
-	  	  	<execution>
-	 		  <id>distro-assembly</id>
-	  	  	  <phase>install</phase>
-	  	  	  <configuration>
-	  	  	    <descriptors>
-	  	  	  		<descriptor>src/package.xml</descriptor>
-	  	  	    </descriptors>
-	  	  	 </configuration>
-	  	  	 <goals>
-	  	  	   <goal>single</goal>
-	  	  	 </goals>
-	   	   </execution>
-	   	 </executions> 	  
-	  </plugin>
-	  <!-- 
  	  <plugin>
   	  	 <groupId>org.vsg</groupId>
   	  	 <artifactId>platform-maven-plugin</artifactId>
@@ -38,7 +19,7 @@
   	  	 <executions>
   	  	  <execution>
  			<id>comps-package</id>
-  	  	   	<phase>pre-integration-test</phase>
+  	  	   	<phase>package</phase>
   	  	   	<configuration>
   	  	   	</configuration>
   	  	   	<goals>
@@ -47,7 +28,6 @@
   	  	   </execution>
   	  	 </executions> 	  
  	  </plugin>
- 	   -->
  	</plugins>
   </build>  
 

@@ -4,20 +4,16 @@
 package org.vsg.cusp.plugins.apps;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 
 /**
  * @author Vison Ruan
@@ -44,8 +40,44 @@ public class ComponentsPackageMojo extends AbstractAppMojo {
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		// TODO Auto-generated method stub
+		// --- get the parent project ---
+		MavenProject parentProject = this.getProject().getParent();
+		
+		if (null == parentProject) {
+			this.getLog().error("This project is not to under CUSP Components structure.");
+			return;
+		}
+		
+		
+		/*
+		List<String> modules = parentProject.getModules();
+		Iterator<String> moduleIter = modules.iterator();
+		while (moduleIter.hasNext()) {
+			String currentName = moduleIter.next();
+			if (currentName.equals( this.getProject().getName() )) {
+				moduleIter.remove();
+			}
+		}*/
+		
+		List<MavenProject> subProjects =  parentProject.getCollectedProjects();
+		Iterator<MavenProject> subProjectIter = subProjects.iterator();
+		while (subProjectIter.hasNext()) {
+			MavenProject mp = subProjectIter.next();
+			if (mp.getArtifactId().equals( this.getProject().getName() )) {
+				subProjectIter.remove();
+			}
+		}
+		
+		System.out.println(subProjects);
+		
 
-		System.out.println("hello message");
+		
+		//parentProject
+		
+
+		
+
+
 
 	}
 

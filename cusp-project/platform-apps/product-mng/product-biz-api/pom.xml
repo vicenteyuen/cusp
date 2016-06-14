@@ -8,5 +8,5 @@
 	</parent>
 	<artifactId>product-biz-api</artifactId>
 	<description>产品管理的基础业务模型和api的定义标准都在些此模块</description>
-	<name>应用模块 - 产品管理定义模块</name>
+	<name>应用模块 - 产品管理API定义</name>
 </project>
