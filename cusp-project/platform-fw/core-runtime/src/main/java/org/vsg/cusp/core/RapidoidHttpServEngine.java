@@ -6,6 +6,8 @@ package org.vsg.cusp.core;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.Path;
+
 import org.rapidoid.net.Server;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
@@ -110,6 +112,10 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 	private void scanComponentsClass(String compName , ClassLoader clsLoader) {
 		
 		
+		// --- scan rest api ---
+		
+
+
 
 	}
 	

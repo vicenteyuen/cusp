@@ -44,7 +44,7 @@ public class ContainerBase implements Container{
 		
 		try {
 			// --- load the share libs ---
-			ClassLoader shareLibClassLoader = getFolderClassLoader(shareLibFolder , parentClassLoader);
+			ClassLoader shareLibClassLoader = getFolderClassLoader(new File(shareLibFolder,"lib") , parentClassLoader);
 			
 			File[] subFolder = microCompsFolder.listFiles(new FileFilter() {
 
@@ -66,7 +66,7 @@ public class ContainerBase implements Container{
 			
 			// --- load component class loader ---
 			for (File compFolder : subFolder) {
-				ClassLoader compClassLoader = getFolderClassLoader(compFolder , shareLibClassLoader);
+				ClassLoader compClassLoader = getFolderClassLoader(new File(compFolder,"lib") , shareLibClassLoader);
 				supportCompClsMapping.put(compFolder.getName(), compClassLoader);
 			}
 			

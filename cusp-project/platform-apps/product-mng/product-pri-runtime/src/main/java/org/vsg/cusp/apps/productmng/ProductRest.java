@@ -1,10 +1,5 @@
 package org.vsg.cusp.apps.productmng;
 
-import io.vertx.core.Vertx;
-
-import java.util.concurrent.CountDownLatch;
-
-import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,10 +18,6 @@ import javax.ws.rs.core.Response;
 public class ProductRest {
 	
 	
-	// --- get the proxy ---
-	@Inject
-	private Vertx vertx;
-
 	
 	@GET
 	@Path("/{id}")
@@ -34,6 +25,12 @@ public class ProductRest {
 			@Suspended AsyncResponse asyncResponse , 
 			@PathParam("id") String productId) {
 
+		
+		// --- call response handle ---
+        Response jaxrs = Response.ok("hello world, VISON").type(MediaType.TEXT_PLAIN).build();
+        asyncResponse.resume(jaxrs);	
+		
+        /*		
 		CountDownLatch latch = new CountDownLatch(2);
 		vertx.eventBus().localConsumer("moduleStarted").handler(message -> {
 			System.out.println(message.body());
@@ -49,12 +46,9 @@ public class ProductRest {
 			// --- call response handle ---
             Response jaxrs = Response.ok("hello world, VISON").type(MediaType.TEXT_PLAIN).build();
             asyncResponse.resume(jaxrs);	
-
-
-			
-			
 			
 		});
+		*/
 
 
 		
