@@ -1,0 +1,4 @@
+{
+  "context-path":"promng",
+  "package-scan": ["org.vsg.cusp.apps.productmng"]
+}

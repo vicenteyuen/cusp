@@ -28,6 +28,8 @@ public class ContainerBase implements Container{
 	
 	private Map<String,ClassLoader> supportCompClsMapping = new LinkedHashMap<String,ClassLoader>();
 	
+	private Map<String , File> supportedCompsPathMapping = new LinkedHashMap<String, File>();
+	
 	// --- start container base 
 	
 	public void init() {
@@ -68,6 +70,7 @@ public class ContainerBase implements Container{
 			for (File compFolder : subFolder) {
 				ClassLoader compClassLoader = getFolderClassLoader(new File(compFolder,"lib") , shareLibClassLoader);
 				supportCompClsMapping.put(compFolder.getName(), compClassLoader);
+				supportedCompsPathMapping.put(compFolder.getName() , compFolder);
 			}
 			
 		} catch (Exception e) {
@@ -131,6 +134,12 @@ public class ContainerBase implements Container{
 
 	private void loadMicoCompsLibs() {
 		
+	}
+
+	@Override
+	public Map<String, File> getComponentsPath() {
+		// TODO Auto-generated method stub
+		return this.supportedCompsPathMapping;
 	}
 	
 

@@ -6,10 +6,7 @@
   <packaging>pom</packaging>
   <modules>
   	<module>platform-fw</module>
-  	
   	<module>platform-build</module>
-  	
-  	
   </modules>
   <properties>
   	<guice.version>4.0</guice.version>

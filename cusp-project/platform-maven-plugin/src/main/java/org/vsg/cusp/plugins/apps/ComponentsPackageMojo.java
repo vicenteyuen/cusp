@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -85,6 +84,13 @@ public class ComponentsPackageMojo extends AbstractAppMojo {
 		updateRuntimeLibsForShare(subProjects, shareDir);
 		
 		updateRuntimeLibsForPrivate(subProjects, artifactDir);
+		
+		try {
+			updateRuntimeConfFile(parentProject, artifactDir);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -168,6 +174,38 @@ public class ComponentsPackageMojo extends AbstractAppMojo {
 	}
 
 	
+	
+	private void updateRuntimeConfFile(MavenProject mvnProject , File targetDir) throws IOException {
+		File baseDir = mvnProject.getBasedir();
+		File srcDir = new File(baseDir, "src");
+		
+		if (!srcDir.exists()) {
+			return;
+		}
+		
+		File confDir = new File(srcDir , "conf");
+		
+		if (!confDir.exists()) {
+			return ;
+		}
+	
+		File confFile = new File(confDir , "comp.json");
+		
+		if ( !confFile.exists() ) {
+			return;
+		}
+		
+		Path source = confFile.toPath();
+		
+		File targetFile = new File(targetDir , confFile.getName());
+
+		Path target = targetFile.toPath();
+
+		if (!targetFile.exists()) {
+			Files.copy(source, target,StandardCopyOption.COPY_ATTRIBUTES);
+		}		
+
+	}
 
 	
 	private Map<String,URI> orginalClasspathJar = new LinkedHashMap<String,URI>();
@@ -289,5 +327,6 @@ public class ComponentsPackageMojo extends AbstractAppMojo {
 		}
 
 	}
+
 
 }

@@ -1,5 +1,6 @@
 package org.vsg.cusp.core;
 
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -20,5 +21,8 @@ public interface Container {
 	 * @return
 	 */
 	ClassLoader getParentClassLoader();
+	
+	
+	Map<String, File> getComponentsPath();
 
 }
