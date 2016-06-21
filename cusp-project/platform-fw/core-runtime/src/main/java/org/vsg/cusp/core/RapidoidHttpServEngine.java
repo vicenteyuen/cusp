@@ -233,7 +233,7 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 				if ( methodPathInst != null ) {
 					Collection<String> httpMethods = supportdHttpMethod(method);
 
-					String fullPath = contextPath + basePath + methodPathInst.value();
+					String fullPath = "/" + contextPath + basePath + methodPathInst.value();
 					
 					restPathList.add( basePath + methodPathInst.value() );
 					
