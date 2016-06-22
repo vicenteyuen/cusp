@@ -7,26 +7,35 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.container.AsyncResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.Resp;
 import org.rapidoid.net.Server;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.OnRoute;
 import org.rapidoid.setup.Setup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.core.rapidoid.eventrest.AsyncResponseImpl;
 import org.vsg.cusp.core.utils.ClassFilter;
 import org.vsg.cusp.core.utils.ClassUtils;
 
@@ -232,17 +241,45 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 				
 				if ( methodPathInst != null ) {
 					Collection<String> httpMethods = supportdHttpMethod(method);
-
-					String fullPath = "/" + contextPath + basePath + methodPathInst.value();
 					
-					restPathList.add( basePath + methodPathInst.value() );
+					// --- scan method parameter ---
+					
+					MethodParametersMetaInfo mpMetaInfo = scanParameterMetaInfo(method);
+					
+					
+					StringBuilder fullPath = new StringBuilder();
+					if (contextPath == null || contextPath.equals("")) {
+						
+					} else {
+						fullPath.append("/").append(contextPath );
+					}
+					fullPath.append( basePath ).append( methodPathInst.value() );
+					restPathList.add( fullPath.toString() );
 					
 					// --- bind get method ---
 					if (httpMethods.contains( HttpMethod.GET )) {
 						// --- bind request ---
-						OnRoute route = new OnRoute(http, setup.defaults(), org.rapidoid.util.Constants.GET, fullPath);
+						OnRoute route = new OnRoute(http, setup.defaults(), org.rapidoid.util.Constants.GET, fullPath.toString());
 						
-						route.json(new String("savem").getBytes());
+						route.serve(new ReqHandler() {
+
+							/**
+							 * 
+							 */
+							private static final long serialVersionUID = 3162459205800800468L;
+
+							@Override
+							public Object execute(Req req)
+									throws Exception {
+								// TODO Auto-generated method stub
+								injectParameterInstanceToMethod(mpMetaInfo , req , fullPath.toString());
+								// --- scan method parameter ---
+								Object returnVal = method.invoke(inst , mpMetaInfo.getParams());
+								
+								return "hello content";
+							}
+							
+						});
 						// --- call method ---
 
 					}
@@ -268,6 +305,34 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 
 	}
 	
+	
+	private Map<String , String> parsePathParameter(String path , String pattern) {
+		StringTokenizer patternToken = new StringTokenizer(pattern,"\\/");
+		StringTokenizer pathToken = new StringTokenizer(path,"\\/");
+		
+		Map<String,String> pathParams = new LinkedHashMap<String,String>();
+
+		while (patternToken.hasMoreElements()) {
+			
+			String patternVar = patternToken.nextToken();
+			String pathVar = pathToken.nextToken();
+
+			if (patternVar.indexOf("{") > -1 && patternVar.indexOf("}") > -1) {
+				String paramName = patternVar.replace("{", "").replace("}", "");
+				
+				pathParams.put( paramName , pathVar);
+			} else {
+				// --- check the pattern value equat path value or not ---
+				if (!patternVar.equals(pathToken)) {
+					logger.warn( "patternVar=" + patternVar + " , " + "pathToken=" + pathVar );
+				}
+			}
+	     }
+		
+		return pathParams;
+	}
+	
+	
 	private Collection<String> supportdHttpMethod(Method method) {
 		Annotation[] annos = method.getAnnotations();
 		
@@ -280,7 +345,82 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 		return supportedHpMethods;
 	}
 	
+	
+	private MethodParametersMetaInfo scanParameterMetaInfo(Method method) {
+		
+		MethodParametersMetaInfo info = new MethodParametersMetaInfo();
+		
+		Parameter[] parameters = method.getParameters();
+
+		
+		info.setParamCls( method.getParameterTypes() );
+		Object[] params = new Object[method.getParameterTypes().length];
+		info.setParams( params );
+		
+		info.setParameters( parameters );
+		
+		return info;
+	}
    
+	private void injectParameterInstanceToMethod(MethodParametersMetaInfo info , Req req , String patternPath) {
+		
+		Class<?>[] supportedClass = info.getParamCls();
+		Object[] paramInsts = info.getParams();
+		
+		for (int i = 0 ; i < supportedClass.length ; i++) {
+			Class<?> paramType = supportedClass[i];
+			Object paramInst = paramInsts[i];
+			
+		
+			if ( paramInst != null) {
+				continue;
+			}
+			
+			Map<String , String> pathParams = parsePathParameter(req.path() , patternPath);			
+			
+			// --- parse any class type ---
+			if (paramType.equals( AsyncResponse.class )) {
+				// --- build async response implement ---
+				AsyncResponse inst = createAsyncResponseImplement(req);
+				paramInsts[i] = inst;
+			}
+			else if (paramType.isPrimitive()) {
+				java.io.Serializable value = null;				
+				if (info.presentAnnotation(i , PathParam.class) ) {
+					PathParam pp = info.receiveAnnotationInst(i, PathParam.class);
+					value = pathParams.get( pp.value() );
+				};
+				if (paramType.getTypeName().equals("int")) {
+					paramInsts[i] = value == null ? 0 : Integer.parseInt(value.toString());
+				}
+
+
+			}
+			else if ( paramType instanceof java.io.Serializable ) {
+				java.io.Serializable value = null;
+				if (info.presentAnnotation(i , PathParam.class) ) {
+					PathParam pp = info.receiveAnnotationInst(i, PathParam.class);
+					value = pathParams.get( pp.value() );
+				};
+				
+				if (paramType.equals(String.class)) {
+					paramInsts[i] = value.toString();
+				}
+			}
+			
+
+		}
+		
+		
+	}
+	
+	private AsyncResponseImpl createAsyncResponseImplement(Req req) {
+		AsyncResponseImpl inst = new AsyncResponseImpl();
+		Resp resp = req.response();
+		inst.setResp( resp );
+		
+		return inst;
+	}
 	
 
 }
