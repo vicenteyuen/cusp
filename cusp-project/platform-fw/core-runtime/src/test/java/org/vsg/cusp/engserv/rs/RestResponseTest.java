@@ -4,7 +4,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.junit.Assert;
 import org.junit.Test;
+
 
 public class RestResponseTest {
 	
@@ -31,7 +33,7 @@ public class RestResponseTest {
 		Response jaxrs = rb.build();
 		MediaType mt = jaxrs.getMediaType();
 		
-		System.out.println(mt);		
+		Assert.assertEquals( "text/plain" , mt.toString());
 	}
 	
 
