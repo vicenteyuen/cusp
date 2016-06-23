@@ -263,9 +263,8 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 					if (httpMethods.contains( HttpMethod.GET )) {
 						// --- bind request ---
 						OnRoute route = new OnRoute(http, setup.defaults(), org.rapidoid.util.Constants.GET, fullPath.toString());
-						
-						route.serve(new ReqHandler() {
 
+						route.serve(new ReqHandler() {
 							/**
 							 * 
 							 */
@@ -276,10 +275,15 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 									throws Exception {
 								// TODO Auto-generated method stub
 								injectParameterInstanceToMethod(mpMetaInfo , req , fullPath.toString());
+								
 								// --- scan method parameter ---
+								// --- block event method ---
 								Object returnVal = method.invoke(inst , mpMetaInfo.getParams());
 								
+								// --- block for request handle ---
+								
 								return "hello content";
+								
 							}
 							
 						});
