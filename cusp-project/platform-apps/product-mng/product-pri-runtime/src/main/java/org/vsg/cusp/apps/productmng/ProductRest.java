@@ -29,6 +29,8 @@ public class ProductRest {
 			rb.type( MediaType.TEXT_PLAIN );
 
 			Response jaxrs = rb.build();
+			
+			
 
        
 			asyncResponse.resume(jaxrs);

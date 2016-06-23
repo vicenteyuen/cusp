@@ -46,7 +46,7 @@ public class ServerExampleReqHandlerTest {
 			public Object execute(Req req)
 					throws Exception {
 				
-				FutureTask ft = new FutureTask(new Callable() {
+				FutureTask ft = new FutureTask(new Callable<Object>() {
 
 					@Override
 					public Object call() throws Exception {
