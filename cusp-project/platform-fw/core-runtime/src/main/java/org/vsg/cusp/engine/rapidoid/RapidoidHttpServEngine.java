@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod;
@@ -265,24 +267,30 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 						OnRoute route = new OnRoute(http, setup.defaults(), org.rapidoid.util.Constants.GET, fullPath.toString());
 
 						route.serve(new ReqHandler() {
-							/**
-							 * 
-							 */
 							private static final long serialVersionUID = 3162459205800800468L;
 
 							@Override
 							public Object execute(Req req)
 									throws Exception {
-								// TODO Auto-generated method stub
-								injectParameterInstanceToMethod(mpMetaInfo , req , fullPath.toString());
 								
-								// --- scan method parameter ---
-								// --- block event method ---
-								Object returnVal = method.invoke(inst , mpMetaInfo.getParams());
+								FutureTask ft = new FutureTask(new Callable<Object>() {
+
+									@Override
+									public Object call() throws Exception {
+										// TODO Auto-generated method stub
+										injectParameterInstanceToMethod(mpMetaInfo , req , fullPath.toString());
+										
+										Object returnVal = method.invoke(inst , mpMetaInfo.getParams());
+										
+										return returnVal;
+									}
+
+								});
 								
-								// --- block for request handle ---
-								
-								return "hello content";
+								Thread runThread = new Thread(ft);
+								runThread.start();								
+
+								return ft;
 								
 							}
 							
