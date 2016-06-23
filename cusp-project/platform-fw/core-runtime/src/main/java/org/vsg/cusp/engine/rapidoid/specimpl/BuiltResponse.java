@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vsg.cusp.core.rapidoid.eventrest;
+package org.vsg.cusp.engine.rapidoid.specimpl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -26,7 +26,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
-import org.vsg.cusp.core.utils.DateUtil;
+import org.vsg.cusp.engine.rapidoid.utils.DateUtil;
 
 /**
  * @author ruanweibiao

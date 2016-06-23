@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vsg.cusp.core;
+package org.vsg.cusp.engine.rapidoid;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +35,9 @@ import org.rapidoid.setup.OnRoute;
 import org.rapidoid.setup.Setup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.core.Container;
+import org.vsg.cusp.core.MethodParametersMetaInfo;
+import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.core.rapidoid.eventrest.AsyncResponseImpl;
 import org.vsg.cusp.core.utils.ClassFilter;
 import org.vsg.cusp.core.utils.ClassUtils;
@@ -323,7 +326,7 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 				pathParams.put( paramName , pathVar);
 			} else {
 				// --- check the pattern value equat path value or not ---
-				if (!patternVar.equals(pathToken)) {
+				if (!patternVar.equals(pathVar)) {
 					logger.warn( "patternVar=" + patternVar + " , " + "pathToken=" + pathVar );
 				}
 			}

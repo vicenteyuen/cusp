@@ -1,4 +1,4 @@
-package org.vsg.cusp.core.utils;
+package org.vsg.cusp.engine.rapidoid.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vsg.cusp.core.rapidoid.eventrest;
+package org.vsg.cusp.engine.rapidoid;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,7 +16,8 @@ import javax.ws.rs.ext.RuntimeDelegate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vsg.cusp.core.rapidoid.eventrest.plugins.MediaTypeHeaderDelegate;
+import org.vsg.cusp.engine.rapidoid.plugins.delegates.MediaTypeHeaderDelegate;
+import org.vsg.cusp.engine.rapidoid.specimpl.ResponseBuilderImpl;
 
 /**
  * @author Vicente Yuen

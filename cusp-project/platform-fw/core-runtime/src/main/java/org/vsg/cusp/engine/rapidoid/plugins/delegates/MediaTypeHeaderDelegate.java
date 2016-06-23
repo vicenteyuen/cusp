@@ -1,11 +1,11 @@
-package org.vsg.cusp.core.rapidoid.eventrest.plugins;
+package org.vsg.cusp.engine.rapidoid.plugins.delegates;
 
 import java.util.HashMap;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.RuntimeDelegate.HeaderDelegate;
 
-import org.vsg.cusp.core.utils.HeaderParameterParser;
+import org.vsg.cusp.engine.rapidoid.utils.HeaderParameterParser;
 
 public class MediaTypeHeaderDelegate implements HeaderDelegate {
 

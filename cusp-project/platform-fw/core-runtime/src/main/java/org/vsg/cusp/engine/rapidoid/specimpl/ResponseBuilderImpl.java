@@ -1,4 +1,4 @@
-package org.vsg.cusp.core.rapidoid.eventrest;
+package org.vsg.cusp.engine.rapidoid.specimpl;
 
 import java.lang.annotation.Annotation;
 import java.net.URI;
@@ -23,8 +23,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Variant;
 
-import org.vsg.cusp.core.utils.HeaderHelper;
-import org.vsg.cusp.core.utils.HttpHeaderNames;
+import org.vsg.cusp.engine.rapidoid.utils.HeaderHelper;
+import org.vsg.cusp.engine.rapidoid.utils.HttpHeaderNames;
 
 public class ResponseBuilderImpl extends ResponseBuilder {
 

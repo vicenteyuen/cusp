@@ -36,17 +36,21 @@ public class AsyncResponseImpl implements AsyncResponse {
 		if (res.getMediaType().equals( javax.ws.rs.core.MediaType.TEXT_PLAIN) ) {
 			this.resp.contentType( org.rapidoid.commons.MediaType.TEXT_PLAIN_UTF8 );
 		}
-		System.out.println("get response ");
 		Object entity = res.getEntity();
-		System.out.println("another entity : " + entity);
-
-		//this.resp.body(  );
 		
+		outputContent(entity);
 
-		//resp.contentType( res.getMediaType() );
 		
 		return true;
 	}
+	
+	
+	private void outputContent(Object entity) {
+		if (entity instanceof java.lang.String) {
+			this.resp.body( entity.toString().getBytes() );
+		}
+	}
+	
 
 	@Override
 	public boolean resume(Throwable response) {

@@ -1,4 +1,4 @@
-package org.vsg.cusp.core.utils;
+package org.vsg.cusp.engine.rapidoid.utils;
 
 public class HttpHeaderNames {
 	public static final String ACCEPT = "Accept";

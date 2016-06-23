@@ -3,6 +3,8 @@ package org.vsg.cusp.core;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.vsg.cusp.engine.rapidoid.RapidoidHttpServEngine;
+
 
 public class RapidoidHttpServEngineApplicationTest {
 	

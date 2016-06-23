@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vsg.cusp.core.utils;
+package org.vsg.cusp.engine.rapidoid.utils;
 
 import java.util.Set;
 
