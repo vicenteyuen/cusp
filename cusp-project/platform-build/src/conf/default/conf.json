@@ -1,18 +1,17 @@
 {
   "engines": [{
-    "class-name":"org.vsg.cusp.core.RapidoidHttpServEngine",
+    "class-name":"org.vsg.cusp.engine.RapidoidHttpServEngine",
     "args":{
       "host":"localhost",
       "port":"8100"
     }
-  }
-  /*,{
-    "class-name":"org.vsg.cusp.core.JeroMQServEngine",
+  },{
+    "class-name":"org.vsg.cusp.eventbus.JeroMQServEngine",
     "args":{
       "host":"localhost",
-      "port":"5100"
+      "port":"8700"
     }
-  }*/],
+  }],
   "server":{
     "port":"7101",
     "cmd-shutdown":"SHUTDOWN"

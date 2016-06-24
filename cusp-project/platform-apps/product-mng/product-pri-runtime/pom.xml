@@ -19,6 +19,18 @@
 			<scope>test</scope>
 			<version>4.11</version>
 		</dependency>
+		<dependency>
+			<groupId>org.vsg</groupId>
+			<artifactId>cusp-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<name>应用模块 - 产品管理私有运行模块</name>
 	
