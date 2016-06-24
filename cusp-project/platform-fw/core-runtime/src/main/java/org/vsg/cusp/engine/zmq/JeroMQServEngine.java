@@ -1,12 +1,14 @@
 /**
  * 
  */
-package org.vsg.cusp.core;
+package org.vsg.cusp.engine.zmq;
 
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.core.Container;
+import org.vsg.cusp.core.ServEngine;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
@@ -20,7 +22,6 @@ public class JeroMQServEngine implements ServEngine , Runnable {
 	private static Logger logger = LoggerFactory.getLogger(JeroMQServEngine.class);	
 	
 	private Map<String, String> arguments;	
-	
 	
 	private Container container;		
 

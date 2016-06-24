@@ -30,7 +30,6 @@ import org.apache.commons.io.IOUtils;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.Resp;
 import org.rapidoid.net.Server;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.OnRoute;
@@ -40,9 +39,10 @@ import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.Container;
 import org.vsg.cusp.core.MethodParametersMetaInfo;
 import org.vsg.cusp.core.ServEngine;
-import org.vsg.cusp.core.rapidoid.eventrest.AsyncResponseImpl;
 import org.vsg.cusp.core.utils.ClassFilter;
 import org.vsg.cusp.core.utils.ClassUtils;
+import org.vsg.cusp.engine.rapidoid.specimpl.AsyncHttpRequestImpl;
+import org.vsg.cusp.engine.rapidoid.spi.AsyncContext;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -273,20 +273,27 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 							public Object execute(Req req)
 									throws Exception {
 								
-								FutureTask ft = new FutureTask(new Callable<Object>() {
+								AsyncHttpRequestImpl hreq = new AsyncHttpRequestImpl(req);
+								
+								FutureTask<AsyncHttpRequestImpl> ft = new FutureTask<AsyncHttpRequestImpl>(new Callable<AsyncHttpRequestImpl>() {
 
 									@Override
-									public Object call() throws Exception {
+									public AsyncHttpRequestImpl call() throws Exception {
 										// TODO Auto-generated method stub
-										injectParameterInstanceToMethod(mpMetaInfo , req , fullPath.toString());
+										injectParameterInstanceToMethod(mpMetaInfo , hreq , fullPath.toString());
 										
 										Object returnVal = method.invoke(inst , mpMetaInfo.getParams());
 										
-										return returnVal;
+										// --- close request ---
+										hreq.close();
+										
+										return hreq;
 									}
 
 								});
+								// --- add future task to manager ---
 								
+								// --- add future task to manager ----
 								Thread runThread = new Thread(ft);
 								runThread.start();								
 
@@ -377,7 +384,7 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 		return info;
 	}
    
-	private void injectParameterInstanceToMethod(MethodParametersMetaInfo info , Req req , String patternPath) {
+	private void injectParameterInstanceToMethod(MethodParametersMetaInfo info , AsyncHttpRequestImpl req , String patternPath) {
 		
 		Class<?>[] supportedClass = info.getParamCls();
 		Object[] paramInsts = info.getParams();
@@ -391,12 +398,14 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 				continue;
 			}
 			
-			Map<String , String> pathParams = parsePathParameter(req.path() , patternPath);			
+			Req orgReq = req.getReq();
+			
+			Map<String , String> pathParams = parsePathParameter(orgReq.path() , patternPath);			
 			
 			// --- parse any class type ---
 			if (paramType.equals( AsyncResponse.class )) {
 				// --- build async response implement ---
-				AsyncResponse inst = createAsyncResponseImplement(req);
+				AsyncResponse inst = req.getAsyncContext().getAsyncResponse();
 				paramInsts[i] = inst;
 			}
 			else if (paramType.isPrimitive()) {
@@ -427,14 +436,6 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 		}
 		
 		
-	}
-	
-	private AsyncResponseImpl createAsyncResponseImplement(Req req) {
-		AsyncResponseImpl inst = new AsyncResponseImpl();
-		Resp resp = req.response();
-		inst.setResp( resp );
-		
-		return inst;
 	}
 	
 
