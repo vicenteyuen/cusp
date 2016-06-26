@@ -3,12 +3,12 @@ package org.vsg.cusp.core;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.vsg.cusp.engine.rapidoid.RapidoidHttpServEngine;
+import org.vsg.cusp.engine.rapidoid.RapidoidEngineModule;
 
 
 public class RapidoidHttpServEngineApplicationTest {
 	
-	private static RapidoidHttpServEngine engine = new RapidoidHttpServEngine();
+	private static RapidoidEngineModule engine = new RapidoidEngineModule();
 	
 
 	public void startServer() throws Exception {

@@ -36,61 +36,81 @@ import org.rapidoid.setup.OnRoute;
 import org.rapidoid.setup.Setup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vsg.cusp.core.Container;
 import org.vsg.cusp.core.MethodParametersMetaInfo;
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.core.modules.AbstractContainerModule;
 import org.vsg.cusp.core.utils.ClassFilter;
 import org.vsg.cusp.core.utils.ClassUtils;
 import org.vsg.cusp.engine.rapidoid.specimpl.AsyncHttpRequestImpl;
-import org.vsg.cusp.engine.rapidoid.spi.AsyncContext;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-
 /**
  * @author Vicente Yuen
  *
  */
-public class RapidoidHttpServEngine implements ServEngine , Runnable {
+public class RapidoidEngineModule extends AbstractContainerModule implements ServEngine, Runnable {
+	
+	private static Logger logger = LoggerFactory.getLogger(RapidoidEngineModule.class);	
 
-	private static Logger logger = LoggerFactory.getLogger(RapidoidHttpServEngine.class);
-	
-	private Map<String, String> arguments;
-	
-	private Container container;	
-	
-	
-	@Override
-	public void setRunningContainer(Container container) {
-		// TODO Auto-generated method stub
-		this.container = container;
-	}
 
 	@Override
-	public void init(Map<String, String> arguments) {
+	protected void configure() {
 		// TODO Auto-generated method stub
-		this.arguments = arguments;
+		// --- start program ----
+		start();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.vsg.cusp.core.ServEngine#start()
-	 */
+
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("Engined is starting ... ");
+		}
 
 		Thread threadHook = new Thread(this);
 		threadHook.start();
+		
+	}
+	
+	private Server serv;
+	
+	Setup setup = On.setup();		
+	
+	@Override
+	public void run() {
+		String host = arguments.get("host");
+		int port = Integer.parseInt( arguments.get("port") );
+
+		try {
+
+			setup.address(host);
+			setup.port(port);
+			
+			serv = setup.listen();
+			
+
+			// --- bind http service ---
+			FastHttp http = setup.http();			
+			Map<String,ClassLoader> compsClsLoader =  getRunningContainer().getComponentsClassLoader();
+			Set<Map.Entry<String, ClassLoader>> entries = compsClsLoader.entrySet();
+			for (Map.Entry<String, ClassLoader> entry : entries ) {
+				initComponentService(entry.getKey() , entry.getValue() , http);
+			}			
+			
+			logger.info("listen http port : [" + port + "].");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 
-	/* (non-Javadoc)
-	 * @see org.vsg.cusp.core.ServEngine#stop()
-	 */
+
 	@Override
 	public void stop() {
-		
 		try {
 			setup.shutdown();
 
@@ -105,50 +125,19 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
-		
-
+			
 	}
-	
-	private Server serv;
-	
-	Setup setup = On.setup();	
 
+	private Map<String, String> arguments;
+	
 	@Override
-	public void run() {
+	public void init(Map<String, String> arguments) {
 		// TODO Auto-generated method stub
-		String host = arguments.get("host");
-		int port = Integer.parseInt( arguments.get("port") );
-
-		try {
-
-			setup.address(host);
-			setup.port(port);
-			
-			serv = setup.listen();
-			
-
-			// --- bind http service ---
-			FastHttp http = setup.http();			
-			Map<String,ClassLoader> compsClsLoader =   this.container.getComponentsClassLoader();
-			Set<Map.Entry<String, ClassLoader>> entries = compsClsLoader.entrySet();
-			for (Map.Entry<String, ClassLoader> entry : entries ) {
-				initComponentService(entry.getKey() , entry.getValue() , http);
-			}			
-			
-			logger.info("listen http port : [" + port + "].");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-
+		this.arguments = arguments;
 	}
 	
 	private void initComponentService(String compName , ClassLoader clsLoader , FastHttp http) {
-		File compDir = this.container.getComponentsPath().get(compName);
+		File compDir = getRunningContainer().getComponentsPath().get(compName);
 		
 		File confFile = new File(compDir , "comp.json");
 		
@@ -222,8 +211,8 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 
 		
 		
-	}
-	
+	}	
+
 	private void implementForRestPath(Class<?> cls , String contextPath,FastHttp http) {
 		Path clsPathinst = cls.getAnnotation(Path.class);
 		
@@ -237,6 +226,7 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 			
 			// --- append set the service ---
 			Object inst = cls.newInstance();
+			
 			
 			Method[] methods = cls.getMethods();
 			
@@ -436,7 +426,5 @@ public class RapidoidHttpServEngine implements ServEngine , Runnable {
 		}
 		
 		
-	}
-	
-
+	}	
 }

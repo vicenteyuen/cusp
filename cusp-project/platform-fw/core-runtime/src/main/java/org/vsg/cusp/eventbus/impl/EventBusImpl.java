@@ -24,6 +24,12 @@ public class EventBusImpl implements EventBus {
 		init();
 	}
 	
+	public void setZmqContext(Context zmqContext) {
+		this.zmqContext = zmqContext;
+	}
+	
+	
+	
 	private void init() {
 		
 	}

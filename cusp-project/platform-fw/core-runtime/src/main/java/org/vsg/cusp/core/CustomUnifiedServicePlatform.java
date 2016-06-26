@@ -23,13 +23,15 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vsg.cusp.engine.rapidoid.RapidoidHttpServEngineModule;
+import org.vsg.cusp.core.modules.AbstractContainerModule;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.google.inject.Stage;
 
 public class CustomUnifiedServicePlatform implements Lifecycle {
@@ -88,8 +90,11 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
         		ServEngine inst =  servEngineCls.newInstance();
         		inst.init(argsMap);
         		
-        		
-        		this.engines.add( inst );
+        		// ---  add engine module ---
+        		if (inst instanceof Module) {
+        			modules.add( (Module) inst );
+        		}
+
         	}
         	
         	// --- custom server ---
@@ -116,7 +121,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
     /**
      * define all engines
      */
-    private List<ServEngine> engines = new ArrayList<ServEngine>();
+    private List<Module> modules = new ArrayList<Module>();
 
 
     /*
@@ -222,17 +227,18 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 			cb.setParentClassLoader( parentClassLoader );
 			cb.init();
 			
-			// --- build module handle ---
-			Injector continerInjector = moduleInjectorInit(cb);
-			
-			Iterator<ServEngine> engineIter =  engines.iterator();
-			while (engineIter.hasNext()){
-				ServEngine engineItem =  engineIter.next();
-				engineItem.setRunningContainer(cb);
-				engineItem.start();
+			// --- init another instance ---
+			for (Module module : this.modules) {
+				if (module instanceof AbstractContainerModule) {
+					((AbstractContainerModule)module).setRunningContainer( cb );
+				}
 			}
-
 			
+			// --- create inject ---
+			Stage stage = Stage.PRODUCTION;
+			Injector injector = Guice.createInjector( stage , this.modules);
+			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -249,20 +255,6 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 		// --- exist program ---
 		Runtime.getRuntime().exit(0);
 	}
-	
-	
-	private Injector moduleInjectorInit(Container container) {
-		Stage stage = Stage.PRODUCTION;
-		
-		// --- load module class ---
-		RapidoidHttpServEngineModule module = new RapidoidHttpServEngineModule();
-		module.setContainer( container );
-		
-		Injector injector = Guice.createInjector( stage , module);
-		return injector;
-	}
-	
-	
 	
 	
     private volatile ServerSocket awaitSocket = null;
@@ -419,10 +411,13 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
         	
 			lock.lock();
 			
-			Iterator<ServEngine> engineIter =  engines.iterator();
-			while (engineIter.hasNext()){
-				ServEngine engineItem =  engineIter.next();
-				engineItem.stop();
+			Iterator<Module> moduleIter =  modules.iterator();
+			while (moduleIter.hasNext()){
+				Module modItem =  moduleIter.next();
+				if (modItem instanceof ServEngine) {
+					((ServEngine)modItem).stop();
+				}
+				
 			}
 			
 			stopAwait();
