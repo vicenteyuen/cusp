@@ -17,7 +17,9 @@ public class MessageCodesTest {
 		Buffer buffer = Buffer.factory.buffer();
 		
 		buffer.appendBytes("hello world".getBytes() );
+		buffer.appendBytes("hello world2".getBytes() );
 		
+		System.out.println(new String(buffer.getBytes(),"utf-8"));
 		
 		
 	}

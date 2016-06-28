@@ -185,7 +185,8 @@ public class BufferImpl implements Buffer {
 	@Override
 	public Buffer appendBytes(byte[] bytes) {
 		// TODO Auto-generated method stub
-		return null;
+		this.buffer.put( bytes );
+		return this;
 	}
 
 	@Override
