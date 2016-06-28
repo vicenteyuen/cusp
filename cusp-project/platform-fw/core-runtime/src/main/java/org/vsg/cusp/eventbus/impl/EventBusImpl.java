@@ -10,14 +10,16 @@ import org.vsg.cusp.eventbus.Message;
 import org.vsg.cusp.eventbus.MessageCodec;
 import org.vsg.cusp.eventbus.MessageConsumer;
 import org.vsg.cusp.eventbus.MessageProducer;
+import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
+import org.zeromq.ZMQ.Socket;
 
 public class EventBusImpl implements EventBus {
 	
 	private static Logger logger = LoggerFactory.getLogger( EventBusImpl.class );
 	
-	private Context zmqContext;
-	
+	private Context clientContext;
+
 	public EventBusImpl() {
 		//this.zmqContext = zmqContext;
 		
@@ -25,19 +27,28 @@ public class EventBusImpl implements EventBus {
 	}
 	
 	public void setZmqContext(Context zmqContext) {
-		this.zmqContext = zmqContext;
+		this.clientContext = zmqContext;
 	}
 	
 	
 	
 	private void init() {
-		
+		clientContext = ZMQ.context(1);
 	}
 
 	@Override
 	public EventBus send(String address, Object message) {
-		// TODO Auto-generated method stub
-		return null;
+		Context context = ZMQ.context(1);
+        Socket requester = context.socket(ZMQ.REQ);
+        requester.connect("tcp://localhost:5559");
+        
+        // --- send content ----
+        requester.send(message.toString().getBytes());
+        
+        requester.close();
+        context.term();
+        
+		return this;
 	}
 
 	@Override
@@ -76,8 +87,16 @@ public class EventBusImpl implements EventBus {
 
 	@Override
 	public <T> MessageConsumer<T> consumer(String address) {
-		// TODO Auto-generated method stub
-		return null;
+		// --- create consumer ---
+		Context context = ZMQ.context(1);
+        Socket requester = context.socket(ZMQ.REQ);
+        requester.connect("tcp://localhost:5559");
+        
+        
+		
+		MessageConsumerImpl mci = new MessageConsumerImpl(requester);
+		
+		return mci;
 	}
 
 	@Override

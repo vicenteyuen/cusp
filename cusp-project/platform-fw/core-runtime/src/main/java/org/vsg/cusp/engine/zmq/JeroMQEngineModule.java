@@ -4,13 +4,12 @@
 package org.vsg.cusp.engine.zmq;
 
 import java.util.Map;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.core.modules.AbstractContainerModule;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.impl.EventBusImpl;
-
-import com.google.inject.Binder;
 
 /**
  * @author Vicente Yuen
@@ -26,6 +25,10 @@ public class JeroMQEngineModule extends AbstractContainerModule implements ServE
 	@Override
 	protected void configure() {
 		
+		
+		// --- start mqbroker ---
+		
+		
 		//EventBusImpl ebi = new EventBusImpl();
 		this.bind(EventBus.class).to(EventBusImpl.class);
 		
@@ -39,11 +42,34 @@ public class JeroMQEngineModule extends AbstractContainerModule implements ServE
 		}
 		*/
 		
+		// --- start mq broker --
+		
+		Thread mqstartThread = new Thread(this);
+		mqstartThread.start();
+		
+		
 	}
+	
+	
+	
+	
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		
+		// --- create Request Response MQ Quere ---
+		ReqRepBroker rrbroker = new ReqRepBroker();
+		ReqRepWorker rrWorker = new ReqRepWorker();
+
+		
+		
+		
+		ScheduledThreadPoolExecutor  stpe = new ScheduledThreadPoolExecutor(10);
+		
+		
+		
+		stpe.execute( rrWorker);
+		stpe.execute( rrbroker );
 		
 	}
 
