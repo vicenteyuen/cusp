@@ -67,7 +67,7 @@ public class BufferImpl implements Buffer {
 	@Override
 	public short getUnsignedByte(int pos) {
 		// TODO Auto-generated method stub
-		return 0;
+		return (short) (getByte(pos) & 0xff);
 	}
 
 	@Override
@@ -78,8 +78,8 @@ public class BufferImpl implements Buffer {
 
 	@Override
 	public long getUnsignedInt(int pos) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		return getInt(pos) & 0x0FFFFFFFF;
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class BufferImpl implements Buffer {
 	@Override
 	public int getUnsignedShort(int pos) {
 		// TODO Auto-generated method stub
-		return 0;
+		return getShort(pos) & 0x0FFFF;
 	}
 
 	@Override
@@ -136,14 +136,15 @@ public class BufferImpl implements Buffer {
 
 	@Override
 	public Buffer getBytes(byte[] dst, int dstIndex) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		buffer.get(dst, dstIndex, buffer.array().length - dstIndex);
+		return this;
 	}
 
 	@Override
 	public Buffer getBytes(int start, int end, byte[] dst) {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.get(dst, start, end - start);
+		return this;
 	}
 
 	@Override
@@ -154,8 +155,13 @@ public class BufferImpl implements Buffer {
 
 	@Override
 	public Buffer getBuffer(int start, int end) {
-		// TODO Auto-generated method stub
-		return null;
+		// copy buffer
+		byte[] dst = new byte[end-start];
+		buffer.get(dst, start, end-start);
+		
+		Buffer buffer = new BufferImpl(dst);
+		
+		return buffer;
 	}
 
 	@Override
@@ -172,14 +178,14 @@ public class BufferImpl implements Buffer {
 
 	@Override
 	public Buffer appendBuffer(Buffer buff) {
-		// TODO Auto-generated method stub
-		return null;
+		this.appendBytes( buff.getBytes() );
+		return this;
 	}
 
 	@Override
 	public Buffer appendBuffer(Buffer buff, int offset, int len) {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.put(buff.getBytes(), offset, len);
+		return this;
 	}
 
 	@Override
@@ -191,44 +197,45 @@ public class BufferImpl implements Buffer {
 
 	@Override
 	public Buffer appendBytes(byte[] bytes, int offset, int len) {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.put(bytes, offset, len);
+		return this;
 	}
 
 	@Override
 	public Buffer appendByte(byte b) {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.put(b);
+		return this;
 	}
 
 	@Override
 	public Buffer appendUnsignedByte(short b) {
 		// TODO Auto-generated method stub
-		return null;
+		buffer.putShort((short) (b & 0xff));
+		return this;
 	}
 
 	@Override
 	public Buffer appendInt(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.putInt(i);
+		return this;
 	}
 
 	@Override
 	public Buffer appendUnsignedInt(long i) {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.putLong( i & 0x0FFFFFFFF );
+		return this;
 	}
 
 	@Override
 	public Buffer appendLong(long l) {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.putLong(l);
+		return this;
 	}
 
 	@Override
 	public Buffer appendShort(short s) {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.putShort(s);
+		return this;
 	}
 
 	@Override
@@ -239,26 +246,31 @@ public class BufferImpl implements Buffer {
 
 	@Override
 	public Buffer appendFloat(float f) {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.putFloat(f);
+		return this;
 	}
 
 	@Override
 	public Buffer appendDouble(double d) {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.putDouble(d);
+		return this;
 	}
 
 	@Override
 	public Buffer appendString(String str, String enc) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			buffer.put( str.getBytes(enc) );
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return this;
 	}
 
 	@Override
 	public Buffer appendString(String str) {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.put( str.getBytes() );
+		return this;
 	}
 
 	@Override
@@ -359,25 +371,26 @@ public class BufferImpl implements Buffer {
 
 	@Override
 	public int length() {
-		// TODO Auto-generated method stub
-		return 0;
+		return buffer.array().length;
 	}
 
 	@Override
 	public Buffer copy() {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public Buffer slice() {
-		// TODO Auto-generated method stub
-		return null;
+		buffer.slice();
+		return this;
 	}
 
 	@Override
 	public Buffer slice(int start, int end) {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
