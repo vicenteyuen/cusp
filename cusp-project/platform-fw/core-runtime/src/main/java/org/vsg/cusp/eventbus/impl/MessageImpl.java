@@ -11,43 +11,68 @@ import org.vsg.cusp.eventbus.MessageCodec;
 import org.vsg.cusp.eventbus.MultiMap;
 
 public class MessageImpl<U, T> implements Message<T> {
-	
-	private static Logger log = LoggerFactory.getLogger( MessageImpl.class );
-	
+
+	private static Logger log = LoggerFactory.getLogger(MessageImpl.class);
+
 	private static byte WIRE_PROTOCOL_VERSION = 1;
-	
+
 	private String address;
-	
+
 	private MessageCodec<U, T> messageCodec;
-	
+
 	private U sentBody;
-	
+
 	private T receivedBody;
-	
+
 	private boolean send;
-	
+
 	private int bodyPos;
-	
+
 	private int headersPos;
-	
+
 	private EventBusImpl bus;
-	
+
 	private String replyAddress;
+	
+	
+	
+	 public EventBusImpl getBus() {
+		return bus;
+	}
+
+
+	public void setBus(EventBusImpl bus) {
+		this.bus = bus;
+	}
+
+
+	public boolean send() {
+		    return send;
+		  }	
+	
+
+	public String getReplyAddress() {
+		return replyAddress;
+	}
+
+	public void setReplyAddress(String replyAddress) {
+		this.replyAddress = replyAddress;
+	}
 
 	@Override
 	public String address() {
 		// TODO Auto-generated method stub
 		return address;
 	}
-	
+
 	private MultiMap headers;
 
 	@Override
 	public MultiMap headers() {
 		if (headers == null) {
-			//decodeHeaders();
+			// decodeHeaders();
 		}
-		if ( headers == null) {
+		if (headers == null) {
 			headers = new CaseInsensitiveHeaders();
 		}
 		return headers;
@@ -61,9 +86,9 @@ public class MessageImpl<U, T> implements Message<T> {
 		}
 		return this.receivedBody;
 	}
-	
+
 	private void decodeBody() {
-		//this.receivedBody = messageCodec;
+		// this.receivedBody = messageCodec;
 	}
 
 	@Override
