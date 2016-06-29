@@ -33,23 +33,31 @@ public class MessageImpl<U, T> implements Message<T> {
 	private EventBusImpl bus;
 
 	private String replyAddress;
-	
-	
-	
-	 public EventBusImpl getBus() {
-		return bus;
+
+	public MessageImpl() {
+
 	}
 
+	public MessageImpl(String address, U sentBody,
+			MessageCodec<U, T> messageCodec, boolean send, EventBusImpl bus) {
+		this.address = address;
+		this.sentBody = sentBody;
+		this.messageCodec = messageCodec;
+		this.send = send;
+		this.bus = bus;
+	}
+
+	public EventBusImpl getBus() {
+		return bus;
+	}
 
 	public void setBus(EventBusImpl bus) {
 		this.bus = bus;
 	}
 
-
 	public boolean send() {
-		    return send;
-		  }	
-	
+		return send;
+	}
 
 	public String getReplyAddress() {
 		return replyAddress;
@@ -61,7 +69,6 @@ public class MessageImpl<U, T> implements Message<T> {
 
 	@Override
 	public String address() {
-		// TODO Auto-generated method stub
 		return address;
 	}
 
@@ -80,47 +87,50 @@ public class MessageImpl<U, T> implements Message<T> {
 
 	@Override
 	public T body() {
-		// TODO Auto-generated method stub
-		if (null == this.receivedBody && bodyPos != 0) {
-			decodeBody();
+		if (receivedBody == null && sentBody != null) {
+			receivedBody = messageCodec.transform(sentBody);
 		}
-		return this.receivedBody;
+		return receivedBody;
 	}
 
-	private void decodeBody() {
-		// this.receivedBody = messageCodec;
-	}
 
 	@Override
 	public String replyAddress() {
-		// TODO Auto-generated method stub
+
 		return replyAddress;
 	}
 
 	@Override
 	public void reply(Object message) {
-		// TODO Auto-generated method stub
-
+		reply(message, new DeliveryOptions(), null);
 	}
 
 	@Override
 	public <R> void reply(Object message,
 			Handler<AsyncResult<Message<R>>> replyHandler) {
-		// TODO Auto-generated method stub
-
+		reply(message, new DeliveryOptions(), replyHandler);
 	}
 
 	@Override
 	public void reply(Object message, DeliveryOptions options) {
-		// TODO Auto-generated method stub
-
+		reply(message, options, null);
 	}
 
 	@Override
 	public <R> void reply(Object message, DeliveryOptions options,
 			Handler<AsyncResult<Message<R>>> replyHandler) {
-		// TODO Auto-generated method stub
+		if (replyAddress != null) {
+			sendReply(bus.createMessage(true, replyAddress,
+					options.getHeaders(), message, options.getCodecName()),
+					options, replyHandler);
+		}
+	}
 
+	protected <R> void sendReply(MessageImpl msg, DeliveryOptions options,
+			Handler<AsyncResult<Message<R>>> replyHandler) {
+		if (bus != null) {
+			bus.sendReply(msg, this, options, replyHandler);
+		}
 	}
 
 	@Override

@@ -29,40 +29,29 @@ public class EventBusImpl implements EventBus {
 
 	private static Logger logger = LoggerFactory.getLogger(EventBusImpl.class);
 
-	private Context clientContext;
-
 	protected volatile boolean started;
 
 	protected ConcurrentMap<String, Handlers> handlerMap = new ConcurrentHashMap<>();
 
 	protected CodecManager codecManager = new CodecManager();
 
-	public EventBusImpl() {
+	private EventBusOptions options;
+
+	public EventBusImpl(EventBusOptions options) {
 		// this.zmqContext = zmqContext;
+
+		this.options = options;
 
 		init();
 	}
 
-	public void setZmqContext(Context zmqContext) {
-		this.clientContext = zmqContext;
-	}
 
 	private void init() {
-		clientContext = ZMQ.context(1);
+
 	}
 
 	@Override
 	public EventBus send(String address, Object message) {
-		Context context = ZMQ.context(1);
-		Socket requester = context.socket(ZMQ.REQ);
-		requester.connect("tcp://localhost:5559");
-
-		// --- send content ----
-		requester.send(message.toString().getBytes());
-
-		requester.close();
-		context.term();
-
 		return send(address, message, new DeliveryOptions(), null);
 	}
 
@@ -81,8 +70,10 @@ public class EventBusImpl implements EventBus {
 	public <T> EventBus send(String address, Object message,
 			DeliveryOptions options,
 			Handler<AsyncResult<Message<T>>> replyHandler) {
-		// TODO Auto-generated method stub
-		return null;
+		sendOrPubInternal(
+				createMessage(true, address, options.getHeaders(), message,
+						options.getCodecName()), options, replyHandler);
+		return this;
 	}
 
 	@Override
@@ -104,8 +95,7 @@ public class EventBusImpl implements EventBus {
 			MultiMap headers, Object body, String codecName) {
 		Objects.requireNonNull(address, "no null address accepted");
 		MessageCodec codec = codecManager.lookupCodec(body, codecName);
-		@SuppressWarnings("unchecked")
-		MessageImpl msg = new MessageImpl();
+		MessageImpl msg = new MessageImpl(address, body, codec, true, this);
 		return msg;
 	}
 
@@ -118,6 +108,7 @@ public class EventBusImpl implements EventBus {
 		SendContextImpl<T> sendContext = new SendContextImpl<>(message,
 				options, replyHandlerRegistration);
 		sendContext.next();
+
 	}
 
 	private final AtomicLong replySequence = new AtomicLong(0);
@@ -162,6 +153,7 @@ public class EventBusImpl implements EventBus {
 		} else {
 			return null;
 		}
+
 	}
 
 	@Override
@@ -267,9 +259,10 @@ public class EventBusImpl implements EventBus {
 		if (started) {
 			throw new IllegalStateException("Already started");
 		}
-		started = true;
-		// completionHandler.handle(Future.succeededFuture());
 
+		started = true;
+
+		// completionHandler.handle(Future.succeededFuture());
 	}
 
 	@Override
@@ -295,12 +288,19 @@ public class EventBusImpl implements EventBus {
 
 	private List<Handler<SendContext>> interceptors = new CopyOnWriteArrayList<>();
 
+	/**
+	 * Define base inner context
+	 * 
+	 * @author Vicente Yuen
+	 *
+	 * @param <T>
+	 */
 	protected class SendContextImpl<T> implements SendContext<T> {
 
-		public final MessageImpl message;
-		public final DeliveryOptions options;
-		public final HandlerRegistration<T> handlerRegistration;
-		public final Iterator<Handler<SendContext>> iter;
+		public MessageImpl message;
+		public DeliveryOptions options;
+		public HandlerRegistration<T> handlerRegistration;
+		public Iterator<Handler<SendContext>> iter;
 
 		public SendContextImpl(MessageImpl message, DeliveryOptions options,
 				HandlerRegistration<T> handlerRegistration) {
@@ -317,6 +317,7 @@ public class EventBusImpl implements EventBus {
 
 		@Override
 		public void next() {
+
 			if (iter.hasNext()) {
 				Handler<SendContext> handler = iter.next();
 				try {
@@ -337,6 +338,27 @@ public class EventBusImpl implements EventBus {
 
 	protected <T> void sendOrPub(SendContextImpl<T> sendContext) {
 		MessageImpl message = sendContext.message;
+
+		
+		Context clientContext = ZMQ.context(zmq.ZMQ.ZMQ_IO_THREADS);
+		// Socket to talk to server
+		Socket requester = clientContext.socket(ZMQ.REQ);
+
+		StringBuilder connProtocol = new StringBuilder("tcp://");
+		connProtocol.append("localhost");
+		connProtocol.append(":").append(this.options.getBrokerPort());
+		
+		System.out.println(connProtocol.toString());
+
+		requester.connect(connProtocol.toString());
+
+		
+		// --- define sent content ,handle 
+		requester.send(message.body().toString(), 0);
+
+		requester.close();
+		clientContext.term();
+
 		// metrics.messageSent(message.address(), !message.send(), true, false);
 		deliverMessageLocally(sendContext);
 	}
@@ -355,10 +377,22 @@ public class EventBusImpl implements EventBus {
 		}
 	}
 
+	protected <T> void sendReply(MessageImpl replyMessage,
+			MessageImpl replierMessage, DeliveryOptions options,
+			Handler<AsyncResult<Message<T>>> replyHandler) {
+		if (replyMessage.address() == null) {
+			throw new IllegalStateException("address not specified");
+		} else {
+			HandlerRegistration<T> replyHandlerRegistration = createReplyHandlerRegistration(replyMessage, options, replyHandler);
+			
+			//new ReplySendContextImpl<>(replyMessage, options,replyHandlerRegistration, replierMessage).next();
+		}
+	}
+
 	protected <T> boolean deliverMessageLocally(MessageImpl msg) {
 		msg.setBus(this);
 		Handlers handlers = handlerMap.get(msg.address());
-		
+
 		if (handlers != null) {
 			if (msg.send()) {
 				// Choose one

@@ -15,6 +15,15 @@ public class ReqRepWorker implements RunnableFuture {
 	
 	private static Logger logger = LoggerFactory.getLogger( ReqRepWorker.class );	
 	
+	
+	public ReqRepWorker() {
+		
+	}
+	
+	public ReqRepWorker(int workerPort) {
+		this.workerPort = workerPort;
+	}
+	
 
 	@Override
 	public boolean cancel(boolean mayInterruptIfRunning) {
@@ -46,9 +55,15 @@ public class ReqRepWorker implements RunnableFuture {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
+	private int workerPort = 5066;
+	
+	
 
 	@Override
 	public void run() {
+		StringBuilder clientSocket = new StringBuilder();
 		
 		Context context = ZMQ.context (1);
 		

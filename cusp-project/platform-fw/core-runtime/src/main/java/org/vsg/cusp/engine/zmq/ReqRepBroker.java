@@ -16,14 +16,23 @@ import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
 
 /**
- * @author ruanweibiao
+ * @author Vicente Yuen
  *
  */
 public class ReqRepBroker implements RunnableFuture {
 	
 	
 	private static Logger logger = LoggerFactory.getLogger( ReqRepBroker.class );
-
+	
+	
+	public ReqRepBroker() {
+		
+	}
+	
+	public ReqRepBroker(int brokerPort) {
+		this.brokerPort = brokerPort;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -80,7 +89,16 @@ public class ReqRepBroker implements RunnableFuture {
 		return null;
 	}
 	
-	private int frontendPort = 8701;
+	private int brokerPort = 8701;
+	
+
+	public int getBrokerPort() {
+		return brokerPort;
+	}
+
+	public void setBrokerPort(int brokerPort) {
+		this.brokerPort = brokerPort;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -91,19 +109,23 @@ public class ReqRepBroker implements RunnableFuture {
 	public void run() {
 		Context context = ZMQ.context(1);
 
-		Socket frontend = context.socket(ZMQ.ROUTER);
+		Socket frontend = context.socket(ZMQ.REP);
+		String frontendAddress = "tcp://*:"+brokerPort;
+		frontend.bind(frontendAddress);
+		
+		/*
 		Socket backend = context.socket(ZMQ.DEALER);
 		
-		String frontendAddress = "tcp://*:"+frontendPort;
-		frontend.bind(frontendAddress);
+
 		backend.bind("tcp://*:5560");
+		*/
 		
-		logger.info("launch broker at port: " + frontendPort);
+		logger.info("launch ReqRepBroker at port: " + brokerPort);
 
 		// Initialize poll set
-		Poller items = new Poller(2);
-		items.register(frontend, Poller.POLLIN);
-		items.register(backend, Poller.POLLIN);
+		//Poller items = new Poller(1);
+		//items.register(frontend, Poller.POLLIN);
+		//items.register(backend, Poller.POLLIN);
 
 		boolean more = false;
 		byte[] message;
@@ -111,21 +133,33 @@ public class ReqRepBroker implements RunnableFuture {
 		// Switch messages between sockets
 		while (!Thread.currentThread().isInterrupted()) {
 			// poll and memorize multipart detection
-			items.poll();
+			//items.poll();
+			byte[] reply = frontend.recv(0);
+			
+			// --- reply content to another server ---
+			
+			System.out.println("Received " + ": [" + new String(reply, ZMQ.CHARSET) + "]");
+
+			/*
 
 			if (items.pollin(0)) {
+
 				while (true) {
 					// receive message
 					message = frontend.recv(0);
 					more = frontend.hasReceiveMore();
+					
+					System.out.println("message -> " + message);
 
 					// Broker it
-					backend.send(message, more ? ZMQ.SNDMORE : 0);
+					//backend.send(message, more ? ZMQ.SNDMORE : 0);
 					if (!more) {
 						break;
 					}
 				}
 			}
+			*/
+			/*
 			if (items.pollin(1)) {
 				while (true) {
 					// receive message
@@ -137,12 +171,12 @@ public class ReqRepBroker implements RunnableFuture {
 						break;
 					}
 				}
-			}
+			}*/
 		}
 		
 		// We never get here but clean up anyhow
 		frontend.close();
-		backend.close();
+		//backend.close();
 		context.term();
 	}
 
