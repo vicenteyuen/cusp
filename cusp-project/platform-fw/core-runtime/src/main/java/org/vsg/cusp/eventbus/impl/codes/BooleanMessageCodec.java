@@ -31,7 +31,7 @@ public class BooleanMessageCodec implements MessageCodec<Boolean, Boolean> {
 	@Override
 	public byte systemCodecID() {
 		// TODO Auto-generated method stub
-		return 3;
+		return 2;
 	}
 
 }

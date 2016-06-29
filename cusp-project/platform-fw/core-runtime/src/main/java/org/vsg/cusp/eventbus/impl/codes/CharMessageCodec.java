@@ -28,7 +28,7 @@ public class CharMessageCodec implements MessageCodec<Character, Character> {
 
 	  @Override
 	  public byte systemCodecID() {
-	    return 10;
+	    return 9;
 	  }
 
 }

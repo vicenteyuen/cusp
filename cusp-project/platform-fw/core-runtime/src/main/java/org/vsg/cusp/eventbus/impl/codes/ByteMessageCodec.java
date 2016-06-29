@@ -28,7 +28,7 @@ public class ByteMessageCodec implements MessageCodec<Byte, Byte> {
 
 	  @Override
 	  public byte systemCodecID() {
-	    return 2;
+	    return 1;
 	  }
 
 }

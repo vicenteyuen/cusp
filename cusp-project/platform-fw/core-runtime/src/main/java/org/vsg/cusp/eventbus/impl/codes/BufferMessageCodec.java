@@ -32,7 +32,7 @@ public class BufferMessageCodec implements MessageCodec<Buffer, Buffer> {
 
 	  @Override
 	  public byte systemCodecID() {
-	    return 11;
+	    return 10;
 	  }	
 	
 }

@@ -28,7 +28,7 @@ public class FloatMessageCodec implements MessageCodec<Float, Float> {
 
 	  @Override
 	  public byte systemCodecID() {
-	    return 7;
+	    return 6;
 	  }
 
 }
