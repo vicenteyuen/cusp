@@ -3,9 +3,6 @@
  */
 package org.vsg.cusp.eventbus;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
