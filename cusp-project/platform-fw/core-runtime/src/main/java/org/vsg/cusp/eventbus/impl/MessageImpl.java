@@ -132,6 +132,10 @@ public class MessageImpl<U, T> implements Message<T> {
 			bus.sendReply(msg, this, options, replyHandler);
 		}
 	}
+	
+	public MessageCodec getMessageCodec() {
+		return this.messageCodec;
+	}
 
 	@Override
 	public void fail(int failureCode, String message) {

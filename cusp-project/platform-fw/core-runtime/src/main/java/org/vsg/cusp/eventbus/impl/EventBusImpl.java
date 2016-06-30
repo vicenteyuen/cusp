@@ -44,9 +44,15 @@ public class EventBusImpl implements EventBus {
 
 		init();
 	}
+	
+	
+	private ZmqEndPointManager zepManager = new ZmqEndPointManager();
 
 
 	private void init() {
+		
+		SimpleMsgExchangeProtocol mep = new SimpleMsgExchangeProtocol();
+		zepManager.setExcangeProtocol( mep );
 
 	}
 
@@ -338,27 +344,10 @@ public class EventBusImpl implements EventBus {
 
 	protected <T> void sendOrPub(SendContextImpl<T> sendContext) {
 		MessageImpl message = sendContext.message;
-
 		
-		Context clientContext = ZMQ.context(zmq.ZMQ.ZMQ_IO_THREADS);
-		// Socket to talk to server
-		Socket requester = clientContext.socket(ZMQ.REQ);
-
-		StringBuilder connProtocol = new StringBuilder("tcp://");
-		connProtocol.append("localhost");
-		connProtocol.append(":").append(this.options.getBrokerPort());
 		
-		System.out.println(connProtocol.toString());
-
-		requester.connect(connProtocol.toString());
-
-		
-		// --- define sent content ,handle 
-		requester.send(message.body().toString(), 0);
-
-		requester.close();
-		clientContext.term();
-
+		// --- message send ---
+		zepManager.messageSent(message, options);
 		// metrics.messageSent(message.address(), !message.send(), true, false);
 		deliverMessageLocally(sendContext);
 	}
