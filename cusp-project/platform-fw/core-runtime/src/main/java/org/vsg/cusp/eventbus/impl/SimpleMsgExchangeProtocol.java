@@ -2,6 +2,7 @@ package org.vsg.cusp.eventbus.impl;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
@@ -46,8 +47,6 @@ public class SimpleMsgExchangeProtocol implements MsgExchangeProtocol {
 		Object body = msg.body();
 		
 		//byte[] valueBytes = msg.body();
-		
-		//NetworkInterface.getByIndex(index)
 
 
 

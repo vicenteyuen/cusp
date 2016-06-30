@@ -42,6 +42,7 @@ public class ZmqEndPointManager {
 		
 
 		requester.connect(connProtocol.toString());
+
 		if (null != excangeProtocol) {
 			byte[] content = excangeProtocol.encode(message);
 			requester.send(content, 0);
