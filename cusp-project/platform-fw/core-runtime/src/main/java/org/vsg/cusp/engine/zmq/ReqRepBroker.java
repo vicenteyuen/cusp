@@ -137,8 +137,8 @@ public class ReqRepBroker implements RunnableFuture {
 			byte[] reply = frontend.recv(0);
 			
 			// --- reply content to another server ---
-			
-			System.out.println("Received " + ": [" + new String(reply, ZMQ.CHARSET) + "]");
+			System.out.println("received : " + reply.length);
+			//System.out.println("Received " + ": [" + new String(reply, ZMQ.CHARSET) + "]");
 
 			/*
 

@@ -1,14 +1,15 @@
 package org.vsg.cusp.eventbus.impl.codes;
 
-
 import org.vsg.cusp.eventbus.MessageCodec;
 import org.vsg.cusp.eventbus.spi.Buffer;
 
 public class BooleanMessageCodec implements MessageCodec<Boolean, Boolean> {
 
+	public static final byte SYSTEMCODEC_ID = 2;
+
 	@Override
 	public void encodeToWire(Buffer buffer, Boolean s) {
-		buffer.appendByte((byte)(s ? 0 : 1));
+		buffer.appendByte((byte) (s ? 0 : 1));
 	}
 
 	@Override
@@ -31,7 +32,7 @@ public class BooleanMessageCodec implements MessageCodec<Boolean, Boolean> {
 	@Override
 	public byte systemCodecID() {
 		// TODO Auto-generated method stub
-		return 2;
+		return SYSTEMCODEC_ID;
 	}
 
 }
