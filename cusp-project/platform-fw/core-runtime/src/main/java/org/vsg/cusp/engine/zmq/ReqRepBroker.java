@@ -3,6 +3,7 @@
  */
 package org.vsg.cusp.engine.zmq;
 
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
@@ -12,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
-import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
 
 /**
@@ -129,14 +129,20 @@ public class ReqRepBroker implements RunnableFuture {
 
 		boolean more = false;
 		byte[] message;
+		
+		
 
 		// Switch messages between sockets
 		while (!Thread.currentThread().isInterrupted()) {
 			// poll and memorize multipart detection
 			//items.poll();
-			byte[] reply = frontend.recv(0);
 			
 			// --- reply content to another server ---
+
+			byte[] reply = frontend.recv(0);
+			
+
+			
 			System.out.println("received : " + reply.length);
 			//System.out.println("Received " + ": [" + new String(reply, ZMQ.CHARSET) + "]");
 

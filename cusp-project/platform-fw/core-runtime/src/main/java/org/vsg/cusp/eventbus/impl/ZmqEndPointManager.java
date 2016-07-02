@@ -39,9 +39,11 @@ public class ZmqEndPointManager {
 		StringBuilder connProtocol = new StringBuilder("tcp://");
 		connProtocol.append("localhost");
 		connProtocol.append(":").append(options.getBrokerPort());
-		
-
 		requester.connect(connProtocol.toString());
+		requester.setIdentity("test key : ".getBytes());
+		//requester.sendMore("hello");
+		
+		
 
 		if (null != excangeProtocol) {
 			byte[] content = excangeProtocol.encode(message);
