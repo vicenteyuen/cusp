@@ -6,5 +6,11 @@ public interface EventFlow {
 	
 	
 	<T> void fire(String eventName , Map<String , Object> fireArguements , Handler<AsyncResult<T>>...handlers);
+	
+	/**
+	 * fire event when the event flow is end handle
+	 * @param handle
+	 */
+	void fireAtEnd(Handler<AsyncResult> handle);
 
 }

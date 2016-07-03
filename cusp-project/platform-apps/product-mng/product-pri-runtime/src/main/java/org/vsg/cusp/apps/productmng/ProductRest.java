@@ -39,6 +39,8 @@ public class ProductRest {
 	@Path("/{id}")
 	public void getProduct(AsyncResponse asyncResponse , @PathParam("id") String productId , int test) throws InterruptedException  {
 		
+		EventFlow ef = null;
+		
 		try {
 			// --- call response handle ---
 			ResponseBuilder rb = Response.ok("hello world, VISON , my dear");
@@ -47,7 +49,7 @@ public class ProductRest {
 			System.out.println("show event bus : " + eventBus);
 			
 			
-			EventFlow ef = efm.getFlow("product/test.example");
+			ef = efm.getFlow("product/test.example");
 			
 			Handler<AsyncResult<Future>> eventHandler = new Handler<AsyncResult<Future>>() {
 
@@ -68,14 +70,26 @@ public class ProductRest {
 			};
 			
 			ef.fire("org.vsg.cusp.evetimst.case1", new LinkedHashMap<String,Object>(), eventHandler);
-			
+			ef.fire("org.vsg.cusp.evetimst.case2", new LinkedHashMap<String,Object>(), eventHandler);
 			
 
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		} finally {
+			if (null != ef) {
+				ef.fireAtEnd( new Handler<AsyncResult>() {
+
+					@Override
+					public void handle(AsyncResult event) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+				});
+			}
+		}
 		
         /*		
 		CountDownLatch latch = new CountDownLatch(2);
