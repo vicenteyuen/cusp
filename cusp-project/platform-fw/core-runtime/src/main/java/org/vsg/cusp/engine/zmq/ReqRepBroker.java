@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
+import org.zeromq.ZMsg;
 
 /**
  * @author Vicente Yuen
@@ -141,6 +142,8 @@ public class ReqRepBroker implements RunnableFuture {
 
 			byte[] reply = frontend.recv(0);
 			
+			//ZMsg msg = ZMsg.recvMsg( frontend );
+
 
 			
 			System.out.println("received : " + reply.length);
