@@ -1,4 +1,5 @@
-package org.vsg.cusp.eventbus;
+package org.vsg.cusp.concurrent;
+
 
 public interface EventFlowManager {
 	

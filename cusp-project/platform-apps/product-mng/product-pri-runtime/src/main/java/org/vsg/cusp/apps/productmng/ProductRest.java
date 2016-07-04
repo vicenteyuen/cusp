@@ -12,10 +12,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.vsg.cusp.concurrent.EventFlow;
+import org.vsg.cusp.concurrent.EventFlowManager;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.EventBus;
-import org.vsg.cusp.eventbus.EventFlow;
-import org.vsg.cusp.eventbus.EventFlowManager;
 import org.vsg.cusp.eventbus.Handler;
 
 
