@@ -2,9 +2,13 @@ package org.vsg.cusp.concurrent;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.vsg.cusp.concurrent.impl.EventFlowManagerImpl;
 import org.vsg.cusp.concurrent.impl.PromiseImpl;
+import org.vsg.cusp.eventbus.AsyncResult;
 
 public class EventFlowTestCase01 {
 	
@@ -22,15 +26,21 @@ public class EventFlowTestCase01 {
 		Promise prom = eventFlow.promise( EventFlow.MODE_LOCAL );
 	
 		PromiseImpl piInst = (PromiseImpl)prom;
-		piInst.setExecService( Executors.newCachedThreadPool() );
+		
+		ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(10 , 5000 , 10l , TimeUnit.SECONDS , new LinkedBlockingDeque<Runnable>());
+		piInst.setExecService( poolExecutor );
 
 		
 
-		GenericFutureListener gfl = new GenericFutureListener() {
+		GenericFutureListener<Future<AsyncResult>> gfl = new GenericFutureListener<Future<AsyncResult>>() {
 
 			@Override
-			public void operationComplete(Future future) throws Exception {
+			public void operationComplete(Future<AsyncResult> future) throws Exception {
 				// TODO Auto-generated method stub
+				System.out.println(future);
+				
+				//AsyncResult  ar = future.get();
+
 				System.out.println("running test 1");
 			}
 
@@ -44,6 +54,7 @@ public class EventFlowTestCase01 {
 			@Override
 			public void operationComplete(Future future) throws Exception {
 				// TODO Auto-generated method stub
+				
 				System.out.println("running test 2");
 			}
 

@@ -2,7 +2,7 @@ package org.vsg.cusp.concurrent.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.AbstractExecutorService;
 
 import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.GenericFutureListener;
@@ -22,14 +22,14 @@ public class PromiseImpl implements Promise {
 	}
 	
 	
-	private ExecutorService execService;
+	private AbstractExecutorService execService;
 	
 
-	public ExecutorService getExecService() {
+	public AbstractExecutorService getExecService() {
 		return execService;
 	}
 
-	public void setExecService(ExecutorService execService) {
+	public void setExecService(AbstractExecutorService execService) {
 		this.execService = execService;
 	}
 	
