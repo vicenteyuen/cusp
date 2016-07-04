@@ -6,6 +6,7 @@ import java.util.concurrent.AbstractExecutorService;
 
 import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.GenericFutureListener;
+import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.Promise;
 
 public class PromiseImpl implements Promise {
@@ -38,9 +39,9 @@ public class PromiseImpl implements Promise {
 
 
 	@Override
-	public Promise addListener(GenericFutureListener listener) {
+	public Promise addOperationEvent(OperationEvent event) {
 		// TODO Auto-generated method stub
-		supportListeners.add(listener);
+		//supportListeners.add(listener);
 		return this;
 	}
 	

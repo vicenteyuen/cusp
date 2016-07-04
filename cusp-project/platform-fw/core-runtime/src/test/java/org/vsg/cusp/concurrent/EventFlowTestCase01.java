@@ -32,65 +32,7 @@ public class EventFlowTestCase01 {
 
 		
 
-		GenericFutureListener<Future<AsyncResult>> gfl = new GenericFutureListener<Future<AsyncResult>>() {
 
-			@Override
-			public void operationComplete(Future<AsyncResult> future) throws Exception {
-				// TODO Auto-generated method stub
-				System.out.println(future);
-				
-				//AsyncResult  ar = future.get();
-
-				System.out.println("running test 1");
-			}
-
-
-		};
-		prom.addListener( gfl );
-		
-		
-		GenericFutureListener gf2 = new GenericFutureListener() {
-
-			@Override
-			public void operationComplete(Future future) throws Exception {
-				// TODO Auto-generated method stub
-				
-				System.out.println("running test 2");
-			}
-
-		};
-		
-		
-		prom.addListener( gf2 );
-		
-
-		GenericFutureListener gf3 = new GenericFutureListener() {
-
-			@Override
-			public void operationComplete(Future future) throws Exception {
-				// TODO Auto-generated method stub
-				System.out.println("running test 3");
-			}
-
-		};
-		
-		
-		prom.addListener( gf3 );
-		
-		
-		GenericFutureListener gf4 = new GenericFutureListener() {
-
-			@Override
-			public void operationComplete(Future future) throws Exception {
-				// TODO Auto-generated method stub
-				System.out.println("running test 4");
-			}
-
-		};
-		
-		
-		prom.addListener( gf4 );
-		
 		
 		try {
 			prom.sync();
