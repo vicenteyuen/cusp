@@ -7,8 +7,12 @@ import org.vsg.cusp.eventbus.Handler;
 
 public interface EventFlow<T> {
 	
-	
-	<T> void fire(String eventName , Map<String , Object> fireArguements , Handler<AsyncResult<T>>...handlers);
+	/**
+	 * get he operation event for method ---
+	 * @param eventName
+	 * @return
+	 */
+	OperationEvent getOperEvent(String eventName);
 	
 	/**
 	 * fire event when the event flow is end handle

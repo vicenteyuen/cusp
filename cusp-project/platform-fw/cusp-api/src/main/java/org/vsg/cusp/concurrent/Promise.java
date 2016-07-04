@@ -1,12 +1,9 @@
 package org.vsg.cusp.concurrent;
 
-import java.util.concurrent.Future;
-
-
 public interface Promise<V> {
 	
 	// --- base promise call back
-	Promise<V> addListener(GenericFutureListener<? extends Future<? super V>> listener);
+	Promise<V> addOperationEvent(OperationEvent event);
 
 	/**
 	 * Waits for this future to be completed
