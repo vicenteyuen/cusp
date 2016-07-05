@@ -92,6 +92,9 @@ public class PromiseImpl implements Promise {
 				@Override
 				public AsyncResult call() throws Exception {
 					// TODO Auto-generated method stub
+					
+					// --- send event msg to run ---
+					// execute method 
 					Method bindMethod = operEvent.assoBindMethod();
 					
 					Class<?>  cls = Class.forName( operEvent.assoClassName() );

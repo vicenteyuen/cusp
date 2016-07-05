@@ -22,9 +22,6 @@ public class EventFlowTestCase01 {
 		efManager.init();
 		eventFlow = efManager.getFlow("testcase");
 		
-		
-		
-		
 		Promise prom = eventFlow.promise( EventFlow.MODE_LOCAL );
 	
 		PromiseImpl piInst = (PromiseImpl)prom;
