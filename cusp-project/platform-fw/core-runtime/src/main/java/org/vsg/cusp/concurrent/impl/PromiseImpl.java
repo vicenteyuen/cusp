@@ -80,7 +80,6 @@ public class PromiseImpl implements Promise {
 		
 		
 		CountDownLatch countDownLatch = new CountDownLatch(operationEvents.size());
-		System.out.println("test inst : " + operationEvents);
 		
 		ListIterator<OperationEvent>  listIter =  operationEvents.listIterator();
 		while ( listIter.hasNext() ) {

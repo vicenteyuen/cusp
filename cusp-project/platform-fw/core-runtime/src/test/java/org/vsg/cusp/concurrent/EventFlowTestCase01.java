@@ -1,6 +1,5 @@
 package org.vsg.cusp.concurrent;
 
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -8,8 +7,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.vsg.cusp.concurrent.impl.EventFlowManagerImpl;
+import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
 import org.vsg.cusp.concurrent.impl.PromiseImpl;
-import org.vsg.cusp.core.utils.AnnotationReflectionUtils;
 
 public class EventFlowTestCase01 {
 	
@@ -17,8 +16,11 @@ public class EventFlowTestCase01 {
 	private EventFlow eventFlow;
 	
 	public void execute() {
+		
+		FlowManagerOptions flowManagerOpts = new FlowManagerOptions();
+		
 	
-		EventFlowManagerImpl efManager = new EventFlowManagerImpl();
+		EventFlowManagerImpl efManager = new EventFlowManagerImpl(flowManagerOpts);
 		efManager.init();
 		eventFlow = efManager.getFlow("testcase");
 		
@@ -44,6 +46,8 @@ public class EventFlowTestCase01 {
 			prom.addOperationEvent(event3);
 			prom.addOperationEvent(event4);
 			prom.addOperationEvent(event5);
+			
+			// --- add promise on done event ---
 			
 			prom.sync();
 		} catch (InterruptedException e) {

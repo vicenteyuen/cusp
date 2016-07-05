@@ -6,7 +6,7 @@ import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.Promise;
 import org.vsg.cusp.eventbus.Handler;
 
-public class EventFlowImpl implements EventFlow {
+public class MultiNodeEventFlowImpl implements EventFlow {
 	
 	private EventFlowManager flowManager;
 	

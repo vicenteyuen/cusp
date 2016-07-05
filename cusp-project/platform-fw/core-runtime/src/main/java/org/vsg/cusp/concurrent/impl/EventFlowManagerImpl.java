@@ -5,17 +5,29 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.EventFlowManager;
 import org.vsg.cusp.concurrent.EventInfo;
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.core.utils.AnnotationReflectionUtils;
+import org.zeromq.ZMQ.Socket;
 
 public class EventFlowManagerImpl implements EventFlowManager {
 	
 	
 	private Map<String, EventFlow> _efInstBinding = new LinkedHashMap<String , EventFlow>();
+	
+	
+	private FlowManagerOptions flowManagerOptions;
+	
+	public EventFlowManagerImpl(FlowManagerOptions options) {
+		flowManagerOptions = options;
+	}
 	
 
 	@Override
@@ -23,14 +35,46 @@ public class EventFlowManagerImpl implements EventFlowManager {
 		// TODO Auto-generated method stub
 		EventFlow  eventFlow =  _efInstBinding.get(flowId);
 		if (null == eventFlow) {
-			EventFlowImpl efi = new EventFlowImpl();
-			efi.setFlowManager( this );
-			eventFlow = efi;
+			
+			if ( flowManagerOptions.isClustered() ) {
+				// --- use multi node ---
+				MultiNodeEventFlowImpl mnEventFlow = createMultiNodeEventFlow();
+				eventFlow = mnEventFlow;
+			}
+			else {
+				SingleNodeEventFlowImpl efi = new SingleNodeEventFlowImpl();
+				efi.setFlowManager( this );
+				eventFlow = efi;
+			}
 			_efInstBinding.put( flowId , eventFlow);
 		}
-		
-		
 		return eventFlow;
+	}
+	
+	private MultiNodeEventFlowImpl createMultiNodeEventFlow() {
+		MultiNodeEventFlowImpl mnEventFlow = new MultiNodeEventFlowImpl();
+		mnEventFlow.setFlowManager( this );
+		
+		EventFlowVentilator venti = new EventFlowVentilator();
+		
+		ExecutorService  es =  Executors.newSingleThreadExecutor();
+		
+		Future<Socket> future = es.submit( venti );
+		
+		
+		try {
+			System.out.println(future.get());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		es.shutdown();
+		
+		return mnEventFlow;
 	}
 	
 	
