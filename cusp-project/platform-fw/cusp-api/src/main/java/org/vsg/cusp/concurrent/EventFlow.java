@@ -1,7 +1,5 @@
 package org.vsg.cusp.concurrent;
 
-import java.util.Map;
-
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.Handler;
 
@@ -19,6 +17,13 @@ public interface EventFlow<T> {
 	 * @param handle
 	 */
 	void fireAtEnd(Handler<AsyncResult> handle);
+	
+	/**
+	 * define event flow manager
+	 * @return
+	 */
+	EventFlowManager getFlowManager();
+	
 	
 	public static final byte MODE_LOCAL = 0;
 	

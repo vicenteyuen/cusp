@@ -1,20 +1,28 @@
 package org.vsg.cusp.concurrent.impl;
 
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-
 import org.vsg.cusp.concurrent.EventFlow;
+import org.vsg.cusp.concurrent.EventFlowManager;
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.Promise;
 import org.vsg.cusp.eventbus.Handler;
 
 public class EventFlowImpl implements EventFlow {
+	
+	private EventFlowManager flowManager;
+	
+	@Override
+	public EventFlowManager getFlowManager() {
+		return flowManager;
+	}
+
+	public void setFlowManager(EventFlowManager flowManager) {
+		this.flowManager = flowManager;
+	}
 
 	@Override
 	public OperationEvent getOperEvent(String eventName) {
 		// TODO Auto-generated method stub
-		return null;
+		return flowManager.getOperEventById(eventName);
 	}
 
 

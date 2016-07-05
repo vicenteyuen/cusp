@@ -19,7 +19,8 @@ public interface OperationEvent {
 	// ---- associa method ---
 	void injectRunningtimeArgument(Map<String,Object> arguements);
 	
+	Method assoBindMethod();
 	
-	Method assobindMethod();
+	String assoClassName();
 
 }
