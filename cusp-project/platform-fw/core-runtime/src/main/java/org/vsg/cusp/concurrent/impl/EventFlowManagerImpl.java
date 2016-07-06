@@ -5,17 +5,18 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.EventFlowManager;
 import org.vsg.cusp.concurrent.EventInfo;
 import org.vsg.cusp.concurrent.OperationEvent;
+import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.core.utils.AnnotationReflectionUtils;
-import org.zeromq.ZMQ.Socket;
+import org.vsg.cusp.eventbus.AsyncResult;
+import org.vsg.cusp.eventbus.EventBusAware;
+import org.vsg.cusp.eventbus.Handler;
+import org.vsg.cusp.eventbus.impl.EventBusImpl;
+import org.vsg.cusp.eventbus.impl.EventBusOptions;
 
 public class EventFlowManagerImpl implements EventFlowManager {
 	
@@ -29,6 +30,16 @@ public class EventFlowManagerImpl implements EventFlowManager {
 		flowManagerOptions = options;
 	}
 	
+	private ServEngine internalEngine;
+	
+
+	public ServEngine getInternalEngine() {
+		return internalEngine;
+	}
+
+	public void setInternalEngine(ServEngine internalEngine) {
+		this.internalEngine = internalEngine;
+	}
 
 	@Override
 	public EventFlow getFlow(String flowId) {
@@ -55,7 +66,35 @@ public class EventFlowManagerImpl implements EventFlowManager {
 		MultiNodeEventFlowImpl mnEventFlow = new MultiNodeEventFlowImpl();
 		mnEventFlow.setFlowManager( this );
 		
-		EventFlowVentilator venti = new EventFlowVentilator();
+		EventBusOptions ebOptions = new EventBusOptions();
+		
+		EventBusImpl ebi = new EventBusImpl(ebOptions);
+		
+		
+		/**
+		 * handle define event
+		 */
+		Handler<AsyncResult<Void>> completionHandler = new Handler<AsyncResult<Void>>() {
+
+			@Override
+			public void handle(AsyncResult<Void> event) {
+				// TODO Auto-generated method stub
+				System.out.println(event);
+			}
+			
+		};
+
+		
+		ebi.start(completionHandler);
+		
+		if ( mnEventFlow instanceof EventBusAware ) {
+			((EventBusAware)mnEventFlow).setEventBus( ebi );
+		}
+		
+		
+		
+		/*
+		EventFlowBroker venti = new EventFlowBroker();
 		
 		ExecutorService  es =  Executors.newSingleThreadExecutor();
 		
@@ -73,7 +112,7 @@ public class EventFlowManagerImpl implements EventFlowManager {
 		}
 		
 		es.shutdown();
-		
+		*/
 		return mnEventFlow;
 	}
 	

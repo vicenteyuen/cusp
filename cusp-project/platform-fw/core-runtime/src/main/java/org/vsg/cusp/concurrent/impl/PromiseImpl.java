@@ -1,10 +1,11 @@
 package org.vsg.cusp.concurrent.impl;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
+import java.util.Vector;
 import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -16,9 +17,14 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.concurrent.EventFlow;
+import org.vsg.cusp.concurrent.ExecTaskFuture;
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.Promise;
 import org.vsg.cusp.eventbus.AsyncResult;
+import org.vsg.cusp.eventbus.EventBus;
+import org.vsg.cusp.eventbus.Handler;
+import org.vsg.cusp.eventbus.Message;
+import org.vsg.cusp.eventbus.MessageProducer;
 
 public class PromiseImpl implements Promise {
 
@@ -79,37 +85,64 @@ public class PromiseImpl implements Promise {
 	private void notifyEventssNow() {
 		
 		
+		/**
+		 * Send pre-define operation event and get the reponse message first.  
+		 */
+		
 		CountDownLatch countDownLatch = new CountDownLatch(operationEvents.size());
+		
+		
+		
+		Collection<ExecTaskFuture> taskFutureInSameGroup = new Vector<ExecTaskFuture>();
+		
+		Handler<AsyncResult<Message>> handler = new Handler<AsyncResult<Message>>() {
+
+			@Override
+			public void handle(AsyncResult<Message> future) {
+				// ---- receve message ----
+				
+				
+				System.out.println("hello message ");
+				
+			}
+			
+		};
+		
 		
 		ListIterator<OperationEvent>  listIter =  operationEvents.listIterator();
 		while ( listIter.hasNext() ) {
 			OperationEvent operEvent = listIter.next();
 			
 			// --- 
-			Callable<AsyncResult> handleCallable = new Callable<AsyncResult>(){
+			Runnable command = new Runnable() {
 
 				@Override
-				public AsyncResult call() throws Exception {
-					// TODO Auto-generated method stub
+				public void run() {
+					EventBus eventBus = flow.getEventBus();
 					
+					MessageProducer producer = eventBus.sender(EventFlow.EVB_CHANNEL);
+					producer.send(operEvent, handler);
+
+	
+					//eventBus.p
 					// --- send event msg to run ---
 					// execute method 
+					/*
 					Method bindMethod = operEvent.assoBindMethod();
 					
 					Class<?>  cls = Class.forName( operEvent.assoClassName() );
 					Object inst = cls.newInstance();
 					bindMethod.invoke( inst ,flow.getFlowManager());
+					*/
 					
 					// ---- count value ---
 					countDownLatch.countDown();
-
-					return new AsyncResultImpl();
+					
 				}
 				
 			};
-			
-			Future<AsyncResult> runningStage =  execService.submit( handleCallable );			
-
+			execService.execute(command);
+			 
 		}
 		
 		execService.shutdown();
@@ -122,6 +155,12 @@ public class PromiseImpl implements Promise {
 		} finally {
 			
 		}
+		
+		/**
+		 * waiting for job task complete and fire 
+		 */
+	
+	
 	}
 	
 	

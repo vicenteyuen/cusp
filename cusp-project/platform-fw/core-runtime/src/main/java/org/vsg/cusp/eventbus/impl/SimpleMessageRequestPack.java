@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.vsg.cusp.concurrent.OperationEvent;
+import org.vsg.cusp.concurrent.impl.codes.OperationEventMessageCodec;
 import org.vsg.cusp.core.utils.ByteUtils;
 import org.vsg.cusp.core.utils.CorrelationIdGenerator;
 import org.vsg.cusp.eventbus.MessageCodec;
@@ -171,6 +173,16 @@ public class SimpleMessageRequestPack implements MessageRequestPack{
 		else if (ByteArrayMessageCodec.SYSTEMCODEC_ID == systemCodeId) {
 			result = (byte[])body;
 		}
+		// --- custom event ---
+		else if (OperationEventMessageCodec.SYSTEMCODEC_ID == systemCodeId) {
+			
+			OperationEvent operEvent = (OperationEvent)body;
+			
+			System.out.println("call oper event : " + operEvent);
+			
+		}
+			
+		
 		return result;
 		
 	}

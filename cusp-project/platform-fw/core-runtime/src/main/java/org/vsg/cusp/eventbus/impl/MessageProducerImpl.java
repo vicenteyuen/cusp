@@ -32,10 +32,11 @@ public class MessageProducerImpl<T> implements MessageProducer<T> {
 		
 	}
 	
-	public MessageProducerImpl(String address , boolean send , DeliveryOptions options) {
+	public MessageProducerImpl(EventBus eventBus , String address , boolean send , DeliveryOptions options) {
 		this.address = address;
 		this.send = send;
 		this.options = options;
+		this.bus = eventBus;
 	}
 	
 

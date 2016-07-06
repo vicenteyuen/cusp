@@ -4,11 +4,16 @@ import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.EventFlowManager;
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.Promise;
+import org.vsg.cusp.eventbus.EventBus;
+import org.vsg.cusp.eventbus.EventBusAware;
 import org.vsg.cusp.eventbus.Handler;
 
-public class MultiNodeEventFlowImpl implements EventFlow {
+public class MultiNodeEventFlowImpl implements EventFlow , EventBusAware {
 	
 	private EventFlowManager flowManager;
+	
+	
+	private EventBus eventBus;
 	
 	@Override
 	public EventFlowManager getFlowManager() {
@@ -25,7 +30,15 @@ public class MultiNodeEventFlowImpl implements EventFlow {
 		return flowManager.getOperEventById(eventName);
 	}
 
+	@Override
+	public EventBus getEventBus() {
+		return eventBus;
+	}
 
+	@Override
+	public void setEventBus(EventBus eventBus) {
+		this.eventBus = eventBus;
+	}
 
 	@Override
 	public void fireAtEnd(Handler handle) {

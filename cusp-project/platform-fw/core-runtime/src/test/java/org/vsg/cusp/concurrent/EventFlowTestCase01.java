@@ -9,11 +9,26 @@ import java.util.concurrent.TimeUnit;
 import org.vsg.cusp.concurrent.impl.EventFlowManagerImpl;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
 import org.vsg.cusp.concurrent.impl.PromiseImpl;
+import org.vsg.cusp.engine.zmq.JeroMQServEngine;
 
 public class EventFlowTestCase01 {
 	
 	
 	private EventFlow eventFlow;
+	
+	
+	
+	public void start() {
+		
+		// --- start engine ---
+		JeroMQServEngine servEngine = new JeroMQServEngine();
+		
+		servEngine.start();
+		
+		
+	}
+	
+	
 	
 	public void execute() {
 		
@@ -27,9 +42,7 @@ public class EventFlowTestCase01 {
 		Promise prom = eventFlow.promise( EventFlow.MODE_LOCAL );
 	
 		PromiseImpl piInst = (PromiseImpl)prom;
-		
-		ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(10 , 5000 , 10l , TimeUnit.SECONDS , new LinkedBlockingDeque<Runnable>());
-		//piInst.setExecService( poolExecutor );
+
 		
 		
 		// --- add openeration event ---
@@ -38,7 +51,7 @@ public class EventFlowTestCase01 {
 		OperationEvent  event3 =  eventFlow.getOperEvent("testCase3@" + MockOperationEventCls.class.getName());
 		OperationEvent  event4 =  eventFlow.getOperEvent("testCase4@" + MockOperationEventCls.class.getName());
 		OperationEvent  event5 =  eventFlow.getOperEvent("testCase5@" + MockOperationEventCls.class.getName());
-
+		
 		try {
 			
 			prom.addOperationEvent(event1);
@@ -48,7 +61,6 @@ public class EventFlowTestCase01 {
 			prom.addOperationEvent(event5);
 			
 			// --- add promise on done event ---
-			
 			prom.sync();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -78,6 +90,10 @@ public class EventFlowTestCase01 {
 		// TODO Auto-generated method stub
 		
 		EventFlowTestCase01 executeCase = new EventFlowTestCase01();
+		
+		executeCase.start();
+		
+		
 		executeCase.execute();
 
 	}

@@ -3,6 +3,7 @@
  */
 package org.vsg.cusp.concurrent.impl;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class OperationEventImpl implements OperationEvent {
 	
 	private String eventId;
 	
-	private Map<String , Object> arguments;
+	private Serializable[] arguments;
 	
 	private Method bindMethod;
 
@@ -29,14 +30,18 @@ public class OperationEventImpl implements OperationEvent {
 		return eventId;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.vsg.cusp.concurrent.OperationEvent#injectRunningtimeArgument(java.util.Map)
-	 */
+
 	@Override
-	public void injectRunningtimeArgument(Map<String, Object> arguements) {
-		// TODO Auto-generated method stub
+	public void runtimeArgument(Serializable[] arguments) {
+		/**
+		 * check arguments object type and support arugment counter.
+		 */
+
+		
+		
 		this.arguments = arguments;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.vsg.cusp.concurrent.OperationEvent#assobindMethod()
@@ -47,13 +52,7 @@ public class OperationEventImpl implements OperationEvent {
 		return bindMethod;
 	}
 
-	public Map<String, Object> getArguments() {
-		return arguments;
-	}
 
-	public void setArguments(Map<String, Object> arguments) {
-		this.arguments = arguments;
-	}
 
 	public Method getBindMethod() {
 		return bindMethod;

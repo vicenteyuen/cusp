@@ -4,6 +4,7 @@ import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.EventFlowManager;
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.Promise;
+import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
 
 public class SingleNodeEventFlowImpl implements EventFlow {
@@ -26,6 +27,11 @@ public class SingleNodeEventFlowImpl implements EventFlow {
 	}
 
 
+	@Override
+	public EventBus getEventBus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public void fireAtEnd(Handler handle) {

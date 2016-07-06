@@ -101,7 +101,9 @@ public class EventBusImpl implements EventBus {
 			MultiMap headers, Object body, String codecName) {
 		Objects.requireNonNull(address, "no null address accepted");
 		MessageCodec codec = codecManager.lookupCodec(body, codecName);
+		
 		MessageImpl msg = new MessageImpl(address, body, codec, true, this);
+
 		return msg;
 	}
 
@@ -109,10 +111,9 @@ public class EventBusImpl implements EventBus {
 			DeliveryOptions options,
 			Handler<AsyncResult<Message<T>>> replyHandler) {
 		checkStarted();
-		HandlerRegistration<T> replyHandlerRegistration = createReplyHandlerRegistration(
-				message, options, replyHandler);
-		SendContextImpl<T> sendContext = new SendContextImpl<>(message,
-				options, replyHandlerRegistration);
+		HandlerRegistration<T> replyHandlerRegistration = createReplyHandlerRegistration(message, options, replyHandler);
+
+		SendContextImpl<T> sendContext = new SendContextImpl<>(message,	options, replyHandlerRegistration);
 		sendContext.next();
 
 	}
@@ -198,9 +199,8 @@ public class EventBusImpl implements EventBus {
 	@Override
 	public <T> MessageProducer<T> sender(String address) {
 		Objects.requireNonNull(address, "address");
-		MessageProducerImpl ppi = new MessageProducerImpl<>(address, true,
-				new DeliveryOptions());
-		return ppi;
+		MessageProducerImpl msgProdImpl = new MessageProducerImpl<>(this, address, true,new DeliveryOptions());
+		return msgProdImpl;
 	}
 
 	@Override
@@ -208,17 +208,16 @@ public class EventBusImpl implements EventBus {
 		Objects.requireNonNull(address, "address");
 		Objects.requireNonNull(options, "options");
 
-		MessageProducerImpl ppi = new MessageProducerImpl<>(address, true,
-				options);
-		return ppi;
+		MessageProducerImpl msgProdImpl = new MessageProducerImpl<>(this,address, true,	options);
+		return msgProdImpl;
 	}
 
 	@Override
 	public <T> MessageProducer<T> publisher(String address) {
 		Objects.requireNonNull(address, "address");
-		MessageProducerImpl ppi = new MessageProducerImpl<>(address, true,
+		MessageProducerImpl msgProdImpl = new MessageProducerImpl<>(this, address, true,
 				new DeliveryOptions());
-		return ppi;
+		return msgProdImpl;
 	}
 
 	@Override
@@ -226,7 +225,7 @@ public class EventBusImpl implements EventBus {
 			DeliveryOptions options) {
 		Objects.requireNonNull(address, "address");
 		Objects.requireNonNull(options, "options");
-		return new MessageProducerImpl<>(address, false, options);
+		return new MessageProducerImpl<>(this,address, false, options);
 	}
 
 	@Override
@@ -345,7 +344,7 @@ public class EventBusImpl implements EventBus {
 	protected <T> void sendOrPub(SendContextImpl<T> sendContext) {
 		MessageImpl message = sendContext.message;
 		
-		
+
 		// --- message send ---
 		zepManager.messageSent(message, options);
 		// metrics.messageSent(message.address(), !message.send(), true, false);

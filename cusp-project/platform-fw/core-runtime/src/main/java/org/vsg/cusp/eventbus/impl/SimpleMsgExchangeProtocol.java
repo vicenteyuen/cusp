@@ -44,9 +44,6 @@ public class SimpleMsgExchangeProtocol implements MsgExchangeProtocol {
 			e.printStackTrace();
 		}
 
-
-		
-		
 		// --- build message bytes ----
 		SimpleMessageRequestPack mp = new SimpleMessageRequestPack();
 		mp.setMesCodes(mc);

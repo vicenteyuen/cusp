@@ -3,7 +3,6 @@
  */
 package org.vsg.cusp.engine.zmq;
 
-import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
-import org.zeromq.ZMsg;
 
 /**
  * @author Vicente Yuen
