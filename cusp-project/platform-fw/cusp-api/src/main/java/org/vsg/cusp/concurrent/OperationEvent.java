@@ -1,7 +1,7 @@
 package org.vsg.cusp.concurrent;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.Map;
 
 /**
  * 
@@ -17,7 +17,9 @@ public interface OperationEvent {
 	String getEventId();
 	
 	// ---- associa method ---
-	void injectRunningtimeArgument(Map<String,Object> arguements);
+	void setRuntimeArgument(Serializable[] arguments);
+	
+	Serializable[] getRuntimeArgument();
 	
 	Method assoBindMethod();
 	

@@ -1,6 +1,7 @@
 package org.vsg.cusp.concurrent;
 
 import org.vsg.cusp.eventbus.AsyncResult;
+import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
 
 public interface EventFlow<T> {
@@ -30,6 +31,10 @@ public interface EventFlow<T> {
 	public static final byte MODE_DIS = 1;
 	
 	Promise promise(byte mode);
+	
+	public static final String EVB_CHANNEL = "EvB_CHAN";
+	
+	EventBus getEventBus();
 	
 	// start deffer event 
 	void startDeffer();

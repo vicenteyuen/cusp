@@ -32,14 +32,17 @@ public class OperationEventImpl implements OperationEvent {
 
 
 	@Override
-	public void runtimeArgument(Serializable[] arguments) {
+	public void setRuntimeArgument(Serializable[] arguments) {
 		/**
 		 * check arguments object type and support arugment counter.
 		 */
-
-		
-		
 		this.arguments = arguments;
+	}
+
+	@Override
+	public Serializable[] getRuntimeArgument() {
+		// TODO Auto-generated method stub
+		return this.arguments;
 	}
 
 

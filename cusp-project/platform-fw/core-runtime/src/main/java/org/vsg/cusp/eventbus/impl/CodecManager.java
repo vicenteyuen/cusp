@@ -42,7 +42,7 @@ public class CodecManager {
 	public static final MessageCodec<Character, Character> CHAR_MESSAGE_CODEC = new CharMessageCodec();
 	public static final MessageCodec<Byte, Byte> BYTE_MESSAGE_CODEC = new ByteMessageCodec();
 	// public static final MessageCodec<ReplyException, ReplyException>
-	public static final MessageCodec<OperationEvent , OperationEvent> OPEREVENT_MESSAGE_CODEC = new OperationEventMessageCodec();
+	public static final MessageCodec<OperationEvent , byte[]> OPEREVENT_MESSAGE_CODEC = new OperationEventMessageCodec();
 	
 	
 	// REPLY_EXCEPTION_MESSAGE_CODEC = new ReplyExceptionMessageCodec();

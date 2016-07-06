@@ -176,9 +176,10 @@ public class SimpleMessageRequestPack implements MessageRequestPack{
 		// --- custom event ---
 		else if (OperationEventMessageCodec.SYSTEMCODEC_ID == systemCodeId) {
 			
-			OperationEvent operEvent = (OperationEvent)body;
+			result = (byte[])body;
 			
-			System.out.println("call oper event : " + operEvent);
+			
+			System.out.println("call oper event : " + new String(result));
 			
 		}
 			
