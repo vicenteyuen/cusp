@@ -9,9 +9,8 @@ import org.vsg.cusp.core.utils.CorrelationIdGenerator;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.event.MessageCodecSupport;
+import org.vsg.cusp.event.ReqMessageModel;
 import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
-import org.vsg.cusp.eventbus.impl.SimpleMessageRequestPack;
-import org.zeromq.ZMQ;
 
 import com.google.common.primitives.Bytes;
 
@@ -63,7 +62,11 @@ public class DefaultMessageExchangeEncoder implements MessageExchangeEncoder {
 	@Override
 	public Message decode(byte[] msgBytes) {
 		// TODO Auto-generated method stub
-		System.out.println("Received2 " + new String (msgBytes, ZMQ.CHARSET) );		
+		ReqMessageSchemerDecoderImpl decoder = new ReqMessageSchemerDecoderImpl();
+		ReqMessageModel reqMsgModel = decoder.decode(msgBytes);
+	
+		System.out.println("correct id : " + reqMsgModel.getCorrelationId());
+		
 		return null;
 	}
 	

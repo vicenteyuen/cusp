@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vsg.cusp.eventbus.impl;
+package org.vsg.cusp.event.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
@@ -80,11 +80,16 @@ public class SimpleMessageRequestPack implements MessageRequestPack{
 
 	@Override
 	public byte[] headerPack() {
+		
+		long corrId = correlationIdGenerator.generate(0);
+		
+		System.out.println("corrId : " + corrId);
+
 
 		byte[] headerBytes = Bytes.concat(
 			new byte[]{APICODEID},
 			Shorts.toByteArray(VERSION),
-			Longs.toByteArray( correlationIdGenerator.generate(0)),
+			Longs.toByteArray( corrId),
 			clientMac
 		);
 		return headerBytes;

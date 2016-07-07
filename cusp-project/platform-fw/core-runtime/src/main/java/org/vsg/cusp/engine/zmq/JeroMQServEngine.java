@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.Container;
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
 
 /**
  * @author Vicente Yuen
@@ -62,6 +63,10 @@ public class JeroMQServEngine implements ServEngine , Runnable {
 		ReqRepBroker broker = new ReqRepBroker();
 		// --- internal worker ---
 		ReqRepWorker worker = new ReqRepWorker();
+		// --- message exchange encoder ---
+		DefaultMessageExchangeEncoder dme = new DefaultMessageExchangeEncoder();
+		worker.setEncoder(dme);
+		
 		ExecutorService execService = Executors.newCachedThreadPool();
 		
 		execService.execute( broker );

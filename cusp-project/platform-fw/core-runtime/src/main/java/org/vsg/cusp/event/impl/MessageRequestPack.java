@@ -1,4 +1,4 @@
-package org.vsg.cusp.eventbus.impl;
+package org.vsg.cusp.event.impl;
 
 public interface MessageRequestPack {
 	

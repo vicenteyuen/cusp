@@ -7,6 +7,8 @@ import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.event.Message;
+import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
@@ -25,6 +27,7 @@ public class ReqRepWorker implements RunnableFuture {
 	}
 	
 
+
 	@Override
 	public boolean cancel(boolean mayInterruptIfRunning) {
 		// TODO Auto-generated method stub
@@ -41,6 +44,16 @@ public class ReqRepWorker implements RunnableFuture {
 	public boolean isDone() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	private  MessageExchangeEncoder encoder;
+	
+	public MessageExchangeEncoder getEncoder() {
+		return encoder;
+	}
+
+	public void setEncoder(MessageExchangeEncoder encoder) {
+		this.encoder = encoder;
 	}
 
 	@Override
@@ -75,12 +88,16 @@ public class ReqRepWorker implements RunnableFuture {
         	
 			while (!Thread.currentThread ().isInterrupted ()) {
 			    //  Wait for next request from client
-	            byte[] task;
-	            while((task = receiver.recv(ZMQ.DONTWAIT)) != null) {
+	            byte[] message;
+	            while((message = receiver.recv(ZMQ.DONTWAIT)) != null) {
 	            	
 	            	// --- parse job message ---
-	            	
-	                System.out.println("process task size : " + task.length);
+	            	if (null != message) {
+	            		Message msgRef = encoder.decode(message);	            		
+	            	} else {
+
+	            	}
+
 	            }
 
 			}
