@@ -1,6 +1,7 @@
 package org.vsg.cusp.event.flow.impl;
 
 import java.lang.reflect.Method;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,11 +16,8 @@ import org.vsg.cusp.concurrent.impl.OperationEventImpl;
 import org.vsg.cusp.concurrent.impl.SingleNodeEventFlowImpl;
 import org.vsg.cusp.core.utils.AnnotationReflectionUtils;
 import org.vsg.cusp.event.flow.FlowManager;
-import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.EventBusAware;
-import org.vsg.cusp.eventbus.Handler;
-import org.vsg.cusp.eventbus.impl.EventBusOptions;
 
 public class FlowManagerImpl implements FlowManager, EventBusAware {
 	
@@ -31,6 +29,9 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 	
 	public FlowManagerImpl(FlowManagerOptions options) {
 		flowManagerOptions = options;
+		
+		init();
+		
 	}
 	
 	private EventBus eventBus;
@@ -66,42 +67,22 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 	private MultiNodeEventFlowImpl createMultiNodeEventFlow() {
 		MultiNodeEventFlowImpl mnEventFlow = new MultiNodeEventFlowImpl();
 		mnEventFlow.setFlowManager( this );
-		
+
 		if ( mnEventFlow instanceof EventBusAware ) {
 			((EventBusAware)mnEventFlow).setEventBus( eventBus );
 		}
-		
-		
-		
-		/*
-		EventFlowBroker venti = new EventFlowBroker();
-		
-		ExecutorService  es =  Executors.newSingleThreadExecutor();
-		
-		Future<Socket> future = es.submit( venti );
-		
-		
-		try {
-			System.out.println(future.get());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		es.shutdown();
-		*/
+
 		return mnEventFlow;
 	}
 	
 	
 	// --- init method ---
-	public void init() {
+	private void init() {
 		
-		//List<Package> matchPackages =  scanPackageByRef("org.vsg");
-		foundClsIncludingEventInfo("org.vsg");
+		Iterator<String> pkgIter = flowManagerOptions.getScanPackages().iterator();
+		while (pkgIter.hasNext()) {
+			foundClsIncludingEventInfo( pkgIter.next() ); 
+		}
 		
 	}
 	
@@ -124,6 +105,7 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 	
 	@Override
 	public OperationEvent getOperEventById(String eventId) {
+		
 		return loadClassOperEvents.get(eventId);
 	}
 	

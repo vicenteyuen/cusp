@@ -54,18 +54,29 @@ public class FlowManagerFactoryImpl implements FlowManagerFactory {
 		try {
 			Class<FlowManager>  cls =  (Class<FlowManager>)Class.forName(managerImpl);
 			
-			FlowManagerOptions options = new FlowManagerOptions();
+			FlowManagerOptions options = parseConfForManagerOptions(jsonConf);
 			
 			flowManager = cls.getDeclaredConstructor(FlowManagerOptions.class).newInstance(options);
 			
-			
-			EventBusOptions ebOptions = parseOptionsForConf(jsonConf);
+			EventBusOptions ebOptions = parseConfForEventBus(jsonConf);
 			injectEventBus(flowManager , ebOptions);
 			
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	
+	private FlowManagerOptions parseConfForManagerOptions(JSONObject jsonConf) {
+		FlowManagerOptions options = new FlowManagerOptions();
+		
+		JSONArray pkgArray = jsonConf.getJSONArray("scan-packages");
+		for (int i = 0 ; i < pkgArray.size() ; i++) {
+			options.getScanPackages().add( pkgArray.get(i).toString());
+		}
+		
+		return options;
 	}
 	
 	
@@ -77,7 +88,7 @@ public class FlowManagerFactoryImpl implements FlowManagerFactory {
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
 	 */
-	private EventBusOptions parseOptionsForConf(JSONObject jsonConf) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	private EventBusOptions parseConfForEventBus(JSONObject jsonConf) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		EventBusOptions options = new EventBusOptions();
 		
 		JSONObject eventBusConf =  jsonConf.getObject("event-bus", JSONObject.class);
@@ -140,6 +151,7 @@ public class FlowManagerFactoryImpl implements FlowManagerFactory {
 			
 		};
 		eventBusImpl.start(completionHandler);
+		
 		if (flowManager instanceof EventBusAware) {
 			EventBusAware eba = (EventBusAware)flowManager;
 			eba.setEventBus(eventBusImpl);

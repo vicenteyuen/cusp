@@ -10,9 +10,11 @@ import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.zeromq.ZFrame;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
+import org.zeromq.ZMsg;
 
 /**
  * @author Vicente Yuen
@@ -139,8 +141,16 @@ public class ReqRepBroker implements RunnableFuture {
 			// --- reply content to another server ---
 
 			byte[] reply = frontend.recv(0);
+			/*
 			
-			//ZMsg msg = ZMsg.recvMsg( frontend );
+			ZMsg msg = ZMsg.recvMsg( frontend );
+			ZFrame zf = msg.poll();
+			
+			System.out.println(zf.getData().length);
+			
+			zf = msg.poll();
+			System.out.println(zf);
+			*/
 
 
 			

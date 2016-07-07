@@ -24,9 +24,9 @@ public class MultiNodeEventFlowImpl implements EventFlow , EventBusAware {
 	}
 
 	@Override
-	public OperationEvent getOperEvent(String eventName) {
+	public OperationEvent getOperEvent(String eventId) {
 		// TODO Auto-generated method stub
-		return flowManager.getOperEventById(eventName);
+		return flowManager.getOperEventById(eventId);
 	}
 
 	@Override

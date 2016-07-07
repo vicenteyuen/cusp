@@ -8,5 +8,6 @@
            {"host":"localhost","port":"8701"}
         ]
      }
-  }
+  },
+  "scan-packages":["org.vsg"]
 }

@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
 import org.vsg.cusp.concurrent.impl.PromiseImpl;
 import org.vsg.cusp.engine.zmq.JeroMQServEngine;
+import org.vsg.cusp.event.flow.FlowManager;
+import org.vsg.cusp.event.flow.FlowManagerFactory;
 import org.vsg.cusp.event.flow.impl.FlowManagerImpl;
 
 public class EventFlowTestCase01 {
@@ -31,19 +33,15 @@ public class EventFlowTestCase01 {
 	
 	
 	public void execute() {
+
+		FlowManagerFactory ff = FlowManagerFactory.getInstance();
 		
-		FlowManagerOptions flowManagerOpts = new FlowManagerOptions();
-		
-	
-		FlowManagerImpl efManager = new FlowManagerImpl(flowManagerOpts);
-		efManager.init();
-		eventFlow = efManager.getFlow("testcase");
+		FlowManager manager = ff.getManager();
+		eventFlow = manager.getFlow("testcase");
 		
 		Promise prom = eventFlow.promise( EventFlow.MODE_LOCAL );
 	
 		PromiseImpl piInst = (PromiseImpl)prom;
-
-		
 		
 		// --- add openeration event ---
 		OperationEvent  event1 =  eventFlow.getOperEvent("testCase1@" + MockOperationEventCls.class.getName());

@@ -1,5 +1,8 @@
 package org.vsg.cusp.concurrent.impl;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 public class FlowManagerOptions {
 	
 	
@@ -16,6 +19,19 @@ public class FlowManagerOptions {
 	public void setClustered(boolean clustered) {
 		this.clustered = clustered;
 	}
+	
+	
+	private Collection<String> scanPackages = new HashSet<String>();
+
+	public Collection<String> getScanPackages() {
+		return scanPackages;
+	}
+
+	public void setScanPackages(Collection<String> scanPackages) {
+		this.scanPackages = scanPackages;
+	}
+	
+	
 
 	
 	

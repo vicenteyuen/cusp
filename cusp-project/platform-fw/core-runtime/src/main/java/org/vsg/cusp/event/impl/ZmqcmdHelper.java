@@ -3,6 +3,8 @@
  */
 package org.vsg.cusp.event.impl;
 
+import java.util.List;
+
 import org.vsg.cusp.eventbus.impl.EventBusOptions;
 import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
 import org.vsg.cusp.eventbus.impl.MessageImpl;
@@ -38,22 +40,26 @@ public class ZmqcmdHelper {
 	}
 	
 	public void messageSent(MessageImpl message ,EventBusOptions options) {
-		Context clientContext = ZMQ.context(zmq.ZMQ.ZMQ_IO_THREADS);
-		// Socket to talk to server
-		Socket requester = clientContext.socket(ZMQ.REQ);
-
-		StringBuilder connProtocol = new StringBuilder("tcp://");
-		connProtocol.append("localhost");
-		connProtocol.append(":").append(options.getBrokerPort());
-		requester.connect(connProtocol.toString());
 
 		
-		if (null != encoder) {
-			byte[] content = encoder.encode(message);
-			requester.send(content, 0);
+		List<String>  senderHosts =  options.getSenderHosts();
+		// Socket to talk to server
+
+		for (String senderHost : senderHosts) {
+			Context clientContext = ZMQ.context(zmq.ZMQ.ZMQ_IO_THREADS);			
+			
+			Socket requester = clientContext.socket(ZMQ.REQ);
+			requester.connect(senderHost);			
+			if (null != encoder && senderHosts.size() > 0) {
+				byte[] content = encoder.encode(message);
+				requester.send(content, 0);
+			}
+			requester.close();
+			clientContext.term();
 		}
-		requester.close();
-		clientContext.term();
+		
+
+
 	}
 
 }

@@ -119,7 +119,6 @@ public class PromiseImpl implements Promise {
 				@Override
 				public void run() {
 					EventBus eventBus = flow.getEventBus();
-					
 					MessageProducer producer = eventBus.sender(EventFlow.EVB_CHANNEL);
 					producer.send(operEvent, handler);
 
