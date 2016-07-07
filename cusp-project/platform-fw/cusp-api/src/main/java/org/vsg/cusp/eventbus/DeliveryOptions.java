@@ -2,6 +2,8 @@ package org.vsg.cusp.eventbus;
 
 import java.util.Objects;
 
+import org.vsg.cusp.event.Message;
+
 public class DeliveryOptions {
 
 	 /**

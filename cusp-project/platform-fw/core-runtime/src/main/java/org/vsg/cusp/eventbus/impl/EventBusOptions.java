@@ -3,7 +3,11 @@
  */
 package org.vsg.cusp.eventbus.impl;
 
+import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.ExecutorService;
+
+import org.vsg.cusp.event.impl.ZmqcmdHelper;
 
 /**
  * @author Vicente Yuen
@@ -40,6 +44,41 @@ public class EventBusOptions {
 	public void setExecutorService(ExecutorService executorService) {
 		this.executorService = executorService;
 	}
+	
+	
+	private List<String> senderHosts = new Vector<String>();
+
+	public List<String> getSenderHosts() {
+		return senderHosts;
+	}
+
+	public void setSenderHosts(List<String> senderHosts) {
+		this.senderHosts = senderHosts;
+	}
+	
+	private String implClsName;
+
+	public String getImplClsName() {
+		return implClsName;
+	}
+
+	public void setImplClsName(String implClsName) {
+		this.implClsName = implClsName;
+	}
+	
+	
+	private ZmqcmdHelper cmdHelper;
+
+	public ZmqcmdHelper getCmdHelper() {
+		return cmdHelper;
+	}
+
+	public void setCmdHelper(ZmqcmdHelper cmdHelper) {
+		this.cmdHelper = cmdHelper;
+	}
+	
+	
+	
 	
 	
 

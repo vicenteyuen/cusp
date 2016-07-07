@@ -113,7 +113,7 @@ public class SimpleMessageRequestPack implements MessageRequestPack{
 		
 		// --- add message ---
 		sendMsgColl.add( byteContent );
-		
+
 		return byteContent;
 	}
 	
@@ -175,12 +175,7 @@ public class SimpleMessageRequestPack implements MessageRequestPack{
 		}
 		// --- custom event ---
 		else if (OperationEventMessageCodec.SYSTEMCODEC_ID == systemCodeId) {
-			
 			result = (byte[])body;
-			
-			
-			System.out.println("call oper event : " + new String(result));
-			
 		}
 			
 		

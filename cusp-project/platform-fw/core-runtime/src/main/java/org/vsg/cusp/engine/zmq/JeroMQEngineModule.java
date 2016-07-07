@@ -8,8 +8,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.core.modules.AbstractContainerModule;
+import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.vsg.cusp.eventbus.EventBus;
-import org.vsg.cusp.eventbus.impl.EventBusImpl;
 
 /**
  * @author Vicente Yuen
@@ -30,7 +30,7 @@ public class JeroMQEngineModule extends AbstractContainerModule implements ServE
 		
 		
 		//EventBusImpl ebi = new EventBusImpl();
-		this.bind(EventBus.class).to(EventBusImpl.class);
+		this.bind(EventBus.class).to(ZmqEventBusImplEndPoint.class);
 		
 
 		/*

@@ -2,11 +2,12 @@ package org.vsg.cusp.eventbus.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.CaseInsensitiveHeaders;
 import org.vsg.cusp.eventbus.DeliveryOptions;
 import org.vsg.cusp.eventbus.Handler;
-import org.vsg.cusp.eventbus.Message;
 import org.vsg.cusp.eventbus.MessageCodec;
 import org.vsg.cusp.eventbus.MultiMap;
 
@@ -30,7 +31,7 @@ public class MessageImpl<U, T> implements Message<T> {
 
 	private int headersPos;
 
-	private EventBusImpl bus;
+	private ZmqEventBusImplEndPoint bus;
 
 	private String replyAddress;
 
@@ -39,7 +40,7 @@ public class MessageImpl<U, T> implements Message<T> {
 	}
 
 	public MessageImpl(String address, U sentBody,
-			MessageCodec<U, T> messageCodec, boolean send, EventBusImpl bus) {
+			MessageCodec<U, T> messageCodec, boolean send, ZmqEventBusImplEndPoint bus) {
 		this.address = address;
 		this.sentBody = sentBody;
 		this.messageCodec = messageCodec;
@@ -47,11 +48,11 @@ public class MessageImpl<U, T> implements Message<T> {
 		this.bus = bus;
 	}
 
-	public EventBusImpl getBus() {
+	public ZmqEventBusImplEndPoint getBus() {
 		return bus;
 	}
 
-	public void setBus(EventBusImpl bus) {
+	public void setBus(ZmqEventBusImplEndPoint bus) {
 		this.bus = bus;
 	}
 

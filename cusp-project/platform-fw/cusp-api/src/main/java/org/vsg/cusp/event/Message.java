@@ -1,4 +1,9 @@
-package org.vsg.cusp.eventbus;
+package org.vsg.cusp.event;
+
+import org.vsg.cusp.eventbus.AsyncResult;
+import org.vsg.cusp.eventbus.DeliveryOptions;
+import org.vsg.cusp.eventbus.Handler;
+import org.vsg.cusp.eventbus.MultiMap;
 
 
 public interface Message<T> {

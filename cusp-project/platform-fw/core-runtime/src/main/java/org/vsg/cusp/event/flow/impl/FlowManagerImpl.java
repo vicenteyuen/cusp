@@ -1,4 +1,4 @@
-package org.vsg.cusp.concurrent.impl;
+package org.vsg.cusp.event.flow.impl;
 
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
@@ -7,18 +7,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.vsg.cusp.concurrent.EventFlow;
-import org.vsg.cusp.concurrent.EventFlowManager;
 import org.vsg.cusp.concurrent.EventInfo;
 import org.vsg.cusp.concurrent.OperationEvent;
-import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
+import org.vsg.cusp.concurrent.impl.MultiNodeEventFlowImpl;
+import org.vsg.cusp.concurrent.impl.OperationEventImpl;
+import org.vsg.cusp.concurrent.impl.SingleNodeEventFlowImpl;
 import org.vsg.cusp.core.utils.AnnotationReflectionUtils;
+import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.eventbus.AsyncResult;
+import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.EventBusAware;
 import org.vsg.cusp.eventbus.Handler;
-import org.vsg.cusp.eventbus.impl.EventBusImpl;
 import org.vsg.cusp.eventbus.impl.EventBusOptions;
 
-public class EventFlowManagerImpl implements EventFlowManager {
+public class FlowManagerImpl implements FlowManager, EventBusAware {
 	
 	
 	private Map<String, EventFlow> _efInstBinding = new LinkedHashMap<String , EventFlow>();
@@ -26,20 +29,18 @@ public class EventFlowManagerImpl implements EventFlowManager {
 	
 	private FlowManagerOptions flowManagerOptions;
 	
-	public EventFlowManagerImpl(FlowManagerOptions options) {
+	public FlowManagerImpl(FlowManagerOptions options) {
 		flowManagerOptions = options;
 	}
 	
-	private ServEngine internalEngine;
-	
+	private EventBus eventBus;
 
-	public ServEngine getInternalEngine() {
-		return internalEngine;
+	@Override
+	public void setEventBus(EventBus bus) {
+		// TODO Auto-generated method stub
+		this.eventBus = bus;
 	}
 
-	public void setInternalEngine(ServEngine internalEngine) {
-		this.internalEngine = internalEngine;
-	}
 
 	@Override
 	public EventFlow getFlow(String flowId) {
@@ -66,29 +67,8 @@ public class EventFlowManagerImpl implements EventFlowManager {
 		MultiNodeEventFlowImpl mnEventFlow = new MultiNodeEventFlowImpl();
 		mnEventFlow.setFlowManager( this );
 		
-		EventBusOptions ebOptions = new EventBusOptions();
-		
-		EventBusImpl ebi = new EventBusImpl(ebOptions);
-		
-		
-		/**
-		 * handle define event
-		 */
-		Handler<AsyncResult<Void>> completionHandler = new Handler<AsyncResult<Void>>() {
-
-			@Override
-			public void handle(AsyncResult<Void> event) {
-				// TODO Auto-generated method stub
-				System.out.println(event);
-			}
-			
-		};
-
-		
-		ebi.start(completionHandler);
-		
 		if ( mnEventFlow instanceof EventBusAware ) {
-			((EventBusAware)mnEventFlow).setEventBus( ebi );
+			((EventBusAware)mnEventFlow).setEventBus( eventBus );
 		}
 		
 		

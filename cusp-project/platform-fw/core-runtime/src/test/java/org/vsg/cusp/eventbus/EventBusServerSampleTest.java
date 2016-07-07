@@ -1,6 +1,6 @@
 package org.vsg.cusp.eventbus;
 
-import org.vsg.cusp.eventbus.impl.EventBusImpl;
+import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
@@ -8,7 +8,7 @@ import org.zeromq.ZMQ.Socket;
 public class EventBusServerSampleTest {
 
 	
-	private EventBusImpl ebi;
+	private ZmqEventBusImplEndPoint ebi;
 	
 	public EventBusServerSampleTest() {
 		// TODO Auto-generated constructor stub

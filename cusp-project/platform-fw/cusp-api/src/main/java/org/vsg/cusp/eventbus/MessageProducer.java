@@ -1,5 +1,7 @@
 package org.vsg.cusp.eventbus;
 
+import org.vsg.cusp.event.Message;
+
 public interface MessageProducer<T> {
 
 	  int DEFAULT_WRITE_QUEUE_MAX_SIZE = 1000;

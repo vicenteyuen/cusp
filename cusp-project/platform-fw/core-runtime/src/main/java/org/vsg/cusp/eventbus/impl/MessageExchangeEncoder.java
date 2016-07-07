@@ -1,8 +1,8 @@
 package org.vsg.cusp.eventbus.impl;
 
-import org.vsg.cusp.eventbus.Message;
+import org.vsg.cusp.event.Message;
 
-public interface MsgExchangeProtocol {
+public interface MessageExchangeEncoder {
 	
 	
 	byte[] encode(MessageImpl msg);

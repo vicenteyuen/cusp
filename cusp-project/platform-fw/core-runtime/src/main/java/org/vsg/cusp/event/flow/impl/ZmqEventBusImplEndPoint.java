@@ -1,4 +1,4 @@
-package org.vsg.cusp.eventbus.impl;
+package org.vsg.cusp.event.flow.impl;
 
 import java.util.Iterator;
 import java.util.List;
@@ -11,23 +11,32 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
+import org.vsg.cusp.event.impl.ZmqcmdHelper;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.DeliveryOptions;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
-import org.vsg.cusp.eventbus.Message;
 import org.vsg.cusp.eventbus.MessageCodec;
 import org.vsg.cusp.eventbus.MessageConsumer;
 import org.vsg.cusp.eventbus.MessageProducer;
 import org.vsg.cusp.eventbus.MultiMap;
 import org.vsg.cusp.eventbus.SendContext;
+import org.vsg.cusp.eventbus.impl.CodecManager;
+import org.vsg.cusp.eventbus.impl.EventBusOptions;
+import org.vsg.cusp.eventbus.impl.HandlerHolder;
+import org.vsg.cusp.eventbus.impl.HandlerRegistration;
+import org.vsg.cusp.eventbus.impl.Handlers;
+import org.vsg.cusp.eventbus.impl.MessageImpl;
+import org.vsg.cusp.eventbus.impl.MessageProducerImpl;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
 
-public class EventBusImpl implements EventBus {
+public class ZmqEventBusImplEndPoint implements EventBus {
 
-	private static Logger logger = LoggerFactory.getLogger(EventBusImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(ZmqEventBusImplEndPoint.class);
 
 	protected volatile boolean started;
 
@@ -37,23 +46,19 @@ public class EventBusImpl implements EventBus {
 
 	private EventBusOptions options;
 
-	public EventBusImpl(EventBusOptions options) {
-		// this.zmqContext = zmqContext;
-
+	public ZmqEventBusImplEndPoint(EventBusOptions options) {
 		this.options = options;
 
 		init();
 	}
 	
 	
-	private ZmqEndPointManager zepManager = new ZmqEndPointManager();
+	private ZmqcmdHelper cmdHelper;
 
 
 	private void init() {
-		
-		SimpleMsgExchangeProtocol mep = new SimpleMsgExchangeProtocol();
-		zepManager.setExcangeProtocol( mep );
-
+		// --- define helper ---
+		cmdHelper = options.getCmdHelper();
 	}
 
 	@Override
@@ -97,7 +102,7 @@ public class EventBusImpl implements EventBus {
 		return this;
 	}
 
-	protected MessageImpl createMessage(boolean send, String address,
+	public MessageImpl createMessage(boolean send, String address,
 			MultiMap headers, Object body, String codecName) {
 		Objects.requireNonNull(address, "no null address accepted");
 		MessageCodec codec = codecManager.lookupCodec(body, codecName);
@@ -150,8 +155,11 @@ public class EventBusImpl implements EventBus {
 			Handler<Message<T>> simpleReplyHandler = convertHandler(replyHandler);
 
 			Context context = ZMQ.context(1);
+		
 			Socket requester = context.socket(ZMQ.REQ);
 			requester.connect("tcp://localhost:5559");
+			
+
 
 			HandlerRegistration<T> registration = new HandlerRegistration<>(
 					requester);
@@ -346,7 +354,7 @@ public class EventBusImpl implements EventBus {
 		
 
 		// --- message send ---
-		zepManager.messageSent(message, options);
+		cmdHelper.messageSent(message, options);
 		// metrics.messageSent(message.address(), !message.send(), true, false);
 		deliverMessageLocally(sendContext);
 	}
@@ -365,7 +373,7 @@ public class EventBusImpl implements EventBus {
 		}
 	}
 
-	protected <T> void sendReply(MessageImpl replyMessage,
+	public <T> void sendReply(MessageImpl replyMessage,
 			MessageImpl replierMessage, DeliveryOptions options,
 			Handler<AsyncResult<Message<T>>> replyHandler) {
 		if (replyMessage.address() == null) {

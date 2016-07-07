@@ -1,5 +1,7 @@
 package org.vsg.cusp.eventbus;
 
+import org.vsg.cusp.event.Message;
+
 public interface MessageConsumer<T> {
 
 	MessageConsumer<T> exceptionHandler(Handler<Throwable> handler);

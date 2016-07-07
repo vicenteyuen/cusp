@@ -1,4 +1,4 @@
-package org.vsg.cusp.eventbus.impl;
+package org.vsg.cusp.event.impl;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -6,24 +6,20 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import org.vsg.cusp.core.utils.CorrelationIdGenerator;
-import org.vsg.cusp.eventbus.Message;
+import org.vsg.cusp.event.Message;
 import org.vsg.cusp.eventbus.MessageCodec;
+import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
+import org.vsg.cusp.eventbus.impl.MessageImpl;
+import org.vsg.cusp.eventbus.impl.SimpleMessageRequestPack;
 
 import com.google.common.primitives.Bytes;
 
-public class SimpleMsgExchangeProtocol implements MsgExchangeProtocol {
-
-	public SimpleMsgExchangeProtocol() {
-		// TODO Auto-generated constructor stub
-	}
-	
+public class DefaultMessageExchangeEncoder implements MessageExchangeEncoder {
 	
 	
 
 	@Override
 	public byte[] encode(MessageImpl msg) {
-		
-
 		
 		MessageCodec mc = msg.getMessageCodec();
 		

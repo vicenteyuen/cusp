@@ -1,7 +1,10 @@
-package org.vsg.cusp.concurrent;
+package org.vsg.cusp.event.flow;
+
+import org.vsg.cusp.concurrent.EventFlow;
+import org.vsg.cusp.concurrent.OperationEvent;
 
 
-public interface EventFlowManager {
+public interface FlowManager {
 	
 	
 	EventFlow getFlow(String flowId);
@@ -12,5 +15,7 @@ public interface EventFlowManager {
 	 * @return
 	 */
 	OperationEvent getOperEventById(String eventId) ;
+	
+	
 
 }

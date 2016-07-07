@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.AsyncTestBase;
-import org.vsg.cusp.eventbus.impl.EventBusImpl;
+import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.vsg.cusp.eventbus.impl.EventBusOptions;
 
 /**
@@ -27,7 +27,7 @@ public class EventBusTestBase extends AsyncTestBase {
 		EventBusOptions options = new EventBusOptions();
 		
 
-		EventBusImpl eventBusImpl = new EventBusImpl(options);
+		ZmqEventBusImplEndPoint eventBusImpl = new ZmqEventBusImplEndPoint(options);
 		
 		eventBusImpl.start(ar2 -> {
 			System.out.println(ar2);

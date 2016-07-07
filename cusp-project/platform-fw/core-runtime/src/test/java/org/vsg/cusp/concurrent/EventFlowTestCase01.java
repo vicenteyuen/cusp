@@ -6,10 +6,10 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.vsg.cusp.concurrent.impl.EventFlowManagerImpl;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
 import org.vsg.cusp.concurrent.impl.PromiseImpl;
 import org.vsg.cusp.engine.zmq.JeroMQServEngine;
+import org.vsg.cusp.event.flow.impl.FlowManagerImpl;
 
 public class EventFlowTestCase01 {
 	
@@ -35,7 +35,7 @@ public class EventFlowTestCase01 {
 		FlowManagerOptions flowManagerOpts = new FlowManagerOptions();
 		
 	
-		EventFlowManagerImpl efManager = new EventFlowManagerImpl(flowManagerOpts);
+		FlowManagerImpl efManager = new FlowManagerImpl(flowManagerOpts);
 		efManager.init();
 		eventFlow = efManager.getFlow("testcase");
 		

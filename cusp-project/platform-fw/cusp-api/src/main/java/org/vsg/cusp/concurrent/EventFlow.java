@@ -1,5 +1,6 @@
 package org.vsg.cusp.concurrent;
 
+import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
@@ -23,7 +24,7 @@ public interface EventFlow<T> {
 	 * define event flow manager
 	 * @return
 	 */
-	EventFlowManager getFlowManager();
+	FlowManager getFlowManager();
 	
 	
 	public static final byte MODE_LOCAL = 0;

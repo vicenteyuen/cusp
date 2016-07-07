@@ -1,12 +1,14 @@
 package org.vsg.cusp.concurrent;
 
+import org.vsg.cusp.event.flow.FlowManager;
+
 
 public class MockOperationEventCls {
 
 
 	
 	@EventInfo(id="testCase1")
-	public <U> void execTestCase1( EventFlowManager flowManager) throws Exception {
+	public <U> void execTestCase1( FlowManager flowManager) throws Exception {
 		
 		EventFlow  eventFlow =  flowManager.getFlow("test2");
 		
@@ -24,28 +26,28 @@ public class MockOperationEventCls {
 	
 	
 	@EventInfo(id="testCase2")
-	public <U> void execTestCase2( EventFlowManager flowManager) throws Exception {
+	public <U> void execTestCase2( FlowManager flowManager) throws Exception {
 
 		System.out.println("flow manager 2: " + flowManager);
 		
 	}
 	
 	@EventInfo(id="testCase3")
-	public <U> void execTestCase3(EventFlowManager flowManager) throws Exception {
+	public <U> void execTestCase3(FlowManager flowManager) throws Exception {
 
 		System.out.println("flow manager 3: " + flowManager);
 		
 	}	
 
 	@EventInfo(id="testCase4")
-	public <U> void execTestCase4(EventFlowManager flowManager) throws Exception {
+	public <U> void execTestCase4(FlowManager flowManager) throws Exception {
 
 		System.out.println("flow manager 4: " + flowManager);
 		
 	}
 	
 	@EventInfo(id="testCase5")
-	public <U> void execTestCase5(EventFlowManager flowManager) throws Exception {
+	public <U> void execTestCase5(FlowManager flowManager) throws Exception {
 		System.out.println("flow manager 5: " + flowManager);
 		
 	}		

@@ -1,34 +1,40 @@
 /**
  * 
  */
-package org.vsg.cusp.eventbus.impl;
+package org.vsg.cusp.event.impl;
 
+import org.vsg.cusp.eventbus.impl.EventBusOptions;
+import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
+import org.vsg.cusp.eventbus.impl.MessageImpl;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
 
 /**
- * @author vison
+ * @author Vicente Yuen
  *
  */
-public class ZmqEndPointManager {
+public class ZmqcmdHelper {
 	
 	
-	private  MsgExchangeProtocol excangeProtocol;
+	private  MessageExchangeEncoder encoder;
+
+	private EventBusOptions options;
 
 	/**
 	 * 
 	 */
-	public ZmqEndPointManager() {
-		// TODO Auto-generated constructor stub
+	public ZmqcmdHelper(EventBusOptions options) {
+		this.options = options;
+		this.options.setCmdHelper(this);
 	}
 
-	public MsgExchangeProtocol getExcangeProtocol() {
-		return excangeProtocol;
+	public MessageExchangeEncoder getEncoder() {
+		return encoder;
 	}
 
-	public void setExcangeProtocol(MsgExchangeProtocol excangeProtocol) {
-		this.excangeProtocol = excangeProtocol;
+	public void setEncoder(MessageExchangeEncoder encoder) {
+		this.encoder = encoder;
 	}
 	
 	public void messageSent(MessageImpl message ,EventBusOptions options) {
@@ -40,11 +46,10 @@ public class ZmqEndPointManager {
 		connProtocol.append("localhost");
 		connProtocol.append(":").append(options.getBrokerPort());
 		requester.connect(connProtocol.toString());
-		requester.setIdentity("test key : ".getBytes());
-		//requester.sendMore("hello");
 
-		if (null != excangeProtocol) {
-			byte[] content = excangeProtocol.encode(message);
+		
+		if (null != encoder) {
+			byte[] content = encoder.encode(message);
 			requester.send(content, 0);
 		}
 		requester.close();

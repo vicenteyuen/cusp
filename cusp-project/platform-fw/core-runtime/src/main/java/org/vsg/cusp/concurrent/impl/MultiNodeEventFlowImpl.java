@@ -1,26 +1,25 @@
 package org.vsg.cusp.concurrent.impl;
 
 import org.vsg.cusp.concurrent.EventFlow;
-import org.vsg.cusp.concurrent.EventFlowManager;
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.Promise;
+import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.EventBusAware;
 import org.vsg.cusp.eventbus.Handler;
 
 public class MultiNodeEventFlowImpl implements EventFlow , EventBusAware {
 	
-	private EventFlowManager flowManager;
-	
+	private FlowManager flowManager;
 	
 	private EventBus eventBus;
 	
 	@Override
-	public EventFlowManager getFlowManager() {
+	public FlowManager getFlowManager() {
 		return flowManager;
 	}
 
-	public void setFlowManager(EventFlowManager flowManager) {
+	public void setFlowManager(FlowManager flowManager) {
 		this.flowManager = flowManager;
 	}
 
