@@ -3,15 +3,16 @@ package org.vsg.cusp.eventbus.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.MessageCodec;
+import org.vsg.cusp.event.MessageCodecSupport;
 import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.CaseInsensitiveHeaders;
 import org.vsg.cusp.eventbus.DeliveryOptions;
 import org.vsg.cusp.eventbus.Handler;
-import org.vsg.cusp.eventbus.MessageCodec;
 import org.vsg.cusp.eventbus.MultiMap;
 
-public class MessageImpl<U, T> implements Message<T> {
+public class MessageImpl<U, T> implements Message<T> , MessageCodecSupport {
 
 	private static Logger log = LoggerFactory.getLogger(MessageImpl.class);
 
@@ -134,6 +135,7 @@ public class MessageImpl<U, T> implements Message<T> {
 		}
 	}
 	
+	@Override
 	public MessageCodec getMessageCodec() {
 		return this.messageCodec;
 	}

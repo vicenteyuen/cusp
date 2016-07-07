@@ -5,7 +5,7 @@ import org.vsg.cusp.event.Message;
 public interface MessageExchangeEncoder {
 	
 	
-	byte[] encode(MessageImpl msg);
+	byte[] encode(Message msg);
 	
 	
 	Message decode(byte[] msgBytes);

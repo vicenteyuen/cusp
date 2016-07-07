@@ -67,35 +67,29 @@ public class ReqRepWorker implements RunnableFuture {
 		
 		Context context = ZMQ.context (1);
 		
-        Socket responder = context.socket (ZMQ.REP);
-        responder.connect ("tcp://localhost:5560");
+        Socket receiver = context.socket (ZMQ.PULL);
+        receiver.connect ("tcp://localhost:5560");
 
         try {
         	logger.info("ReqRepWorker Running. ");
         	
 			while (!Thread.currentThread ().isInterrupted ()) {
 			    //  Wait for next request from client
-			    String string = responder.recvStr (0);
-			    
-			    if (logger.isDebugEnabled()) {
-			    	logger.debug("Received request: [%s] " + string);
-			    }
+	            byte[] task;
+	            while((task = receiver.recv(ZMQ.DONTWAIT)) != null) {
+	            	
+	            	// --- parse job message ---
+	            	
+	                System.out.println("process task size : " + task.length);
+	            }
 
-			    //  Do some 'work'
-			    Thread.sleep (1000);
-
-			    //  Send reply back to client
-			    responder.send ("World");
 			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} finally {
 			logger.info("ReqRepWorker shutdown. ");
 		}
         
         //  We never get here but clean up anyhow
-        responder.close();
+        receiver.close();
         context.term();
 	}
 

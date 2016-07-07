@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.vsg.cusp.concurrent.EventFlow;
-import org.vsg.cusp.concurrent.EventFlowManager;
+import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
@@ -33,7 +33,7 @@ public class ProductRest {
 	private EventBus eventBus;
 	
 	
-	private EventFlowManager efm;
+	private FlowManager efm;
 	
 	@GET
 	@Path("/{id}")
@@ -69,8 +69,8 @@ public class ProductRest {
 				
 			};
 			
-			ef.fire("org.vsg.cusp.evetimst.case1", new LinkedHashMap<String,Object>(), eventHandler);
-			ef.fire("org.vsg.cusp.evetimst.case2", new LinkedHashMap<String,Object>(), eventHandler);
+			//ef.fire("org.vsg.cusp.evetimst.case1", new LinkedHashMap<String,Object>(), eventHandler);
+			//ef.fire("org.vsg.cusp.evetimst.case2", new LinkedHashMap<String,Object>(), eventHandler);
 			
 
 

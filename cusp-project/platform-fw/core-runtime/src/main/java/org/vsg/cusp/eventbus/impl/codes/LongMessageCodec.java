@@ -3,7 +3,7 @@
  */
 package org.vsg.cusp.eventbus.impl.codes;
 
-import org.vsg.cusp.eventbus.MessageCodec;
+import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.eventbus.spi.Buffer;
 
 /**

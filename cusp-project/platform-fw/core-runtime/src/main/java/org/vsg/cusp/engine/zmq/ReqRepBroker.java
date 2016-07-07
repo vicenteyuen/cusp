@@ -114,13 +114,10 @@ public class ReqRepBroker implements RunnableFuture {
 		String frontendAddress = "tcp://*:"+brokerPort;
 		frontend.bind(frontendAddress);
 		
-		/*
-		Socket backend = context.socket(ZMQ.DEALER);
 		
+		Socket taskSocket = context.socket(ZMQ.PUSH);
+		taskSocket.bind("tcp://*:5560");
 
-		backend.bind("tcp://*:5560");
-		*/
-		
 		logger.info("launch ReqRepBroker at port: " + brokerPort);
 
 		// Initialize poll set
@@ -131,30 +128,21 @@ public class ReqRepBroker implements RunnableFuture {
 		boolean more = false;
 		byte[] message;
 		
-		
-
 		// Switch messages between sockets
 		while (!Thread.currentThread().isInterrupted()) {
 			// poll and memorize multipart detection
 			//items.poll();
 			
 			// --- reply content to another server ---
-
 			byte[] reply = frontend.recv(0);
-			/*
 			
-			ZMsg msg = ZMsg.recvMsg( frontend );
-			ZFrame zf = msg.poll();
+			// --- assign to another push task ---
+			taskSocket.send(reply , 0);
 			
-			System.out.println(zf.getData().length);
-			
-			zf = msg.poll();
-			System.out.println(zf);
-			*/
-
-
-			
-			System.out.println("received : " + reply.length);
+            String request = "world" ;
+            // Send the message
+            frontend.send(request.getBytes (ZMQ.CHARSET), 0);			
+						
 			//System.out.println("Received " + ": [" + new String(reply, ZMQ.CHARSET) + "]");
 
 			/*
@@ -193,7 +181,7 @@ public class ReqRepBroker implements RunnableFuture {
 		
 		// We never get here but clean up anyhow
 		frontend.close();
-		//backend.close();
+		taskSocket.close();
 		context.term();
 	}
 

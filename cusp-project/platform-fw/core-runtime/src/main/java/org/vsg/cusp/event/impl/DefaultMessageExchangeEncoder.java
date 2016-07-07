@@ -7,10 +7,11 @@ import java.net.UnknownHostException;
 
 import org.vsg.cusp.core.utils.CorrelationIdGenerator;
 import org.vsg.cusp.event.Message;
-import org.vsg.cusp.eventbus.MessageCodec;
+import org.vsg.cusp.event.MessageCodec;
+import org.vsg.cusp.event.MessageCodecSupport;
 import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
-import org.vsg.cusp.eventbus.impl.MessageImpl;
 import org.vsg.cusp.eventbus.impl.SimpleMessageRequestPack;
+import org.zeromq.ZMQ;
 
 import com.google.common.primitives.Bytes;
 
@@ -19,9 +20,13 @@ public class DefaultMessageExchangeEncoder implements MessageExchangeEncoder {
 	
 
 	@Override
-	public byte[] encode(MessageImpl msg) {
+	public byte[] encode(Message msg) {
 		
-		MessageCodec mc = msg.getMessageCodec();
+		MessageCodec mc = null;
+		if (msg instanceof MessageCodecSupport) {
+			MessageCodecSupport mcs = (MessageCodecSupport)msg;
+			mc = mcs.getMessageCodec();
+		}
 		
 		// --- encode content ---
 		int contentTotalLenght = 0;
@@ -58,6 +63,7 @@ public class DefaultMessageExchangeEncoder implements MessageExchangeEncoder {
 	@Override
 	public Message decode(byte[] msgBytes) {
 		// TODO Auto-generated method stub
+		System.out.println("Received2 " + new String (msgBytes, ZMQ.CHARSET) );		
 		return null;
 	}
 	

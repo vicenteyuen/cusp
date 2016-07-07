@@ -5,6 +5,7 @@ package org.vsg.cusp.event.impl;
 
 import java.util.List;
 
+import org.vsg.cusp.event.Message;
 import org.vsg.cusp.eventbus.impl.EventBusOptions;
 import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
 import org.vsg.cusp.eventbus.impl.MessageImpl;
@@ -40,8 +41,6 @@ public class ZmqcmdHelper {
 	}
 	
 	public void messageSent(MessageImpl message ,EventBusOptions options) {
-
-		
 		List<String>  senderHosts =  options.getSenderHosts();
 		// Socket to talk to server
 
@@ -53,7 +52,12 @@ public class ZmqcmdHelper {
 			if (null != encoder && senderHosts.size() > 0) {
 				byte[] content = encoder.encode(message);
 				requester.send(content, 0);
+				
+				// --- reply content ---
+				byte[] reply  = requester.recv(0);
+				Message replyMsg = encoder.decode( reply );
 			}
+			
 			requester.close();
 			clientContext.term();
 		}

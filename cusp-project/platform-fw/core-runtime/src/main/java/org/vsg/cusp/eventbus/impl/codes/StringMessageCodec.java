@@ -3,7 +3,7 @@ package org.vsg.cusp.eventbus.impl.codes;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import org.vsg.cusp.eventbus.MessageCodec;
+import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.eventbus.spi.Buffer;
 
 public class StringMessageCodec implements MessageCodec<String, String> {

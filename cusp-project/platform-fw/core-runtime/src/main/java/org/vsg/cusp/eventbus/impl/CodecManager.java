@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.impl.codes.OperationEventMessageCodec;
-import org.vsg.cusp.eventbus.MessageCodec;
+import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.eventbus.impl.codes.BooleanMessageCodec;
 import org.vsg.cusp.eventbus.impl.codes.BufferMessageCodec;
 import org.vsg.cusp.eventbus.impl.codes.ByteArrayMessageCodec;

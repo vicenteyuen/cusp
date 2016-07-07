@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 
 import org.vsg.cusp.concurrent.OperationEvent;
-import org.vsg.cusp.eventbus.MessageCodec;
+import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.eventbus.spi.Buffer;
 
 /**

@@ -60,11 +60,12 @@ public class JeroMQServEngine implements ServEngine , Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		ReqRepBroker broker = new ReqRepBroker();
-		
+		// --- internal worker ---
+		ReqRepWorker worker = new ReqRepWorker();
 		ExecutorService execService = Executors.newCachedThreadPool();
 		
 		execService.execute( broker );
-		
+		execService.execute( worker );
 		execService.shutdown();
 		
 	}

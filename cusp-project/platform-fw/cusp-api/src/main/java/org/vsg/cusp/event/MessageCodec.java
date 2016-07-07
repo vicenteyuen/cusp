@@ -1,4 +1,4 @@
-package org.vsg.cusp.eventbus;
+package org.vsg.cusp.event;
 
 import org.vsg.cusp.eventbus.spi.Buffer;
 

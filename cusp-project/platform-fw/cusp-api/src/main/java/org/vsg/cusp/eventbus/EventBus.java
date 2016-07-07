@@ -1,6 +1,7 @@
 package org.vsg.cusp.eventbus;
 
 import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.MessageCodec;
 
 /**
  * 
