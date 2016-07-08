@@ -2,11 +2,13 @@ package org.vsg.cusp.event.impl;
 
 import org.vsg.cusp.event.ReqMessageModel;
 
+import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.google.common.primitives.Shorts;
 
-public class ReqMessageSchemaDecoderImpl implements ReqMessageSchemaDecoder {
+public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , ReqMessageSchemaEncoder {
+	
 
 	@Override
 	public ReqMessageModel decode(byte[] inputContent) {
@@ -62,5 +64,38 @@ public class ReqMessageSchemaDecoderImpl implements ReqMessageSchemaDecoder {
 
 		model.setBody(contBytes);
 	}
+
+
+	@Override
+	public byte[] encode(ReqMessageModel model) {
+
+		
+		byte[] headerBytes = Bytes.concat(
+			new byte[]{model.getApiCodeId()},
+			Shorts.toByteArray(model.getVersion()),
+			Longs.toByteArray( model.getCorrelationId()),
+			model.getClientMac()
+		);		
+		
+		
+		return null;
+	}
+
+
+	@Override
+	public ReqMessageModel genFromBodyContent(byte[] bodyContent,
+			RequestMessage requestMessage) {
+		ReqMessageModel model = new ReqMessageModel();
+		model.setApiCodeId( requestMessage.getApiId() );
+		model.setVersion( requestMessage.getApiVersion() );
+		model.setCorrelationId( requestMessage.getCorrelationId() );
+		model.setClientMac( requestMessage.getClientAddress() );
+		// --- add client address ---
+
+		model.setBody( bodyContent );
+		return model;
+	}
+	
+	
 
 }

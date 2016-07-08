@@ -1,8 +1,16 @@
 package org.vsg.cusp.event.impl;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
+import org.vsg.cusp.core.utils.CorrelationIdGenerator;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
+import org.vsg.cusp.event.MessageCodecSupport;
 import org.vsg.cusp.event.RequestMessageDecoder;
+import org.vsg.cusp.event.RequestMessageEncoder;
 import org.vsg.cusp.eventbus.impl.CodecManager;
 import org.vsg.cusp.eventbus.impl.codes.BooleanMessageCodec;
 import org.vsg.cusp.eventbus.impl.codes.BufferMessageCodec;
@@ -17,10 +25,11 @@ import org.vsg.cusp.eventbus.impl.codes.NullMessageCodec;
 import org.vsg.cusp.eventbus.impl.codes.ShortMessageCodec;
 import org.vsg.cusp.eventbus.impl.codes.StringMessageCodec;
 
+import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 
-public class SingleRequestMessage {
+public class SingleRequestMessage extends AbstractRequestMessage {
 	
 	public static final byte CODE_ID = 1;
 	
@@ -42,8 +51,14 @@ public class SingleRequestMessage {
 		return reqMessageDecoder;
 	}
 	
+	private SingleRequestMessageEncoder reqMessageEncoder = new SingleRequestMessageEncoder();
 	
-	private static MessageCodec returnMsgCodecbySystemCodeId(byte systemCodeId) {
+	public RequestMessageEncoder getRequestMessageEncoder() {
+		return reqMessageEncoder;
+	}
+	
+	
+	private MessageCodec returnMsgCodecbySystemCodeId(byte systemCodeId) {
 		MessageCodec  msgCodec = null;
 		if ( NullMessageCodec.SYSTEMCODEC_ID == systemCodeId ) {
 			msgCodec = codecManager.getCodec("null");
@@ -140,6 +155,42 @@ public class SingleRequestMessage {
 		}
 
 
-	}	
+	}
+	
+	
+	private class SingleRequestMessageEncoder implements RequestMessageEncoder {
+
+		@Override
+		public <T> byte[] encode(Message<T> msg) {
+			
+			MessageCodec mc = null;
+			if (msg instanceof MessageCodecSupport) {
+				MessageCodecSupport mcs = (MessageCodecSupport)msg;
+				mc = mcs.getMessageCodec();
+			}
+			
+			// --- encode content ---
+			int contentTotalLenght = 0;
+			
+			byte[] cliendAddressIdBytes = getClientAddress();
+			CorrelationIdGenerator inst = CorrelationIdGenerator.genInstance(cliendAddressIdBytes);
+
+
+			// --- build message bytes ----
+			SimpleMessageRequestPack mp = new SimpleMessageRequestPack();
+			mp.setMesCodes(mc);
+			mp.setCorrelationIdGenerator(inst);
+			mp.setClientMac( cliendAddressIdBytes );
+			
+			mp.addMessageBody( msg.body() );
+			
+			byte[] headerBytes = mp.headerPack();
+
+			byte[] bodyBytes = mp.messagePack();
+		
+			return Bytes.concat(headerBytes , bodyBytes);
+		}
+		
+	}
 	
 }
