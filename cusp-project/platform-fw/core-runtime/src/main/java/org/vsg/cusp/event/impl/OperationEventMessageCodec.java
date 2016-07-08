@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vsg.cusp.concurrent.impl.codes;
+package org.vsg.cusp.event.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -17,7 +17,7 @@ import org.vsg.cusp.eventbus.spi.Buffer;
  */
 public class OperationEventMessageCodec implements MessageCodec<OperationEvent, byte[]> {
 	
-	public static final byte SYSTEMCODEC_ID = 12;
+	public static final byte SYSTEMCODEC_ID = -1;
 	
 
 	@Override

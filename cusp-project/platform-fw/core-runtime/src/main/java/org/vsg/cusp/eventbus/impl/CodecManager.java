@@ -5,8 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.vsg.cusp.concurrent.OperationEvent;
-import org.vsg.cusp.concurrent.impl.codes.OperationEventMessageCodec;
 import org.vsg.cusp.event.MessageCodec;
+import org.vsg.cusp.event.impl.OperationEventMessageCodec;
 import org.vsg.cusp.eventbus.impl.codes.BooleanMessageCodec;
 import org.vsg.cusp.eventbus.impl.codes.BufferMessageCodec;
 import org.vsg.cusp.eventbus.impl.codes.ByteArrayMessageCodec;
@@ -56,7 +56,7 @@ public class CodecManager {
 				BUFFER_MESSAGE_CODEC, BYTE_ARRAY_MESSAGE_CODEC,
 				INT_MESSAGE_CODEC, LONG_MESSAGE_CODEC, FLOAT_MESSAGE_CODEC,
 				DOUBLE_MESSAGE_CODEC, BOOLEAN_MESSAGE_CODEC,
-				SHORT_MESSAGE_CODEC, CHAR_MESSAGE_CODEC, BYTE_MESSAGE_CODEC , OPEREVENT_MESSAGE_CODEC);
+				SHORT_MESSAGE_CODEC, CHAR_MESSAGE_CODEC, BYTE_MESSAGE_CODEC);
 	}
 
 	public MessageCodec lookupCodec(Object body, String codecName) {
@@ -91,9 +91,6 @@ public class CodecManager {
 			codec = CHAR_MESSAGE_CODEC;
 		} else if (body instanceof Byte) {
 			codec = BYTE_MESSAGE_CODEC;
-		}
-		else if (body instanceof OperationEvent) {
-			codec = OPEREVENT_MESSAGE_CODEC;
 		}
 		else {
 			codec = defaultCodecMap.get(body.getClass());

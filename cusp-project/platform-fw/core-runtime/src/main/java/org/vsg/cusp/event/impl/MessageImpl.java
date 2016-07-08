@@ -1,4 +1,4 @@
-package org.vsg.cusp.eventbus.impl;
+package org.vsg.cusp.event.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +73,70 @@ public class MessageImpl<U, T> implements Message<T> , MessageCodecSupport {
 	public String address() {
 		return address;
 	}
+
+	
+	
+	String getAddress() {
+		return address;
+	}
+
+	void setAddress(String address) {
+		this.address = address;
+	}
+
+	U getSentBody() {
+		return sentBody;
+	}
+
+	void setSentBody(U sentBody) {
+		this.sentBody = sentBody;
+	}
+
+	T getReceivedBody() {
+		return receivedBody;
+	}
+
+	void setReceivedBody(T receivedBody) {
+		this.receivedBody = receivedBody;
+	}
+
+	boolean isSend() {
+		return send;
+	}
+
+	void setSend(boolean send) {
+		this.send = send;
+	}
+
+	int getBodyPos() {
+		return bodyPos;
+	}
+
+	void setBodyPos(int bodyPos) {
+		this.bodyPos = bodyPos;
+	}
+
+	int getHeadersPos() {
+		return headersPos;
+	}
+
+	void setHeadersPos(int headersPos) {
+		this.headersPos = headersPos;
+	}
+
+	MultiMap getHeaders() {
+		return headers;
+	}
+
+	void setHeaders(MultiMap headers) {
+		this.headers = headers;
+	}
+
+	void setMessageCodec(MessageCodec<U, T> messageCodec) {
+		this.messageCodec = messageCodec;
+	}
+
+
 
 	private MultiMap headers;
 

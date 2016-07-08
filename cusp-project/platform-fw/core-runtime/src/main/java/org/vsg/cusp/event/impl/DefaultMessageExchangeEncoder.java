@@ -10,13 +10,15 @@ import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.event.MessageCodecSupport;
 import org.vsg.cusp.event.ReqMessageModel;
+import org.vsg.cusp.event.RequestMessageDecoder;
+import org.vsg.cusp.eventbus.impl.CodecManager;
 import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
 
 import com.google.common.primitives.Bytes;
 
 public class DefaultMessageExchangeEncoder implements MessageExchangeEncoder {
 	
-	
+	protected CodecManager codecManager = new CodecManager();
 
 	@Override
 	public byte[] encode(Message msg) {
@@ -53,21 +55,35 @@ public class DefaultMessageExchangeEncoder implements MessageExchangeEncoder {
 		mp.addMessageBody( msg.body() );
 		
 		byte[] headerBytes = mp.headerPack();
-		
+
 		byte[] bodyBytes = mp.messagePack();
 	
-		return Bytes.concat( headerBytes, bodyBytes );
+		return Bytes.concat(headerBytes , bodyBytes);
 	}
 
 	@Override
 	public Message decode(byte[] msgBytes) {
 		// TODO Auto-generated method stub
-		ReqMessageSchemerDecoderImpl decoder = new ReqMessageSchemerDecoderImpl();
+		ReqMessageSchemaDecoderImpl decoder = new ReqMessageSchemaDecoderImpl();
 		ReqMessageModel reqMsgModel = decoder.decode(msgBytes);
-	
-		System.out.println("correct id : " + reqMsgModel.getCorrelationId());
 		
-		return null;
+		// --- decode message type ---
+		byte apiCodeId = reqMsgModel.getApiCodeId();
+		
+		Message msgImpl = null;
+		if (SingleRequestMessage.CODE_ID == apiCodeId) {
+			SingleRequestMessage reqMsg = new SingleRequestMessage();
+			RequestMessageDecoder reqMsgDecoder =  reqMsg.getRequestManagerDecoder();
+
+			msgImpl = reqMsgDecoder.decode( reqMsgModel.getBody() );
+		}
+		
+		System.out.println(msgImpl);
+
+
+
+		
+		return msgImpl;
 	}
 	
 	

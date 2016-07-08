@@ -135,6 +135,11 @@ public class ReqRepBroker implements RunnableFuture {
 			
 			// --- reply content to another server ---
 			byte[] reply = frontend.recv(0);
+			StringBuilder output = new StringBuilder("reveive : ");
+			for (byte con : reply) {
+				output.append(con).append(" ");
+			}
+			System.out.println(output);			
 			
 			// --- assign to another push task ---
 			taskSocket.send(reply , 0);

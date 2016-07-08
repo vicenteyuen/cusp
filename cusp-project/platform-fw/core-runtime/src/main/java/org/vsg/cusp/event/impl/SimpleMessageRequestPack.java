@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.vsg.cusp.concurrent.OperationEvent;
-import org.vsg.cusp.concurrent.impl.codes.OperationEventMessageCodec;
 import org.vsg.cusp.core.utils.ByteUtils;
 import org.vsg.cusp.core.utils.CorrelationIdGenerator;
 import org.vsg.cusp.event.MessageCodec;
@@ -83,9 +82,6 @@ public class SimpleMessageRequestPack implements MessageRequestPack{
 		
 		long corrId = correlationIdGenerator.generate(0);
 		
-		System.out.println("corrId : " + corrId);
-
-
 		byte[] headerBytes = Bytes.concat(
 			new byte[]{APICODEID},
 			Shorts.toByteArray(VERSION),
@@ -109,6 +105,8 @@ public class SimpleMessageRequestPack implements MessageRequestPack{
 		byte[] sysCodeIdBytes = new byte[]{systemCodeId};
 		byte[] compressBytes = new byte[]{0}; // none->0 , gzip->1 , snappy->2
 		byte[] timestampBytes = Longs.toByteArray(System.currentTimeMillis());
+
+		
 		
 		// --- msg content leng ---
 		byte[] bodyContentLength = Ints.toByteArray( contentResult.length );

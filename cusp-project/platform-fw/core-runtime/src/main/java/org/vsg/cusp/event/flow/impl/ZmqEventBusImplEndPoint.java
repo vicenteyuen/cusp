@@ -13,7 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
-import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
+import org.vsg.cusp.event.impl.MessageImpl;
+import org.vsg.cusp.event.impl.OperationEventMessageCodec;
 import org.vsg.cusp.event.impl.ZmqcmdHelper;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.DeliveryOptions;
@@ -28,7 +29,6 @@ import org.vsg.cusp.eventbus.impl.EventBusOptions;
 import org.vsg.cusp.eventbus.impl.HandlerHolder;
 import org.vsg.cusp.eventbus.impl.HandlerRegistration;
 import org.vsg.cusp.eventbus.impl.Handlers;
-import org.vsg.cusp.eventbus.impl.MessageImpl;
 import org.vsg.cusp.eventbus.impl.MessageProducerImpl;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
@@ -59,6 +59,7 @@ public class ZmqEventBusImplEndPoint implements EventBus {
 	private void init() {
 		// --- define helper ---
 		cmdHelper = options.getCmdHelper();
+		codecManager.registerCodec( new OperationEventMessageCodec() );
 	}
 
 	@Override
@@ -386,7 +387,7 @@ public class ZmqEventBusImplEndPoint implements EventBus {
 	}
 
 	protected <T> boolean deliverMessageLocally(MessageImpl msg) {
-		msg.setBus(this);
+		//msg.setBus(this);
 		Handlers handlers = handlerMap.get(msg.address());
 
 		if (handlers != null) {
