@@ -17,7 +17,6 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 		model.setApiCodeId( inputContent[index++] );
 		
 		// --- get version content ---
-		
 		int locFrom = index++;
 		int locTo = locFrom + Short.BYTES;
 		

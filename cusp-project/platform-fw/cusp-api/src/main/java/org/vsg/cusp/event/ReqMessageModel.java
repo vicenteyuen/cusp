@@ -20,6 +20,8 @@ public class ReqMessageModel implements Serializable {
 	
 	private long correlationId;
 	
+	private String address;
+	
 	private byte[] body;
 
 	public byte getApiCodeId() {
@@ -60,6 +62,14 @@ public class ReqMessageModel implements Serializable {
 
 	public void setBody(byte[] body) {
 		this.body = body;
+	}
+
+	String getAddress() {
+		return address;
+	}
+
+	void setAddress(String address) {
+		this.address = address;
 	}
 	
 	
