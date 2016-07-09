@@ -23,15 +23,10 @@ import org.vsg.cusp.eventbus.spi.Buffer;
 
 public class CodecManager {
 	// The standard message codecs
-	// public static final MessageCodec<String, String> PING_MESSAGE_CODEC = new
-	// PingMessageCodec();
 	public static final MessageCodec<String, String> NULL_MESSAGE_CODEC = new NullMessageCodec();
 	public static final MessageCodec<String, String> STRING_MESSAGE_CODEC = new StringMessageCodec();
 	public static final MessageCodec<Buffer, Buffer> BUFFER_MESSAGE_CODEC = new BufferMessageCodec();
-	// public static final MessageCodec<JsonObject, JsonObject>
-	// JSON_OBJECT_MESSAGE_CODEC = new JsonObjectMessageCodec();
-	// public static final MessageCodec<JsonArray, JsonArray>
-	// JSON_ARRAY_MESSAGE_CODEC = new JsonArrayMessageCodec();
+
 	public static final MessageCodec<byte[], byte[]> BYTE_ARRAY_MESSAGE_CODEC = new ByteArrayMessageCodec();
 	public static final MessageCodec<Integer, Integer> INT_MESSAGE_CODEC = new IntMessageCodec();
 	public static final MessageCodec<Long, Long> LONG_MESSAGE_CODEC = new LongMessageCodec();

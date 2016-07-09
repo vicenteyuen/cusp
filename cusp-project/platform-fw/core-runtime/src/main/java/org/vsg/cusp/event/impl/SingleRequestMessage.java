@@ -1,10 +1,5 @@
 package org.vsg.cusp.event.impl;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-
 import org.vsg.cusp.core.utils.CorrelationIdGenerator;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
@@ -30,14 +25,13 @@ import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 
 public class SingleRequestMessage extends AbstractRequestMessage {
-	
-	public static final byte CODE_ID = 1;
+
 	
 	protected static CodecManager codecManager = new CodecManager();
 	
 	
 	public SingleRequestMessage() {
-		codecManager.registerCodec( new OperationEventMessageCodec() );
+		//codecManager.registerCodec( new OperationEventMessageCodec() );
 	}
 	
 	
@@ -163,6 +157,7 @@ public class SingleRequestMessage extends AbstractRequestMessage {
 		@Override
 		public <T> byte[] encode(Message<T> msg) {
 			
+			System.out.println("address : " + msg.address());
 			MessageCodec mc = null;
 			if (msg instanceof MessageCodecSupport) {
 				MessageCodecSupport mcs = (MessageCodecSupport)msg;

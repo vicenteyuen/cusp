@@ -7,20 +7,20 @@ import java.util.ListIterator;
 import java.util.Objects;
 import java.util.Vector;
 import java.util.concurrent.AbstractExecutorService;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.ExecTaskFuture;
 import org.vsg.cusp.concurrent.OperationEvent;
-import org.vsg.cusp.concurrent.Promise;
 import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
@@ -35,7 +35,8 @@ public class PromiseImpl implements Promise {
 	public EventFlow getFlow() {
 		return flow;
 	}
-
+	
+	@Inject
 	public void setFlow(EventFlow flow) {
 		this.flow = flow;
 	}

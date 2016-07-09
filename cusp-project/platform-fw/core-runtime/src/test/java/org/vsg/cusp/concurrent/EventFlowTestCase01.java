@@ -2,16 +2,15 @@ package org.vsg.cusp.concurrent;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
-import org.vsg.cusp.concurrent.impl.PromiseImpl;
-import org.vsg.cusp.engine.zmq.JeroMQServEngine;
+import org.vsg.cusp.engine.zmq.JeroMQEngineModule;
+import org.vsg.cusp.event.common.EventModule;
 import org.vsg.cusp.event.flow.FlowManager;
-import org.vsg.cusp.event.flow.FlowManagerFactory;
-import org.vsg.cusp.event.flow.impl.FlowManagerImpl;
+import org.vsg.cusp.event.flow.Promise;
+
+import com.google.common.eventbus.EventBus;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class EventFlowTestCase01 {
 	
@@ -23,9 +22,9 @@ public class EventFlowTestCase01 {
 	public void start() {
 		
 		// --- start engine ---
-		JeroMQServEngine servEngine = new JeroMQServEngine();
+		//JeroMQServEngine servEngine = new JeroMQServEngine();
 		
-		servEngine.start();
+		//servEngine.start();
 		
 		
 	}
@@ -33,15 +32,18 @@ public class EventFlowTestCase01 {
 	
 	
 	public void execute() {
+		
+		JeroMQEngineModule mqEngineModule = new JeroMQEngineModule();
+		
+		EventModule evtMod = new EventModule();
+		
+		Injector inject = Guice.createInjector(mqEngineModule , evtMod);
+		
+		FlowManager manager =  inject.getInstance( FlowManager.class );
 
-		FlowManagerFactory ff = FlowManagerFactory.getInstance();
-		
-		FlowManager manager = ff.getManager();
 		eventFlow = manager.getFlow("testcase");
-		
-		Promise prom = eventFlow.promise( EventFlow.MODE_LOCAL );
 	
-		PromiseImpl piInst = (PromiseImpl)prom;
+		Promise prom = eventFlow.promise( EventFlow.MODE_LOCAL );
 		
 		// --- add openeration event ---
 		OperationEvent  event1 =  eventFlow.getOperEvent("testCase1@" + MockOperationEventCls.class.getName());
@@ -64,6 +66,7 @@ public class EventFlowTestCase01 {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 
 
 	}

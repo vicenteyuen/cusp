@@ -2,13 +2,14 @@ package org.vsg.cusp.concurrent.impl;
 
 import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.OperationEvent;
-import org.vsg.cusp.concurrent.Promise;
 import org.vsg.cusp.event.flow.FlowManager;
+import org.vsg.cusp.event.flow.Promise;
+import org.vsg.cusp.event.flow.PromiseAware;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.EventBusAware;
 import org.vsg.cusp.eventbus.Handler;
 
-public class MultiNodeEventFlowImpl implements EventFlow , EventBusAware {
+public class MultiNodeEventFlowImpl implements EventFlow , EventBusAware ,  PromiseAware {
 	
 	private FlowManager flowManager;
 	
@@ -44,16 +45,19 @@ public class MultiNodeEventFlowImpl implements EventFlow , EventBusAware {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
-	private PromiseImpl prom;
+
+	@Override
+	public void setPromise(Promise promise) {
+		// TODO Auto-generated method stub
+		this.prom = promise;
+	}
+
+	private Promise prom;
 	
 
 	@Override
 	public Promise promise(byte mode) {
-		
-		prom = new PromiseImpl();
-		prom.setFlow( this );
+
 		if (mode == 1) {
 			
 		} 

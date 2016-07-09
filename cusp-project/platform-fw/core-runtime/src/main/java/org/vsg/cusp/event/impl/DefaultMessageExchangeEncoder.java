@@ -36,7 +36,7 @@ public class DefaultMessageExchangeEncoder implements MessageExchangeEncoder {
 		byte apiCodeId = reqMsgModel.getApiCodeId();
 		
 		Message msgImpl = null;
-		if (SingleRequestMessage.CODE_ID == apiCodeId) {
+		if (reqMsg.getApiId() == apiCodeId) {
 			RequestMessageDecoder reqMsgDecoder =  reqMsg.getRequestManagerDecoder();
 			msgImpl = reqMsgDecoder.decode( reqMsgModel.getBody() );
 		}

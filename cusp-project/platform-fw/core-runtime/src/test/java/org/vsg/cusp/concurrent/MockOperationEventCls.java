@@ -1,6 +1,7 @@
 package org.vsg.cusp.concurrent;
 
 import org.vsg.cusp.event.flow.FlowManager;
+import org.vsg.cusp.event.flow.Promise;
 
 
 public class MockOperationEventCls {

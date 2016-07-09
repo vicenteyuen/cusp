@@ -9,6 +9,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
@@ -42,7 +44,7 @@ public class ZmqEventBusImplEndPoint implements EventBus {
 
 	protected ConcurrentMap<String, Handlers> handlerMap = new ConcurrentHashMap<>();
 
-	protected CodecManager codecManager = new CodecManager();
+	protected CodecManager codecManager;
 
 	private EventBusOptions options;
 
@@ -52,6 +54,11 @@ public class ZmqEventBusImplEndPoint implements EventBus {
 		init();
 	}
 	
+	@Inject
+	public void setCodecManager(CodecManager codeManager) {
+		this.codecManager = codeManager;
+	}
+	
 	
 	private ZmqcmdHelper cmdHelper;
 
@@ -59,7 +66,6 @@ public class ZmqEventBusImplEndPoint implements EventBus {
 	private void init() {
 		// --- define helper ---
 		cmdHelper = options.getCmdHelper();
-		codecManager.registerCodec( new OperationEventMessageCodec() );
 	}
 
 	@Override
@@ -107,9 +113,7 @@ public class ZmqEventBusImplEndPoint implements EventBus {
 			MultiMap headers, Object body, String codecName) {
 		Objects.requireNonNull(address, "no null address accepted");
 		MessageCodec codec = codecManager.lookupCodec(body, codecName);
-		
 		MessageImpl msg = new MessageImpl(address, body, codec, true, this);
-
 		return msg;
 	}
 

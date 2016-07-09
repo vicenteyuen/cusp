@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.EventInfo;
 import org.vsg.cusp.concurrent.OperationEvent;
@@ -16,6 +18,8 @@ import org.vsg.cusp.concurrent.impl.OperationEventImpl;
 import org.vsg.cusp.concurrent.impl.SingleNodeEventFlowImpl;
 import org.vsg.cusp.core.utils.AnnotationReflectionUtils;
 import org.vsg.cusp.event.flow.FlowManager;
+import org.vsg.cusp.event.flow.Promise;
+import org.vsg.cusp.event.flow.PromiseAware;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.EventBusAware;
 
@@ -29,17 +33,23 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 	
 	public FlowManagerImpl(FlowManagerOptions options) {
 		flowManagerOptions = options;
-		
 		init();
-		
 	}
-	
-	private EventBus eventBus;
 
+	private EventBus eventBus;
+	
+	@Inject
 	@Override
 	public void setEventBus(EventBus bus) {
 		// TODO Auto-generated method stub
 		this.eventBus = bus;
+	}
+	
+	private  Promise promise;
+	
+	@Inject
+	public void setPromise(Promise promise) {
+		this.promise = promise;
 	}
 
 
@@ -59,6 +69,12 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 				efi.setFlowManager( this );
 				eventFlow = efi;
 			}
+			
+			if (eventFlow instanceof Promise) {
+				PromiseAware promiseAware = ((PromiseAware)eventFlow);
+				promiseAware.setPromise(promise);
+			}
+			
 			_efInstBinding.put( flowId , eventFlow);
 		}
 		return eventFlow;

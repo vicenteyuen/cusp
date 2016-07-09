@@ -1,4 +1,6 @@
-package org.vsg.cusp.concurrent;
+package org.vsg.cusp.event.flow;
+
+import org.vsg.cusp.concurrent.OperationEvent;
 
 public interface Promise<V> {
 	

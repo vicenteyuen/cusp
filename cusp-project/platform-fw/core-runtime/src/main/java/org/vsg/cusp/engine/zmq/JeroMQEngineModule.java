@@ -29,23 +29,9 @@ public class JeroMQEngineModule extends AbstractContainerModule implements ServE
 		// --- start mqbroker ---
 		
 		
-		//EventBusImpl ebi = new EventBusImpl();
-		this.bind(EventBus.class).to(ZmqEventBusImplEndPoint.class);
+		JeroMQServEngine servEngine = new JeroMQServEngine();
 		
-
-		/*
-		Iterator<ServEngine> engineIter =  engines.iterator();
-		while (engineIter.hasNext()){
-			ServEngine engineItem =  engineIter.next();
-			engineItem.setRunningContainer(this.getContainer());
-			engineItem.start();
-		}
-		*/
-		
-		// --- start mq broker --
-		
-		Thread mqstartThread = new Thread(this);
-		mqstartThread.start();
+		servEngine.start();
 		
 		
 	}
@@ -57,19 +43,7 @@ public class JeroMQEngineModule extends AbstractContainerModule implements ServE
 	@Override
 	public void run() {
 		
-		// --- create Request Response MQ Quere ---
-		ReqRepBroker rrbroker = new ReqRepBroker();
-		ReqRepWorker rrWorker = new ReqRepWorker();
 
-		
-		
-		
-		ScheduledThreadPoolExecutor  stpe = new ScheduledThreadPoolExecutor(10);
-		
-		
-		
-		stpe.execute( rrWorker);
-		stpe.execute( rrbroker );
 		
 	}
 

@@ -58,8 +58,8 @@ public class FlowManagerFactoryImpl implements FlowManagerFactory {
 			
 			flowManager = cls.getDeclaredConstructor(FlowManagerOptions.class).newInstance(options);
 			
-			EventBusOptions ebOptions = parseConfForEventBus(jsonConf);
-			injectEventBus(flowManager , ebOptions);
+			//EventBusOptions ebOptions = parseConfForEventBus(jsonConf);
+			//injectEventBus(flowManager , ebOptions);
 			
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			// TODO Auto-generated catch block
@@ -80,51 +80,7 @@ public class FlowManagerFactoryImpl implements FlowManagerFactory {
 	}
 	
 	
-	/**
-	 * parse config options
-	 * @param jsonConf
-	 * @return
-	 * @throws ClassNotFoundException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 */
-	private EventBusOptions parseConfForEventBus(JSONObject jsonConf) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		EventBusOptions options = new EventBusOptions();
-		
-		JSONObject eventBusConf =  jsonConf.getObject("event-bus", JSONObject.class);
-		
-		options.setImplClsName( eventBusConf.getString("impl") );
-		
-		JSONObject optionsConf = eventBusConf.getJSONObject("options");
-		
-		JSONArray  jsonArray = optionsConf.getJSONArray("senders");
 
-		for (int i = 0 ; i < jsonArray.size() ; i++) {
-			JSONObject senderConf = (JSONObject)jsonArray.get(i);
-			
-			StringBuilder hostStr = null;
-			if (null != senderConf.getString("protocol") ) {
-				hostStr = new StringBuilder(senderConf.getString("protocol"));
-			} else {
-				hostStr = new StringBuilder("tcp://");
-			}
-			hostStr.append( senderConf.getString("host") );
-			hostStr.append( ":" ).append(senderConf.getIntValue("port"));
-			options.getSenderHosts().add(hostStr.toString());
-		}
-		
-		
-		// --- parse encoder ---
-		String encoderClsName = eventBusConf.getString("encoder");
-		Class<MessageExchangeEncoder>  encoderCls =  (Class<MessageExchangeEncoder>)Class.forName(encoderClsName);
-		MessageExchangeEncoder msgEncoder = encoderCls.newInstance();
-		
-		ZmqcmdHelper helper = new ZmqcmdHelper(options);
-		helper.setEncoder( msgEncoder );
-		
-
-		return options;
-	}
 	
 	
 	
