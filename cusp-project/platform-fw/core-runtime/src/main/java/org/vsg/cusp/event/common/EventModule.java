@@ -3,19 +3,15 @@ package org.vsg.cusp.event.common;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.rapidoid.concurrent.Promise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
-import org.vsg.cusp.concurrent.impl.PromiseImpl;
 import org.vsg.cusp.event.flow.FlowManager;
-import org.vsg.cusp.event.flow.impl.FlowManagerProvider;
+import org.vsg.cusp.event.flow.impl.FlowManagerImpl;
 import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
-import org.vsg.cusp.event.impl.EventBusProvider;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;
 import org.vsg.cusp.event.impl.ZmqcmdHelper;
 import org.vsg.cusp.eventbus.AsyncResult;
-import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
 import org.vsg.cusp.eventbus.impl.CodecManager;
 import org.vsg.cusp.eventbus.impl.EventBusOptions;
@@ -65,30 +61,33 @@ public class EventModule extends AbstractModule {
 			
 			FlowManagerOptions options = parseConfForManagerOptions(jsonConf);
 			
+			this.bind( FlowManagerOptions.class ).toInstance( options  );
+			/*
 			FlowManagerProvider flowManagerProvider = new FlowManagerProvider();
 			flowManagerProvider.setFlowManagerInstCls( cls );
 			flowManagerProvider.setOptions( options );
 			
 			this.bind(FlowManager.class ).toProvider( flowManagerProvider );
+			*/
+			this.bind(FlowManager.class).to( FlowManagerImpl.class );
 
-	
-			
 			CodecManager codecManager = new CodecManager();
 			codecManager.registerCodec(new OperationEventMessageCodec());
 			this.bind(CodecManager.class).toInstance( codecManager );
 
-			
-			// --- operation event bus ---
 			EventBusOptions ebOptions = parseConfForEventBus(jsonConf);
+			this.bind( EventBusOptions.class ).toInstance( ebOptions );
+			// --- operation event bus ---
+			/*
+
 			EventBusProvider eventBusProvider = new EventBusProvider();
 			eventBusProvider.setOptions( ebOptions );
 			this.bind( EventBus.class ).toProvider( eventBusProvider);
 			
 			
 			// --- set promise ----
-			PromiseImpl promise = new PromiseImpl();
-			this.bind(org.vsg.cusp.event.flow.Promise.class).toInstance(promise);
-			
+			this.bind(org.vsg.cusp.event.flow.Promise.class).toProvider(PromiseProvider.class);
+			*/
 			
 		} catch (ClassNotFoundException | IllegalArgumentException |  SecurityException e) {
 			// TODO Auto-generated catch block
@@ -99,7 +98,7 @@ public class EventModule extends AbstractModule {
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
 	}
 	
 	/**

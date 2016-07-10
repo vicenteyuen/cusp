@@ -36,7 +36,6 @@ public class PromiseImpl implements Promise {
 		return flow;
 	}
 	
-	@Inject
 	public void setFlow(EventFlow flow) {
 		this.flow = flow;
 	}

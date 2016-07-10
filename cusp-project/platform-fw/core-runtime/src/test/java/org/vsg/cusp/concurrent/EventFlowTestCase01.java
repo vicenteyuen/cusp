@@ -44,8 +44,9 @@ public class EventFlowTestCase01 {
 		eventFlow = manager.getFlow("testcase");
 	
 		Promise prom = eventFlow.promise( EventFlow.MODE_LOCAL );
-		
+
 		// --- add openeration event ---
+		/*
 		OperationEvent  event1 =  eventFlow.getOperEvent("testCase1@" + MockOperationEventCls.class.getName());
 		OperationEvent  event2 =  eventFlow.getOperEvent("testCase2@" + MockOperationEventCls.class.getName());
 		OperationEvent  event3 =  eventFlow.getOperEvent("testCase3@" + MockOperationEventCls.class.getName());
@@ -53,6 +54,7 @@ public class EventFlowTestCase01 {
 		OperationEvent  event5 =  eventFlow.getOperEvent("testCase5@" + MockOperationEventCls.class.getName());
 		
 		try {
+
 			
 			prom.addOperationEvent(event1);
 			prom.addOperationEvent(event2);
@@ -66,6 +68,7 @@ public class EventFlowTestCase01 {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		
 
 

@@ -31,6 +31,7 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 	
 	private FlowManagerOptions flowManagerOptions;
 	
+	@Inject	
 	public FlowManagerImpl(FlowManagerOptions options) {
 		flowManagerOptions = options;
 		init();
@@ -38,17 +39,17 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 
 	private EventBus eventBus;
 	
-	@Inject
+
 	@Override
 	public void setEventBus(EventBus bus) {
 		// TODO Auto-generated method stub
 		this.eventBus = bus;
 	}
 	
-	private  Promise promise;
+	private Promise<?> promise;
 	
-	@Inject
-	public void setPromise(Promise promise) {
+
+	public void setPromise(Promise<?> promise) {
 		this.promise = promise;
 	}
 
@@ -56,6 +57,8 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 	@Override
 	public EventFlow getFlow(String flowId) {
 		// TODO Auto-generated method stub
+		System.out.println(this.eventBus );
+		System.out.println( this.promise);
 		EventFlow  eventFlow =  _efInstBinding.get(flowId);
 		if (null == eventFlow) {
 			
@@ -70,6 +73,7 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 				eventFlow = efi;
 			}
 			
+			System.out.println("proomi : " + promise);
 			if (eventFlow instanceof Promise) {
 				PromiseAware promiseAware = ((PromiseAware)eventFlow);
 				promiseAware.setPromise(promise);
