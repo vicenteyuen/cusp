@@ -1,4 +1,4 @@
-package org.vsg.cusp.concurrent.impl;
+package org.vsg.cusp.event.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,10 +32,12 @@ public class PromiseImpl implements Promise {
 	
 	private EventFlow flow;
 	
+	
 	public EventFlow getFlow() {
 		return flow;
 	}
 	
+
 	public void setFlow(EventFlow flow) {
 		this.flow = flow;
 	}

@@ -2,8 +2,8 @@ package org.vsg.cusp.event.flow.impl;
 
 import javax.inject.Provider;
 
-import org.vsg.cusp.concurrent.impl.PromiseImpl;
 import org.vsg.cusp.event.flow.Promise;
+import org.vsg.cusp.event.impl.PromiseImpl;
 
 public class PromiseProvider implements Provider<Promise> {
 

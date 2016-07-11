@@ -15,8 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
+import org.vsg.cusp.event.common.Service;
 import org.vsg.cusp.event.impl.MessageImpl;
-import org.vsg.cusp.event.impl.OperationEventMessageCodec;
 import org.vsg.cusp.event.impl.ZmqcmdHelper;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.DeliveryOptions;
@@ -36,7 +36,8 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
 
-public class ZmqEventBusImplEndPoint implements EventBus {
+
+public class ZmqEventBusImplEndPoint implements EventBus , Service{
 
 	private static Logger logger = LoggerFactory.getLogger(ZmqEventBusImplEndPoint.class);
 
@@ -48,6 +49,7 @@ public class ZmqEventBusImplEndPoint implements EventBus {
 
 	private EventBusOptions options;
 
+	@Inject
 	public ZmqEventBusImplEndPoint(EventBusOptions options) {
 		this.options = options;
 
@@ -416,5 +418,27 @@ public class ZmqEventBusImplEndPoint implements EventBus {
 		}
 		return false;
 	}
+
+	@Override
+	public void start() throws Exception {
+
+		Handler<AsyncResult<Void>> completionHandler = new Handler<AsyncResult<Void>>() {
+
+			@Override
+			public void handle(AsyncResult<Void> event) {
+				// TODO Auto-generated method stub
+				System.out.println(event);
+			}
+			
+		};
+		this.start(completionHandler);			
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

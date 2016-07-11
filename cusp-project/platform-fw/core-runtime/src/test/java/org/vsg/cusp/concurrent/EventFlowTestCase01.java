@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.vsg.cusp.engine.zmq.JeroMQEngineModule;
 import org.vsg.cusp.event.common.EventModule;
+import org.vsg.cusp.event.common.Service;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.Promise;
 
@@ -40,6 +41,21 @@ public class EventFlowTestCase01 {
 		Injector inject = Guice.createInjector(mqEngineModule , evtMod);
 		
 		FlowManager manager =  inject.getInstance( FlowManager.class );
+		
+		
+		EventBus eventBus = inject.getInstance(EventBus.class);
+		// --- start event bus service ---
+		try {
+			if (eventBus instanceof Service) {
+				Service eventBusService = (Service)eventBus;
+				eventBusService.start();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
 
 		eventFlow = manager.getFlow("testcase");
 	

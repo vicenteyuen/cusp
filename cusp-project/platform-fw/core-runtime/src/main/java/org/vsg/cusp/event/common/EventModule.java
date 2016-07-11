@@ -7,11 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
 import org.vsg.cusp.event.flow.FlowManager;
+import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.event.flow.impl.FlowManagerImpl;
 import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;
+import org.vsg.cusp.event.impl.PromiseImpl;
 import org.vsg.cusp.event.impl.ZmqcmdHelper;
 import org.vsg.cusp.eventbus.AsyncResult;
+import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
 import org.vsg.cusp.eventbus.impl.CodecManager;
 import org.vsg.cusp.eventbus.impl.EventBusOptions;
@@ -21,6 +24,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.inject.AbstractModule;
+import com.google.inject.Scope;
 
 public class EventModule extends AbstractModule {
 
@@ -77,6 +81,14 @@ public class EventModule extends AbstractModule {
 
 			EventBusOptions ebOptions = parseConfForEventBus(jsonConf);
 			this.bind( EventBusOptions.class ).toInstance( ebOptions );
+			
+			this.bind( EventBus.class ).to( ZmqEventBusImplEndPoint.class );
+			
+			
+			
+			// --- reset promise ---
+			this.bind( Promise.class ).to( PromiseImpl.class );
+			
 			// --- operation event bus ---
 			/*
 
