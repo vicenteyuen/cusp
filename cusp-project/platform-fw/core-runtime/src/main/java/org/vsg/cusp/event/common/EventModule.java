@@ -11,7 +11,7 @@ import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.event.flow.impl.FlowManagerImpl;
 import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;
-import org.vsg.cusp.event.impl.PromiseImpl;
+import org.vsg.cusp.event.impl.PromiseProvider;
 import org.vsg.cusp.event.impl.ZmqcmdHelper;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.EventBus;
@@ -24,7 +24,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.inject.AbstractModule;
-import com.google.inject.Scope;
 
 public class EventModule extends AbstractModule {
 
@@ -87,7 +86,7 @@ public class EventModule extends AbstractModule {
 			
 			
 			// --- reset promise ---
-			this.bind( Promise.class ).to( PromiseImpl.class );
+			this.bind( Promise.class ).toProvider( PromiseProvider.class );
 			
 			// --- operation event bus ---
 			/*

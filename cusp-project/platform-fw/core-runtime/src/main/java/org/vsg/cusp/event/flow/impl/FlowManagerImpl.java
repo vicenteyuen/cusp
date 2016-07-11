@@ -20,6 +20,7 @@ import org.vsg.cusp.core.utils.AnnotationReflectionUtils;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.event.flow.PromiseAware;
+import org.vsg.cusp.event.impl.PromiseProvider;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.EventBusAware;
 
@@ -49,8 +50,10 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 	private Promise<?> promise;
 	
 
-	public void setPromise(Promise<?> promise) {
-		this.promise = promise;
+	@Inject
+	public void setPromiseProvider(PromiseProvider promiseProvider) {
+		promiseProvider.get();
+
 	}
 
 
