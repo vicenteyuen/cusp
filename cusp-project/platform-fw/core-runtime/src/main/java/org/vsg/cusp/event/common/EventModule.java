@@ -66,14 +66,8 @@ public class EventModule extends AbstractModule {
 			FlowManagerOptions options = parseConfForManagerOptions(jsonConf);
 			
 			this.bind( FlowManagerOptions.class ).toInstance( options  );
-			/*
-			FlowManagerProvider flowManagerProvider = new FlowManagerProvider();
-			flowManagerProvider.setFlowManagerInstCls( cls );
-			flowManagerProvider.setOptions( options );
-			
-			this.bind(FlowManager.class ).toProvider( flowManagerProvider );
-			*/
-			this.bind(FlowManager.class).to( FlowManagerImpl.class );
+
+			this.bind(FlowManager.class).to( FlowManagerImpl.class ).in( Scopes.SINGLETON );
 
 			CodecManager codecManager = new CodecManager();
 			codecManager.registerCodec(new OperationEventMessageCodec());
