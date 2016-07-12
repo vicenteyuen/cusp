@@ -67,6 +67,16 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 
 	@Override
 	public byte[] encode(ReqMessageModel model) {
+		
+		int addLength = model.getAddress().length();
+		StringBuilder addLenSb = new StringBuilder(model.getAddress());
+		if (addLength < 15) {
+			for (int i = 0 ; i < 15 - addLength ; i++) {
+				addLenSb.append("");
+			}
+		}
+		
+		System.out.println(addLenSb.length());
 
 		
 		byte[] headerBytes = Bytes.concat(
@@ -74,10 +84,11 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 			Shorts.toByteArray(model.getVersion()),
 			Longs.toByteArray( model.getCorrelationId()),
 			model.getClientMac()
-		);		
+		);
+
 		
-		
-		return null;
+		byte[] bodyBytes = model.getBody();
+		return Bytes.concat( headerBytes, bodyBytes );
 	}
 
 
@@ -89,6 +100,7 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 		model.setVersion( requestMessage.getApiVersion() );
 		model.setCorrelationId( requestMessage.getCorrelationId() );
 		model.setClientMac( requestMessage.getClientAddress() );
+		//model.setAddress( reque );
 		// --- add client address ---
 
 		model.setBody( bodyContent );

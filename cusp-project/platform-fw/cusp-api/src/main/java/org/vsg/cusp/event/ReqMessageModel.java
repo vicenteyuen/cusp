@@ -63,12 +63,16 @@ public class ReqMessageModel implements Serializable {
 	public void setBody(byte[] body) {
 		this.body = body;
 	}
-
-	String getAddress() {
+	
+	public String getAddress() {
 		return address;
 	}
 
-	void setAddress(String address) {
+	/**
+	 * max length is less than 15 bytes
+	 * @param address
+	 */
+	public void setAddress(String address) {
 		this.address = address;
 	}
 	

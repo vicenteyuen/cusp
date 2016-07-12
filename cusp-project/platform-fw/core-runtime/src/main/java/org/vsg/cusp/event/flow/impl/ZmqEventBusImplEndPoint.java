@@ -359,7 +359,6 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 	protected <T> void sendOrPub(SendContextImpl<T> sendContext) {
 		MessageImpl message = sendContext.message;
 		
-
 		// --- message send ---
 		cmdHelper.messageSent(message, options);
 		// metrics.messageSent(message.address(), !message.send(), true, false);

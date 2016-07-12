@@ -1,5 +1,7 @@
 package org.vsg.cusp.event.impl;
 
+import java.io.UnsupportedEncodingException;
+
 import org.vsg.cusp.core.utils.CorrelationIdGenerator;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
@@ -157,7 +159,17 @@ public class SingleRequestMessage extends AbstractRequestMessage {
 		@Override
 		public <T> byte[] encode(Message<T> msg) {
 			
-			System.out.println("address : " + msg.address());
+			
+			// ---- set  query message content ---
+			byte[] contBytes = new byte[0];
+			try {
+				contBytes = createQueryMessage(msg);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			/*
 			MessageCodec mc = null;
 			if (msg instanceof MessageCodecSupport) {
 				MessageCodecSupport mcs = (MessageCodecSupport)msg;
@@ -182,8 +194,31 @@ public class SingleRequestMessage extends AbstractRequestMessage {
 			byte[] headerBytes = mp.headerPack();
 
 			byte[] bodyBytes = mp.messagePack();
+			*/
 		
-			return Bytes.concat(headerBytes , bodyBytes);
+			return contBytes;
+		}
+		
+		
+		private <T> byte[] createQueryMessage(Message<T> msg) throws UnsupportedEncodingException {
+			String replyAddress = msg.replyAddress();
+			
+			StringBuilder fullAddress = new StringBuilder(msg.address());
+			if (null != replyAddress && !replyAddress.equals("")) {
+				fullAddress.append("->").append( replyAddress );
+			}
+			
+			if (fullAddress.length() < 32) {
+				for (int i = 0 ; i < fullAddress.length() ;i++) {
+					fullAddress.append(" ");
+				}
+			}
+			
+			System.out.println(fullAddress.toString().getBytes("utf-8").length);
+			
+			byte[] content = (byte[])msg.body();
+			return Bytes.concat( fullAddress.toString().getBytes("utf-8")  , content);
+			
 		}
 		
 	}
