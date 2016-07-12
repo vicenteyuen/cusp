@@ -1,8 +1,13 @@
 package org.vsg.cusp.event.flow;
 
+import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.OperationEvent;
 
 public interface Promise<V> {
+	
+	
+	void setFlow(EventFlow eventFlow);
+	
 	
 	// --- base promise call back
 	Promise<V> addOperationEvent(OperationEvent event);

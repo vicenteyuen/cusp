@@ -48,7 +48,6 @@ public class MultiNodeEventFlowImpl implements EventFlow , EventBusAware ,  Prom
 
 	@Override
 	public void setPromise(Promise promise) {
-		System.out.println("call promise : " + promise);
 		this.prom = promise;
 	}
 

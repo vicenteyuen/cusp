@@ -8,8 +8,8 @@ import org.vsg.cusp.event.common.EventModule;
 import org.vsg.cusp.event.common.Service;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.Promise;
+import org.vsg.cusp.eventbus.EventBus;
 
-import com.google.common.eventbus.EventBus;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -42,10 +42,10 @@ public class EventFlowTestCase01 {
 		
 		FlowManager manager =  inject.getInstance( FlowManager.class );
 		
-		
 		EventBus eventBus = inject.getInstance(EventBus.class);
 		// --- start event bus service ---
 		try {
+
 			if (eventBus instanceof Service) {
 				Service eventBusService = (Service)eventBus;
 				eventBusService.start();
@@ -55,6 +55,7 @@ public class EventFlowTestCase01 {
 			e.printStackTrace();
 		}
 		
+		// --- wait the server start ---	
 
 
 		eventFlow = manager.getFlow("testcase");
@@ -62,7 +63,7 @@ public class EventFlowTestCase01 {
 		Promise prom = eventFlow.promise( EventFlow.MODE_LOCAL );
 
 		// --- add openeration event ---
-		/*
+
 		OperationEvent  event1 =  eventFlow.getOperEvent("testCase1@" + MockOperationEventCls.class.getName());
 		OperationEvent  event2 =  eventFlow.getOperEvent("testCase2@" + MockOperationEventCls.class.getName());
 		OperationEvent  event3 =  eventFlow.getOperEvent("testCase3@" + MockOperationEventCls.class.getName());
@@ -84,7 +85,7 @@ public class EventFlowTestCase01 {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
+		
 		
 
 

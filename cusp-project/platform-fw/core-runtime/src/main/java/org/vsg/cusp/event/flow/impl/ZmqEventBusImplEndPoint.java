@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.inject.Inject;
 
@@ -91,8 +93,7 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 			DeliveryOptions options,
 			Handler<AsyncResult<Message<T>>> replyHandler) {
 		sendOrPubInternal(
-				createMessage(true, address, options.getHeaders(), message,
-						options.getCodecName()), options, replyHandler);
+				createMessage(true, address, options.getHeaders(), message,	options.getCodecName()), options, replyHandler);
 		return this;
 	}
 
@@ -281,7 +282,6 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 		}
 
 		started = true;
-
 		// completionHandler.handle(Future.succeededFuture());
 	}
 
@@ -418,20 +418,43 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 		}
 		return false;
 	}
+	
+	private Lock lock = new ReentrantLock();
 
 	@Override
 	public void start() throws Exception {
+		
+		
+		if (lock.tryLock()) {
+			
+			try {
+				lock.lock();
+				
+				Handler<AsyncResult<Void>> completionHandler = new Handler<AsyncResult<Void>>() {
 
-		Handler<AsyncResult<Void>> completionHandler = new Handler<AsyncResult<Void>>() {
-
-			@Override
-			public void handle(AsyncResult<Void> event) {
-				// TODO Auto-generated method stub
-				System.out.println(event);
+					@Override
+					public void handle(AsyncResult<Void> event) {
+						// TODO Auto-generated method stub
+						System.out.println(event);
+					}
+					
+				};
+				this.start(completionHandler);	
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				lock.unlock();
 			}
 			
-		};
-		this.start(completionHandler);			
+		} else {
+			// --- lock fail ---
+			System.out.println("get lock fail.");
+			System.exit( -1);
+		}
+		
+
+		
 	}
 
 	@Override

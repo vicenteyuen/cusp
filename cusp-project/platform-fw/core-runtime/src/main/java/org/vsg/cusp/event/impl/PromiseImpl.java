@@ -12,8 +12,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.concurrent.EventFlow;
@@ -22,6 +20,7 @@ import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.eventbus.AsyncResult;
+import org.vsg.cusp.eventbus.DeliveryOptions;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
 import org.vsg.cusp.eventbus.MessageProducer;
@@ -38,6 +37,7 @@ public class PromiseImpl implements Promise {
 	}
 	
 
+	@Override
 	public void setFlow(EventFlow flow) {
 		this.flow = flow;
 	}
@@ -121,7 +121,10 @@ public class PromiseImpl implements Promise {
 				@Override
 				public void run() {
 					EventBus eventBus = flow.getEventBus();
-					MessageProducer producer = eventBus.sender(EventFlow.EVB_CHANNEL);
+					DeliveryOptions options = new DeliveryOptions();
+					options.setCodecName( "operation-event" );
+					MessageProducer producer = eventBus.sender(EventFlow.EVB_CHANNEL , options);
+					
 					producer.send(operEvent, handler);
 
 	
