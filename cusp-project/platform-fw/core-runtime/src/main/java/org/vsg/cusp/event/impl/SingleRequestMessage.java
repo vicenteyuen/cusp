@@ -208,14 +208,12 @@ public class SingleRequestMessage extends AbstractRequestMessage {
 				fullAddress.append("->").append( replyAddress );
 			}
 			
-			if (fullAddress.length() < 32) {
-				for (int i = 0 ; i < fullAddress.length() ;i++) {
+			int currentMark = 32 -  fullAddress.length();
+			if (currentMark > 0) {
+				for (int i = 0 ; i < currentMark ;i++) {
 					fullAddress.append(" ");
 				}
 			}
-			
-			System.out.println(fullAddress.toString().getBytes("utf-8").length);
-			
 			byte[] content = (byte[])msg.body();
 			return Bytes.concat( fullAddress.toString().getBytes("utf-8")  , content);
 			

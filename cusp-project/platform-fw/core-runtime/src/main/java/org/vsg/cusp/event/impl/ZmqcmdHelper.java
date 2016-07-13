@@ -49,7 +49,6 @@ public class ZmqcmdHelper {
 			Socket requester = clientContext.socket(ZMQ.REQ);
 			requester.connect(senderHost);			
 			if (null != encoder && senderHosts.size() > 0) {
-				
 				byte[] content = encoder.encode(message);
 				// --- output content ---
 				StringBuilder output = new StringBuilder();
