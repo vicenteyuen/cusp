@@ -23,8 +23,6 @@ public class DefaultMessageExchangeEncoder implements MessageExchangeEncoder {
 		
 		RequestMessageEncoder reqMsgEncoder =  reqMsg.getRequestMessageEncoder();
 		byte[] body = reqMsgEncoder.encode((Message<byte[]>)msg);
-
-
 		
 		ReqMessageModel  reqMsgModel = reqMsgSchemaEncoder.genFromBodyContent(body, reqMsg);
 		return reqMsgSchemaEncoder.encode( reqMsgModel );

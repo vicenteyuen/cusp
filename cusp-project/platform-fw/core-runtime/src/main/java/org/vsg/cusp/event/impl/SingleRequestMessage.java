@@ -169,6 +169,8 @@ public class SingleRequestMessage extends AbstractRequestMessage {
 				e.printStackTrace();
 			}
 			
+			System.out.println(contBytes.length);
+			
 			/*
 			MessageCodec mc = null;
 			if (msg instanceof MessageCodecSupport) {

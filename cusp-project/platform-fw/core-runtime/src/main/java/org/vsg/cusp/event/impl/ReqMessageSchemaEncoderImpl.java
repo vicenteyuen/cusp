@@ -68,17 +68,6 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 	@Override
 	public byte[] encode(ReqMessageModel model) {
 		
-		int addLength = model.getAddress().length();
-		StringBuilder addLenSb = new StringBuilder(model.getAddress());
-		if (addLength < 15) {
-			for (int i = 0 ; i < 15 - addLength ; i++) {
-				addLenSb.append("");
-			}
-		}
-		
-		System.out.println(addLenSb.length());
-
-		
 		byte[] headerBytes = Bytes.concat(
 			new byte[]{model.getApiCodeId()},
 			Shorts.toByteArray(model.getVersion()),
