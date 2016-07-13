@@ -14,10 +14,10 @@ import org.vsg.cusp.core.utils.CorrelationIdGenerator;
  * @author Vicente Yuen
  *
  */
-public abstract class AbstractRequestMessage implements RequestMessage {
+public abstract class AbstractRequestMessageEnvelope implements RequestMessageEnvelope {
 	
 	
-	public AbstractRequestMessage() {
+	public AbstractRequestMessageEnvelope() {
 		init();
 	}
 	
@@ -46,6 +46,10 @@ public abstract class AbstractRequestMessage implements RequestMessage {
 		return apiId;
 	}
 	
+	protected void setApiId(byte apiId) {
+		this.apiId = apiId;
+	}
+	
 	private short apiVersion;
 
 	/* (non-Javadoc)
@@ -57,15 +61,8 @@ public abstract class AbstractRequestMessage implements RequestMessage {
 		return apiVersion;
 	}
 	
-	private long correlationId;
-
-	/* (non-Javadoc)
-	 * @see org.vsg.cusp.event.impl.RequestMessage#getCorrelationId()
-	 */
-	@Override
-	public long getCorrelationId() {
-		// TODO Auto-generated method stub
-		return correlationId;
+	protected void setApiVersion(short apiVersion) {
+		this.apiVersion = apiVersion;
 	}
 	
 	private byte[] clientAddress;

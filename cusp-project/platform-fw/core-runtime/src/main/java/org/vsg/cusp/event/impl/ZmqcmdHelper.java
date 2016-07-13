@@ -39,7 +39,7 @@ public class ZmqcmdHelper {
 		this.encoder = encoder;
 	}
 	
-	public void messageSent(MessageImpl message ,EventBusOptions options) {
+	public void messageSent(Message message ,EventBusOptions options) {
 		List<String>  senderHosts =  options.getSenderHosts();
 		// Socket to talk to server
 
@@ -55,7 +55,7 @@ public class ZmqcmdHelper {
 				for (byte con : content) {
 					output.append(con).append(" ");
 				}
-				System.out.println(output);
+				//System.out.println(output);
 				
 				requester.send(content, 0);
 				

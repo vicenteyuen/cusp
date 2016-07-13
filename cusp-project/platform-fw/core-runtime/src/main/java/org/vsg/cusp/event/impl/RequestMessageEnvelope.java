@@ -14,13 +14,11 @@ package org.vsg.cusp.event.impl;
  * 
  * @author Vicente Yuen
  */
-public interface RequestMessage {
+public interface RequestMessageEnvelope {
 	
 	byte getApiId();
 	
 	short getApiVersion();
-	
-	long getCorrelationId();
 	
 	byte[] getClientAddress();
 }

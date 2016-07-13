@@ -26,14 +26,17 @@ import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 
-public class SingleRequestMessage extends AbstractRequestMessage {
+public class SingleRequestMessage extends AbstractRequestMessageEnvelope {
 
 	
 	protected static CodecManager codecManager = new CodecManager();
 	
 	
 	public SingleRequestMessage() {
-		//codecManager.registerCodec( new OperationEventMessageCodec() );
+		
+		this.setApiId((byte)1);
+		this.setApiVersion((short)1);
+
 	}
 	
 	
@@ -117,7 +120,6 @@ public class SingleRequestMessage extends AbstractRequestMessage {
 			byte systemCodeId = msgByteContByte[locFrom];
 			
 			MessageCodec messageCodec = returnMsgCodecbySystemCodeId(systemCodeId);
-			System.out.println("code id : " + systemCodeId + " , " + messageCodec);
 			// --- output content ---
 			StringBuilder output = new StringBuilder();
 			for (byte con : msgByteContByte) {
@@ -168,36 +170,6 @@ public class SingleRequestMessage extends AbstractRequestMessage {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			System.out.println(contBytes.length);
-			
-			/*
-			MessageCodec mc = null;
-			if (msg instanceof MessageCodecSupport) {
-				MessageCodecSupport mcs = (MessageCodecSupport)msg;
-				mc = mcs.getMessageCodec();
-			}
-			
-			// --- encode content ---
-			int contentTotalLenght = 0;
-			
-			byte[] cliendAddressIdBytes = getClientAddress();
-			CorrelationIdGenerator inst = CorrelationIdGenerator.genInstance(cliendAddressIdBytes);
-
-
-			// --- build message bytes ----
-			SimpleMessageRequestPack mp = new SimpleMessageRequestPack();
-			mp.setMesCodes(mc);
-			mp.setCorrelationIdGenerator(inst);
-			mp.setClientMac( cliendAddressIdBytes );
-			
-			mp.addMessageBody( msg.body() );
-			
-			byte[] headerBytes = mp.headerPack();
-
-			byte[] bodyBytes = mp.messagePack();
-			*/
-		
 			return contBytes;
 		}
 		

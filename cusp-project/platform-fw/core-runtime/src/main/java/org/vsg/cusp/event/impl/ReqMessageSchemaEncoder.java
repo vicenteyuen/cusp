@@ -6,6 +6,6 @@ public interface ReqMessageSchemaEncoder {
 
 	byte[] encode(ReqMessageModel model);
 	
-	ReqMessageModel genFromBodyContent(byte[] bodyContent ,  RequestMessage requestMessage);
+	ReqMessageModel genFromBodyContent(byte[] bodyContent ,  RequestMessageEnvelope requestMessage);
 	
 }

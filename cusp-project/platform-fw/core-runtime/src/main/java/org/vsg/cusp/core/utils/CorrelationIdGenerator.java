@@ -15,7 +15,7 @@ public class CorrelationIdGenerator {
 	private static CorrelationIdGenerator _inst = new CorrelationIdGenerator();
 	
 
-	public long generate(long timestamp) {
+	public static long generate(long timestamp) {
 		return System.nanoTime();
 	}
 	

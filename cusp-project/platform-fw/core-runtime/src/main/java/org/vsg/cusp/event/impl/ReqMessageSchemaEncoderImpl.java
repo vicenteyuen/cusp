@@ -1,5 +1,6 @@
 package org.vsg.cusp.event.impl;
 
+import org.vsg.cusp.core.utils.CorrelationIdGenerator;
 import org.vsg.cusp.event.ReqMessageModel;
 
 import com.google.common.primitives.Bytes;
@@ -22,22 +23,25 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 		
 		short version = Shorts.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
 		model.setVersion( version );
-		
+	
 		// --- get correlationId ---
 		locFrom = locTo;
 		locTo = locFrom + Longs.BYTES;
 		long correlationId = Longs.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
 		model.setCorrelationId( correlationId );
-		
+
 		
 		// --- get client mac ---
 		locFrom = locTo;
 		locTo = locFrom + 6;
 		byte[] clientMac = java.util.Arrays.copyOfRange(inputContent, locFrom, locTo);
+		model.setClientMac(clientMac);
 		
 		locFrom = locTo;
 		int bodyLength = inputContent.length-locTo;
 		byte[] bodyContent = java.util.Arrays.copyOfRange(inputContent, locFrom, bodyLength);
+
+		System.out.println("receive length : " + bodyContent.length);
 		
 		parseToModel(bodyContent , model);
 
@@ -48,6 +52,7 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 	private void parseToModel(byte[] bodyContent , ReqMessageModel model) {
 		// --- get the offset ---
 		int locFrom = 0;
+		/*
 		int locTo = locFrom + Longs.BYTES;
 		byte[] contBytes = java.util.Arrays.copyOfRange(bodyContent, locFrom, locTo);
 		long offset = Longs.fromByteArray( contBytes );
@@ -60,8 +65,9 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 		int contentLocFrom = locTo + (int)offset;
 		int contentLocTo = contentLocFrom + length;
 		contBytes = java.util.Arrays.copyOfRange(bodyContent, contentLocFrom, contentLocTo);
+		*/
 
-		model.setBody(contBytes);
+		//model.setBody(contBytes);
 	}
 
 
@@ -83,15 +89,16 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 
 	@Override
 	public ReqMessageModel genFromBodyContent(byte[] bodyContent,
-			RequestMessage requestMessage) {
+			RequestMessageEnvelope requestMessage) {
 		ReqMessageModel model = new ReqMessageModel();
 		model.setApiCodeId( requestMessage.getApiId() );
 		model.setVersion( requestMessage.getApiVersion() );
-		model.setCorrelationId( requestMessage.getCorrelationId() );
+
 		model.setClientMac( requestMessage.getClientAddress() );
+		System.out.println("send length : " + bodyContent.length);
 		//model.setAddress( reque );
 		// --- add client address ---
-
+		model.setCorrelationId( CorrelationIdGenerator.generate(0));
 		model.setBody( bodyContent );
 		return model;
 	}
