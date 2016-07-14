@@ -37,11 +37,13 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 		byte[] clientMac = java.util.Arrays.copyOfRange(inputContent, locFrom, locTo);
 		model.setClientMac(clientMac);
 		
+		StringBuilder output = new StringBuilder();
+		for (byte con : clientMac) {
+			output.append(con).append(" ");
+		}
 		locFrom = locTo;
-		int bodyLength = inputContent.length-locTo;
+		int bodyLength = inputContent.length;
 		byte[] bodyContent = java.util.Arrays.copyOfRange(inputContent, locFrom, bodyLength);
-
-		System.out.println("receive length : " + bodyContent.length);
 		
 		parseToModel(bodyContent , model);
 
@@ -51,6 +53,9 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 	
 	private void parseToModel(byte[] bodyContent , ReqMessageModel model) {
 		// --- get the offset ---
+		
+		
+		
 		int locFrom = 0;
 		/*
 		int locTo = locFrom + Longs.BYTES;
@@ -66,6 +71,9 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 		int contentLocTo = contentLocFrom + length;
 		contBytes = java.util.Arrays.copyOfRange(bodyContent, contentLocFrom, contentLocTo);
 		*/
+		
+		
+		model.setBody( bodyContent );
 
 		//model.setBody(contBytes);
 	}
@@ -95,7 +103,6 @@ public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , Re
 		model.setVersion( requestMessage.getApiVersion() );
 
 		model.setClientMac( requestMessage.getClientAddress() );
-		System.out.println("send length : " + bodyContent.length);
 		//model.setAddress( reque );
 		// --- add client address ---
 		model.setCorrelationId( CorrelationIdGenerator.generate(0));

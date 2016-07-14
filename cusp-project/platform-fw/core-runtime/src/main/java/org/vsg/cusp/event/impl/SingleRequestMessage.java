@@ -115,39 +115,45 @@ public class SingleRequestMessage extends AbstractRequestMessageEnvelope {
 		@Override
 		public Message<byte[]> decode(byte[] msgByteContByte) {
 			
-			int locFrom = 0;
-			int locTo = locFrom + 1;
-			byte systemCodeId = msgByteContByte[locFrom];
-			
-			MessageCodec messageCodec = returnMsgCodecbySystemCodeId(systemCodeId);
-			// --- output content ---
-			StringBuilder output = new StringBuilder();
-			for (byte con : msgByteContByte) {
-				output.append(con).append(" ");
-			}
-			
-			byte compressByte = msgByteContByte[locTo];
-			
-			locFrom = locTo + 1;
-			locTo = locFrom + Long.BYTES;
-			byte[] contBytes = java.util.Arrays.copyOfRange(msgByteContByte, locFrom, locTo);
-			long timestamp = Longs.fromByteArray( contBytes );
-
-			
-			locFrom = locTo;
-			locTo = locFrom + Integer.BYTES;	
-			contBytes = java.util.Arrays.copyOfRange(msgByteContByte, locFrom, locTo);
-			int bodyLength = Ints.fromByteArray(contBytes);
-			
-			locFrom = locTo;
-			locTo = locFrom + bodyLength;
-			contBytes = java.util.Arrays.copyOfRange(msgByteContByte, locFrom, locTo);
-			
 			MessageImpl<byte[] , byte[]> msgImpl = new MessageImpl<byte[] , byte[]>();
 			
+			int locFrom = 0;
+			int locTo = locFrom + 32;
+			byte[] allAddress = java.util.Arrays.copyOfRange(msgByteContByte, locFrom, locTo);
 			
-			msgImpl.setMessageCodec(messageCodec);
-			msgImpl.setSentBody( contBytes );
+			String address= null;
+			String replyAddress = null;
+			try {
+				String allAddressStr = new String(allAddress,"UTF-8");
+				int loc = allAddressStr.indexOf("->");
+				if (loc > -1) {
+					address = allAddressStr.substring(0, loc);
+					replyAddress = allAddressStr.substring(loc+2);
+				}
+				else {
+					address = allAddressStr;
+				}
+				
+				msgImpl.setAddress(address);
+				msgImpl.setReplyAddress( replyAddress );
+				
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			locFrom = locTo;
+			byte[] body = java.util.Arrays.copyOfRange(msgByteContByte, locFrom, msgByteContByte.length);
+			msgImpl.setSentBody( body );
+
+			try {
+				System.out.println( new String(body,"utf-8") );
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+
 
 			return msgImpl;
 		}
@@ -170,6 +176,8 @@ public class SingleRequestMessage extends AbstractRequestMessageEnvelope {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			
 			return contBytes;
 		}
 		

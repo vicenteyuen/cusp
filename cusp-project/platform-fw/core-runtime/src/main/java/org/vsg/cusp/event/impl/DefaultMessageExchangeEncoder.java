@@ -24,7 +24,11 @@ public class DefaultMessageExchangeEncoder implements MessageExchangeEncoder {
 		byte[] body = reqMsgEncoder.encode((Message<byte[]>)msg);
 		
 		ReqMessageModel  reqMsgModel = reqMsgSchemaEncoder.genFromBodyContent(body, reqMsg);
-		return reqMsgSchemaEncoder.encode( reqMsgModel );
+		byte[] totalBytes = reqMsgSchemaEncoder.encode( reqMsgModel );
+
+		
+		
+		return totalBytes;
 	}
 
 	@Override
@@ -36,16 +40,11 @@ public class DefaultMessageExchangeEncoder implements MessageExchangeEncoder {
 		// --- decode message type ---
 		byte apiCodeId = reqMsgModel.getApiCodeId();
 
-		
 		Message msgImpl = null;
 		if (reqMsg.getApiId() == apiCodeId) {
 			RequestMessageDecoder reqMsgDecoder =  reqMsg.getRequestManagerDecoder();
 			msgImpl = reqMsgDecoder.decode( reqMsgModel.getBody() );
 		}
-		
-		System.out.println(msgImpl);
-
-
 
 		
 		return msgImpl;
