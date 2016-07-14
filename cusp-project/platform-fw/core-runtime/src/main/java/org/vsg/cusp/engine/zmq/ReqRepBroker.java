@@ -3,6 +3,7 @@
  */
 package org.vsg.cusp.engine.zmq;
 
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
@@ -114,10 +115,13 @@ public class ReqRepBroker implements RunnableFuture {
 		String frontendAddress = "tcp://*:"+brokerPort;
 		frontend.bind(frontendAddress);
 		
-		
 		Socket taskSocket = context.socket(ZMQ.PUSH);
 		taskSocket.bind("tcp://*:5560");
 
+		Socket taskReceive = context.socket(ZMQ.REP);
+		String taskReceiveAddress = "tcp://*:5561";
+		taskReceive.bind(taskReceiveAddress);		
+		
 		logger.info("launch ReqRepBroker at port: " + brokerPort);
 
 		// Initialize poll set
@@ -145,9 +149,17 @@ public class ReqRepBroker implements RunnableFuture {
 			// --- assign to another push task ---
 			taskSocket.send(reply , 0);
 			
-            String request = "world" ;
-            // Send the message
-            frontend.send(request.getBytes (ZMQ.CHARSET), 0);			
+			
+			byte[] receiveTask = taskReceive.recv(0);
+			
+            try {
+				String request = new String(receiveTask, "UTF-8") ;
+				// Send the message
+				frontend.send(request.getBytes (ZMQ.CHARSET), 0);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 						
 			//System.out.println("Received " + ": [" + new String(reply, ZMQ.CHARSET) + "]");
 

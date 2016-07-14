@@ -8,6 +8,7 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.impl.WorkerTrigger;
 import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
@@ -78,10 +79,13 @@ public class ReqRepWorker implements RunnableFuture {
 	public void run() {
 		StringBuilder clientSocket = new StringBuilder();
 		
-		Context context = ZMQ.context (1);
+		Context context = ZMQ.context (zmq.ZMQ.ZMQ_IO_THREADS);
 		
         Socket receiver = context.socket (ZMQ.PULL);
         receiver.connect ("tcp://localhost:5560");
+        
+		Socket requester = context.socket(ZMQ.REQ);
+		requester.connect("tcp://localhost:5561");			        
 
         try {
         	logger.info("ReqRepWorker Running. ");
@@ -93,7 +97,23 @@ public class ReqRepWorker implements RunnableFuture {
 	            	
 	            	// --- parse job message ---
 	            	if (null != message) {
-	            		Message msgRef = encoder.decode(message);	            		
+	            		Message msgRef = encoder.decode(message);
+	            		
+	            		/**
+	            		 * trigger event handle 
+	            		 */
+	            		
+	            		WorkerTrigger trggerService = new WorkerTrigger();
+	            		trggerService.receiveMessage(msgRef);
+	            		byte[] replyMsg = trggerService.replyResponseMessage();
+	            		
+	            		// --- return message got it ---
+	            		
+	    				requester.send("receive ok ", 0);
+	    				
+	    				// --- reply content ---
+	    				byte[] reply  = requester.recv(0);	            		
+	            		
 	            	} else {
 
 	            	}

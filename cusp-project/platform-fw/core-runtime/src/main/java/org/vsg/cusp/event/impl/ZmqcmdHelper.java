@@ -55,6 +55,7 @@ public class ZmqcmdHelper {
 				
 				// --- reply content ---
 				byte[] reply  = requester.recv(0);
+				System.out.println(new String(reply));
 				//Message replyMsg = encoder.decode( reply );
 			}
 			
