@@ -1,7 +1,5 @@
 /**
  * 
- * 
- * 
  */
 package org.vsg.cusp.event.impl;
 
