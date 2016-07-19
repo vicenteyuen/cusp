@@ -84,7 +84,7 @@ public class ReqRepWorker implements RunnableFuture {
         Socket receiver = context.socket (ZMQ.PULL);
         receiver.connect ("tcp://localhost:5560");
         
-		Socket requester = context.socket(ZMQ.REQ);
+		Socket requester = context.socket(ZMQ.PUSH);
 		requester.connect("tcp://localhost:5561");			        
 
         try {
@@ -112,7 +112,7 @@ public class ReqRepWorker implements RunnableFuture {
 	    				requester.send("receive ok ", 0);
 	    				
 	    				// --- reply content ---
-	    				byte[] reply  = requester.recv(0);	            		
+	    				//byte[] reply  = requester.recv(0);	            		
 	            		
 	            	} else {
 

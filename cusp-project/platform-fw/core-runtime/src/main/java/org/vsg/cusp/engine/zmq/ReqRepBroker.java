@@ -118,7 +118,7 @@ public class ReqRepBroker implements RunnableFuture {
 		Socket taskSocket = context.socket(ZMQ.PUSH);
 		taskSocket.bind("tcp://*:5560");
 
-		Socket taskReceive = context.socket(ZMQ.REP);
+		Socket taskReceive = context.socket(ZMQ.PULL);
 		String taskReceiveAddress = "tcp://*:5561";
 		taskReceive.bind(taskReceiveAddress);		
 		
