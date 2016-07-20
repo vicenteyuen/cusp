@@ -32,30 +32,20 @@ public class MessageImpl<U, T> implements Message<T> , MessageCodecSupport {
 
 	private int headersPos;
 
-	private ZmqEventBusImplEndPoint bus;
 
 	private String replyAddress;
 
-	public MessageImpl() {
-
-	}
+	
 
 	public MessageImpl(String address, U sentBody,
-			MessageCodec<U, T> messageCodec, boolean send, ZmqEventBusImplEndPoint bus) {
+			MessageCodec<U, T> messageCodec, boolean send) {
 		this.address = address;
 		this.sentBody = sentBody;
 		this.messageCodec = messageCodec;
 		this.send = send;
-		this.bus = bus;
 	}
 
-	public ZmqEventBusImplEndPoint getBus() {
-		return bus;
-	}
 
-	public void setBus(ZmqEventBusImplEndPoint bus) {
-		this.bus = bus;
-	}
 
 	public boolean send() {
 		return send;
@@ -182,23 +172,16 @@ public class MessageImpl<U, T> implements Message<T> , MessageCodecSupport {
 		reply(message, options, null);
 	}
 
+
+	
 	@Override
-	public <R> void reply(Object message, DeliveryOptions options,
-			Handler<AsyncResult<Message<R>>> replyHandler) {
-		if (replyAddress != null) {
-			sendReply(bus.createMessage(true, replyAddress,
-					options.getHeaders(), message, options.getCodecName()),
-					options, replyHandler);
-		}
+	public <R> void reply(Object message, DeliveryOptions options, Handler<AsyncResult<Message<R>>> replyHandler) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	protected <R> void sendReply(MessageImpl msg, DeliveryOptions options,
-			Handler<AsyncResult<Message<R>>> replyHandler) {
-		if (bus != null) {
-			bus.sendReply(msg, this, options, replyHandler);
-		}
-	}
-	
+
+
 	@Override
 	public MessageCodec getMessageCodec() {
 		return this.messageCodec;

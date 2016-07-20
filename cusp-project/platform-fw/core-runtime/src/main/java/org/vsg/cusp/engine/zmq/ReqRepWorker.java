@@ -104,15 +104,11 @@ public class ReqRepWorker implements RunnableFuture {
 	            		 */
 	            		
 	            		WorkerTrigger trggerService = new WorkerTrigger();
+	            		trggerService.setReplySocket( requester );
 	            		trggerService.receiveMessage(msgRef);
-	            		byte[] replyMsg = trggerService.replyResponseMessage();
 	            		
-	            		// --- return message got it ---
-	            		
-	    				requester.send("receive ok ", 0);
-	    				
-	    				// --- reply content ---
-	    				//byte[] reply  = requester.recv(0);	            		
+	            		trggerService.trigger();
+          		
 	            		
 	            	} else {
 

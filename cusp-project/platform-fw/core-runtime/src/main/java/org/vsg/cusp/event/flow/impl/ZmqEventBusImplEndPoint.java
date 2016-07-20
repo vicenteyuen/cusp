@@ -116,7 +116,7 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 			MultiMap headers, Object body, String codecName) {
 		Objects.requireNonNull(address, "no null address accepted");
 		MessageCodec codec = codecManager.lookupCodec(body, codecName);
-		MessageImpl msg = new MessageImpl(address, body, codec, true, this);
+		MessageImpl msg = new MessageImpl(address, body, codec, true);
 		return msg;
 	}
 

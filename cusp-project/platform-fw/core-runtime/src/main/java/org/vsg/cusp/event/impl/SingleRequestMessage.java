@@ -115,7 +115,10 @@ public class SingleRequestMessage extends AbstractRequestMessageEnvelope {
 		@Override
 		public Message<byte[]> decode(byte[] msgByteContByte) {
 			
-			MessageImpl<byte[] , byte[]> msgImpl = new MessageImpl<byte[] , byte[]>();
+			//MessageImpl<byte[] , byte[]> msgImpl = new MessageImpl<byte[] , byte[]>();
+			MessageImpl<byte[] , byte[]> msgImpl = null;
+			
+			// --- bind message handle ----
 			
 			int locFrom = 0;
 			int locTo = locFrom + 32;
