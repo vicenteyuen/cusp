@@ -6,8 +6,8 @@ package org.vsg.cusp.event.impl;
 import java.util.List;
 
 import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.eventbus.impl.EventBusOptions;
-import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
@@ -19,7 +19,7 @@ import org.zeromq.ZMQ.Socket;
 public class ZmqcmdHelper {
 	
 	
-	private  MessageExchangeEncoder encoder;
+	private  MessageEncoder encoder;
 
 	private EventBusOptions options;
 
@@ -31,11 +31,11 @@ public class ZmqcmdHelper {
 		this.options.setCmdHelper(this);
 	}
 
-	public MessageExchangeEncoder getEncoder() {
+	public MessageEncoder getEncoder() {
 		return encoder;
 	}
 
-	public void setEncoder(MessageExchangeEncoder encoder) {
+	public void setEncoder(MessageEncoder encoder) {
 		this.encoder = encoder;
 	}
 	

@@ -1,13 +1,18 @@
 package org.vsg.cusp.event.impl;
 
 import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.ReqMessageModel;
 import org.vsg.cusp.event.RequestMessageDecoder;
 import org.vsg.cusp.event.RequestMessageEncoder;
 import org.vsg.cusp.eventbus.impl.CodecManager;
-import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
 
-public class DefaultMessageExchangeEncoder implements MessageExchangeEncoder {
+/**
+ * Define Message Encoder default instance 
+ * @author Vicente Yuen
+ *
+ */
+public class DefaultMessageExchangeEncoder implements MessageEncoder {
 	
 	protected CodecManager codecManager = new CodecManager();
 	

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
+import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.event.flow.impl.FlowManagerImpl;
@@ -18,7 +19,6 @@ import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
 import org.vsg.cusp.eventbus.impl.CodecManager;
 import org.vsg.cusp.eventbus.impl.EventBusOptions;
-import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -37,10 +37,7 @@ public class EventModule extends AbstractModule {
 		try {
 			
 			init();
-			
-			
 
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -187,8 +184,8 @@ public class EventModule extends AbstractModule {
 		
 		// --- parse encoder ---
 		String encoderClsName = eventBusConf.getString("encoder");
-		Class<MessageExchangeEncoder>  encoderCls =  (Class<MessageExchangeEncoder>)Class.forName(encoderClsName);
-		MessageExchangeEncoder msgEncoder = encoderCls.newInstance();
+		Class<MessageEncoder>  encoderCls =  (Class<MessageEncoder>)Class.forName(encoderClsName);
+		MessageEncoder msgEncoder = encoderCls.newInstance();
 		
 		ZmqcmdHelper helper = new ZmqcmdHelper(options);
 		helper.setEncoder( msgEncoder );

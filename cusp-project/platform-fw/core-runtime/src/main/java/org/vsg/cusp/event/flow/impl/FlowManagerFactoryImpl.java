@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
+import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.FlowManagerFactory;
 import org.vsg.cusp.event.impl.ZmqcmdHelper;
@@ -17,7 +18,6 @@ import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.EventBusAware;
 import org.vsg.cusp.eventbus.Handler;
 import org.vsg.cusp.eventbus.impl.EventBusOptions;
-import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;

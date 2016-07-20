@@ -8,8 +8,8 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.impl.WorkerTrigger;
-import org.vsg.cusp.eventbus.impl.MessageExchangeEncoder;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
@@ -47,13 +47,13 @@ public class ReqRepWorker implements RunnableFuture {
 		return false;
 	}
 	
-	private  MessageExchangeEncoder encoder;
+	private  MessageEncoder encoder;
 	
-	public MessageExchangeEncoder getEncoder() {
+	public MessageEncoder getEncoder() {
 		return encoder;
 	}
 
-	public void setEncoder(MessageExchangeEncoder encoder) {
+	public void setEncoder(MessageEncoder encoder) {
 		this.encoder = encoder;
 	}
 
