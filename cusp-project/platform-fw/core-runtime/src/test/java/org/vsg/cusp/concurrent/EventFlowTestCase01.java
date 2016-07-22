@@ -10,6 +10,7 @@ import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.eventbus.EventBus;
 
+import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -39,6 +40,7 @@ public class EventFlowTestCase01 {
 		EventModule evtMod = new EventModule();
 		
 		Injector inject = Guice.createInjector(mqEngineModule , evtMod);
+		
 		
 		FlowManager manager =  inject.getInstance( FlowManager.class );
 		
