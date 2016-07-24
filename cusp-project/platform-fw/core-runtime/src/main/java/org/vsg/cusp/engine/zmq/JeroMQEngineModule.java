@@ -8,8 +8,12 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.core.modules.AbstractContainerModule;
+import org.vsg.cusp.event.common.Service;
 import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
+import org.vsg.cusp.event.impl.MultiThreadEngineService;
 import org.vsg.cusp.eventbus.EventBus;
+
+import com.google.inject.Scopes;
 
 /**
  * @author Vicente Yuen
@@ -27,11 +31,13 @@ public class JeroMQEngineModule extends AbstractContainerModule implements ServE
 		
 		
 		// --- start mqbroker ---
+		binder().bind(ServEngine.class).to( JeroMQServEngine.class ).in( Scopes.SINGLETON );
 		
 		
-		JeroMQServEngine servEngine = new JeroMQServEngine();
 		
-		servEngine.start();
+		//JeroMQServEngine servEngine = new JeroMQServEngine();
+		
+		//servEngine.start();
 		
 		
 	}

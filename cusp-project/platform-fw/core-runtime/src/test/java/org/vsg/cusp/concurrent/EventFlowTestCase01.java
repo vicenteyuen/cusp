@@ -3,14 +3,15 @@ package org.vsg.cusp.concurrent;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.engine.zmq.JeroMQEngineModule;
+import org.vsg.cusp.engine.zmq.JeroMQServEngine;
 import org.vsg.cusp.event.common.EventModule;
 import org.vsg.cusp.event.common.Service;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.eventbus.EventBus;
 
-import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -41,6 +42,9 @@ public class EventFlowTestCase01 {
 		
 		Injector inject = Guice.createInjector(mqEngineModule , evtMod);
 		
+		// --- start jeromq engine ---
+		ServEngine engineInst = inject.getInstance(JeroMQServEngine.class);
+		engineInst.start();
 		
 		FlowManager manager =  inject.getInstance( FlowManager.class );
 		
