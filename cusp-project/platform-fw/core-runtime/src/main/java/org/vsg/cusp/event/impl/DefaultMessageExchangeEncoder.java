@@ -40,7 +40,7 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 		
 		
 		
-		byte[] all = Bytes.concat( Longs.toByteArray( totalLength ) , new byte[]{1} , totalBytes);
+		byte[] all = Bytes.concat( Longs.toByteArray( totalLength ) , new byte[]{Message.TYPE_REQ} , totalBytes);
 		
 		
 		return all;
@@ -79,6 +79,16 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 		long msgTotalLength = Longs.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
 		msg.setHeadPos( locTo );
 		
+		locFrom = locTo;
+		locTo = locFrom + 1;
+		
+		byte msgType = java.util.Arrays.copyOfRange(inputContent, locFrom, locTo)[0];
+		msg.setMsgType( msgType );
+		
+		
+
+		
+
 		/*
 		ReqMessageModel model = new ReqMessageModel();
 		short index = 0;

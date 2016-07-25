@@ -8,7 +8,9 @@ import org.vsg.cusp.eventbus.MultiMap;
 public interface Message<T> {
 	
 	
-	public static final byte REQUEST = 1;
+	public static final byte TYPE_REQ = 1;
+	
+	public static final byte TYPE_REP = 2;
 	
 	
 	/**
