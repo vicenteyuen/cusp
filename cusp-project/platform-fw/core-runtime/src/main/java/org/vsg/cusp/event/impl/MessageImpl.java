@@ -32,10 +32,21 @@ public class MessageImpl<U, T> implements Message<T> , MessageCodecSupport {
 
 	private int headersPos;
 
-
 	private String replyAddress;
 
+	public MessageImpl() {
+		
+	}
+
 	
+	
+	@Override
+	public byte msgType() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 
 	public MessageImpl(String address, U sentBody,
 			MessageCodec<U, T> messageCodec, boolean send) {

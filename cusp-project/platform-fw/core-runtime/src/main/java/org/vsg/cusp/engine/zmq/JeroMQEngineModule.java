@@ -4,16 +4,19 @@
 package org.vsg.cusp.engine.zmq;
 
 import java.util.Map;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.RunnableFuture;
 
+import org.vsg.cusp.core.EventBusServEngine;
 import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.core.modules.AbstractContainerModule;
-import org.vsg.cusp.event.common.Service;
-import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
-import org.vsg.cusp.event.impl.MultiThreadEngineService;
-import org.vsg.cusp.eventbus.EventBus;
+import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.MessageEncoder;
+import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
+import org.vsg.cusp.event.impl.MessageProvider;
 
 import com.google.inject.Scopes;
+import com.google.inject.name.Names;
+
 
 /**
  * @author Vicente Yuen
@@ -30,14 +33,19 @@ public class JeroMQEngineModule extends AbstractContainerModule implements ServE
 	protected void configure() {
 		
 		
+		
+		this.bind(Message.class).toProvider( MessageProvider.class );
+		this.bind(MessageEncoder.class).to( DefaultMessageExchangeEncoder.class ).in(  Scopes.SINGLETON  );
+		
+		
+		// --- set the service --
+		this.bind(RunnableFuture.class).annotatedWith(Names.named("RequestResponseBroker")).to(ReqRepBroker.class).in( Scopes.SINGLETON );
+		this.bind(RunnableFuture.class).annotatedWith(Names.named("RequestResponseWorker")).to(ReqRepWorker.class).in( Scopes.SINGLETON );
+		
+		
 		// --- start mqbroker ---
-		binder().bind(ServEngine.class).to( JeroMQServEngine.class ).in( Scopes.SINGLETON );
-		
-		
-		
-		//JeroMQServEngine servEngine = new JeroMQServEngine();
-		
-		//servEngine.start();
+		this.bind(EventBusServEngine.class).to( JeroMQServEngine.class ).in( Scopes.SINGLETON );
+
 		
 		
 	}

@@ -3,6 +3,7 @@ package org.vsg.cusp.concurrent;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.vsg.cusp.core.EventBusServEngine;
 import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.engine.zmq.JeroMQEngineModule;
 import org.vsg.cusp.engine.zmq.JeroMQServEngine;
@@ -21,8 +22,22 @@ public class EventFlowTestCase01 {
 	private EventFlow eventFlow;
 	
 	
+	private Injector inject;
 	
-	public void start() {
+	public void initModule() {
+		JeroMQEngineModule mqEngineModule = new JeroMQEngineModule();
+		EventModule evtMod = new EventModule();
+		
+		inject = Guice.createInjector(mqEngineModule , evtMod);
+		
+	}
+	
+	
+	public void startEngineOrService() {
+		// --- start engine ---
+		EventBusServEngine  eventBusServEngine = inject.getInstance( EventBusServEngine.class );
+		eventBusServEngine.start();
+		
 		
 		// --- start engine ---
 		//JeroMQServEngine servEngine = new JeroMQServEngine();
@@ -35,16 +50,7 @@ public class EventFlowTestCase01 {
 	
 	
 	public void execute() {
-		
-		JeroMQEngineModule mqEngineModule = new JeroMQEngineModule();
-		
-		EventModule evtMod = new EventModule();
-		
-		Injector inject = Guice.createInjector(mqEngineModule , evtMod);
-		
-		// --- start jeromq engine ---
-		ServEngine engineInst = inject.getInstance(JeroMQServEngine.class);
-		engineInst.start();
+
 		
 		FlowManager manager =  inject.getInstance( FlowManager.class );
 		
@@ -118,7 +124,9 @@ public class EventFlowTestCase01 {
 		
 		EventFlowTestCase01 executeCase = new EventFlowTestCase01();
 		
-		executeCase.start();
+		executeCase.initModule();
+		
+		executeCase.startEngineOrService();
 		
 		
 		executeCase.execute();

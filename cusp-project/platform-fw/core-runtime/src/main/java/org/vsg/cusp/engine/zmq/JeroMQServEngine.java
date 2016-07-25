@@ -6,24 +6,43 @@ package org.vsg.cusp.engine.zmq;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RunnableFuture;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.Container;
-import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.core.EventBusServEngine;
 import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
 
 /**
  * @author Vicente Yuen
  *
  */
-public class JeroMQServEngine implements ServEngine , Runnable {
+public class JeroMQServEngine implements EventBusServEngine , Runnable {
 	
 	private static Logger logger = LoggerFactory.getLogger(JeroMQServEngine.class);	
 	
 	private Map<String, String> arguments;	
 	
-	private Container container;		
+	private Container container;
+	
+	
+	
+	private RunnableFuture reqRepBroker;
+	
+	private RunnableFuture worker;
+	
+	@Inject
+	public JeroMQServEngine(@Named("RequestResponseBroker") RunnableFuture reqRepBroker,
+			@Named("RequestResponseWorker") RunnableFuture worker) {
+		this.reqRepBroker = reqRepBroker;
+		this.worker = worker;
+	}
+	
+	
 
 	@Override
 	public void setRunningContainer(Container container) {
@@ -59,17 +78,15 @@ public class JeroMQServEngine implements ServEngine , Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		ReqRepBroker broker = new ReqRepBroker();
-		// --- internal worker ---
-		ReqRepWorker worker = new ReqRepWorker();
+		
+
 		// --- message exchange encoder ---
-		DefaultMessageExchangeEncoder dme = new DefaultMessageExchangeEncoder();
-		worker.setEncoder(dme);
+		//DefaultMessageExchangeEncoder dme = new DefaultMessageExchangeEncoder();
+		//worker.setEncoder(dme);
 		
 		ExecutorService execService = Executors.newCachedThreadPool();
-		
-		execService.execute( broker );
+
+		execService.execute( reqRepBroker );
 		execService.execute( worker );
 		execService.shutdown();
 		

@@ -5,6 +5,8 @@ import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
@@ -52,7 +54,8 @@ public class ReqRepWorker implements RunnableFuture {
 	public MessageEncoder getEncoder() {
 		return encoder;
 	}
-
+	
+	@Inject
 	public void setEncoder(MessageEncoder encoder) {
 		this.encoder = encoder;
 	}
