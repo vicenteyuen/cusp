@@ -1,5 +1,7 @@
 package org.vsg.cusp.event.impl;
 
+import java.io.UnsupportedEncodingException;
+
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.ReqMessageModel;
@@ -8,6 +10,7 @@ import org.vsg.cusp.eventbus.impl.CodecManager;
 
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
+import com.google.common.primitives.Shorts;
 
 /**
  * Define Message Encoder default instance 
@@ -33,14 +36,30 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 		byte[] body = reqMsgEncoder.encode((Message<byte[]>)msg);
 		
 		ReqMessageModel  reqMsgModel = reqMsgSchemaEncoder.genFromBodyContent(body, reqMsg);
-		byte[] totalBytes = reqMsgSchemaEncoder.encode( reqMsgModel );
+		
+		byte[] headerBytes = Bytes.concat(
+				new byte[]{reqMsgModel.getApiCodeId()},
+				Shorts.toByteArray(reqMsgModel.getVersion()),
+				Longs.toByteArray( reqMsgModel.getCorrelationId()),
+				reqMsgModel.getClientMac()
+			);
+		
+		byte[] totalBytes = headerBytes;
 
 		
 		long totalLength = totalBytes.length;
 		
+		System.out.println(reqMsgModel.getClientMac().length);
 		
+
 		
-		byte[] all = Bytes.concat( Longs.toByteArray( totalLength ) , new byte[]{Message.TYPE_REQ} , totalBytes);
+		byte[] all = Bytes.concat( 
+				Longs.toByteArray( totalLength ) ,
+				new byte[]{Message.TYPE_REQ}, 
+				reqMsgModel.getClientMac(),
+				Longs.toByteArray( System.currentTimeMillis() ),
+				Longs.toByteArray( reqMsgModel.getCorrelationId()),
+				totalBytes);
 		
 		
 		return all;
@@ -85,8 +104,23 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 		byte msgType = java.util.Arrays.copyOfRange(inputContent, locFrom, locTo)[0];
 		msg.setMsgType( msgType );
 		
-		
+		// --- get clinet mac ---
+		locFrom = locTo;
+		locTo = locFrom + 6;
+		try {
+			msg.headers().add("PUBLISHER", new String(java.util.Arrays.copyOfRange(inputContent, locFrom, locTo),"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
+		locFrom = locTo;
+		locTo = locFrom + Long.BYTES;		
+		long publisherSentTime = Longs.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
+
+		locFrom = locTo;
+		locTo = locFrom + Long.BYTES;
+		long correlationId = Longs.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
 		
 
 		/*
