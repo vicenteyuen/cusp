@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 
+import org.vsg.cusp.core.utils.CommonUtils;
+
 public class IPAddressTest {
 
     public static void main(String[] args) throws SocketException{    
@@ -13,16 +15,17 @@ public class IPAddressTest {
                 showInfo(IP);    
                  
                 //从名字获得 InetAddress信息    
-                IP = InetAddress.getByName("www.sina.com.cn");    
-                showInfo(IP);    
+                //IP = InetAddress.getByName("www.sina.com.cn");    
+                //showInfo(IP);    
                  
                 //从IP 地址 获得 InetAddress信息    
                 byte[] bs = new byte[]{(byte)192,(byte)168,(byte)0,(byte)102};    
-                IP = InetAddress.getByAddress(bs);
-                
+                //IP = InetAddress.getByAddress(bs);
                 
                 byte[] mac = NetworkInterface.getByInetAddress(IP).getHardwareAddress();  
                 
+                String cuid = CommonUtils.getUid(mac);
+
                 //下面代码是把mac地址拼装成String  
                 StringBuffer sb = new StringBuffer();  
                   
