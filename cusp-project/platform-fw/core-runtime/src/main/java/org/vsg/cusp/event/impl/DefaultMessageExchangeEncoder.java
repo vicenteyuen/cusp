@@ -2,6 +2,7 @@ package org.vsg.cusp.event.impl;
 
 import java.io.UnsupportedEncodingException;
 
+import org.vsg.cusp.core.utils.CommonUtils;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.ReqMessageModel;
@@ -9,6 +10,7 @@ import org.vsg.cusp.event.RequestMessageEncoder;
 import org.vsg.cusp.eventbus.impl.CodecManager;
 
 import com.google.common.primitives.Bytes;
+import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.google.common.primitives.Shorts;
 
@@ -49,7 +51,15 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 		
 		long totalLength = totalBytes.length;
 		
-		System.out.println(reqMsgModel.getClientMac().length);
+		
+		String uid = CommonUtils.getUid( reqMsgModel.getClientMac() );
+		System.out.println(uid);
+		// --- paurse corrent id array ---
+		String[] correlationIds = uid.split("\\.");
+		byte[] correlationIdsPrefix =Longs.toByteArray( Long.parseLong( correlationIds[0] ) ) ;
+		byte[] correlationIdsSuffix =Longs.toByteArray( Long.parseLong( correlationIds[1] ) ) ;
+		byte[] correlationIdsSeq = Ints.toByteArray( 0 );
+
 		
 
 		
@@ -58,7 +68,9 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 				new byte[]{Message.TYPE_REQ}, 
 				reqMsgModel.getClientMac(),
 				Longs.toByteArray( System.currentTimeMillis() ),
-				Longs.toByteArray( reqMsgModel.getCorrelationId()),
+				correlationIdsPrefix,
+				correlationIdsSuffix,
+				correlationIdsSeq,
 				totalBytes);
 		
 		
@@ -120,9 +132,19 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 
 		locFrom = locTo;
 		locTo = locFrom + Long.BYTES;
-		long correlationId = Longs.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
+		long corrIdPrefix = Longs.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
+		
+		locFrom = locTo;
+		locTo = locFrom + Long.BYTES;
+		long corrIdSubfix = Longs.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
+		
+		locFrom = locTo;
+		locTo = locFrom + Integer.BYTES;
+		int corrIdSeq = Ints.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
+
 		
 
+		
 		/*
 		ReqMessageModel model = new ReqMessageModel();
 		short index = 0;
