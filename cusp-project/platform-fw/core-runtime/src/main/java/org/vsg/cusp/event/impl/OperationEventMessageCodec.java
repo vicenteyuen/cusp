@@ -39,6 +39,10 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 
 	@Override
 	public OperationEvent decodeFromWire(int pos, Buffer buffer) {
+		StringBuilder content = new StringBuilder();
+
+		
+
 		StringTokenizer st = new StringTokenizer( new String(buffer.getBytes()) , "\\|" );
 		String eventId = st.nextToken();
 		
@@ -82,9 +86,21 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 		Class<?>[] paramTypeCls = method.getParameterTypes();
 		
 		StringBuilder result = new StringBuilder(methodName);
+		result.append(":");
+		
+		// --- return  parameter ---
+		StringBuilder paramTypeStr = new StringBuilder();
 		for (Class<?> oneCls : paramTypeCls) {
-			result.append(",");
-			result.append(oneCls.getName());		
+			if (paramTypeStr.length() > 0) {
+				paramTypeStr.append(",");
+			}
+			paramTypeStr.append(oneCls.getName());		
+		}
+		
+		if (paramTypeStr.length() == 0) {
+			result.append("void");
+		} else {
+			result.append(paramTypeStr);
 		}
 		
 		return result;
