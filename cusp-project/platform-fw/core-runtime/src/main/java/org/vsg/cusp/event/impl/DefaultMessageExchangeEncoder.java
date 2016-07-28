@@ -23,14 +23,6 @@ import com.google.common.primitives.Shorts;
  *
  */
 public class DefaultMessageExchangeEncoder implements MessageEncoder {
-	
-	protected CodecManager codecManager = new CodecManager();
-	
-	
-	public SingleRequestMessage reqMsg = new SingleRequestMessage();
-	
-	private ReqMessageSchemaEncoderImpl reqMsgSchemaEncoder = new ReqMessageSchemaEncoderImpl();
-
 
 	@Override
 	public byte[] encode(Message<byte[]> msg) {

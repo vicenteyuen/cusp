@@ -36,6 +36,7 @@ import org.vsg.cusp.eventbus.impl.HandlerHolder;
 import org.vsg.cusp.eventbus.impl.HandlerRegistration;
 import org.vsg.cusp.eventbus.impl.Handlers;
 import org.vsg.cusp.eventbus.impl.MessageProducerImpl;
+import org.vsg.cusp.eventbus.spi.Buffer;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
@@ -136,8 +137,13 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 		if (null != codecName) {
 			MessageCodec<Object,byte[]> msgCodec = codecManager.getCodec(codecName);
 			
+			Buffer buffer = Buffer.factory.buffer();
+			
+			msgCodec.encodeToWire( buffer , body);
+			
+			
 			mainBody = msgCodec.transform(body);
-			msgCodec.encodeToWire(null, s);
+			//msgCodec.encodeToWire(null, s);
 			
 			
 			

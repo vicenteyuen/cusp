@@ -26,6 +26,11 @@ import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 
+/***
+ * @deprecated
+ * @author ruanweibiao
+ *
+ */
 public class SingleRequestMessage extends AbstractRequestMessageEnvelope {
 
 	

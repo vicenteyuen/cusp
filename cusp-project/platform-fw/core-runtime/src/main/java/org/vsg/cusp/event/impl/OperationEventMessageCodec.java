@@ -22,6 +22,9 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 
 	@Override
 	public void encodeToWire(Buffer buffer, OperationEvent s) {
+		
+		System.out.println("bind");
+		
 	}
 
 	@Override
