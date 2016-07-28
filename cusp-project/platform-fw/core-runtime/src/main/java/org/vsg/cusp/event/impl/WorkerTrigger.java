@@ -3,9 +3,11 @@
  */
 package org.vsg.cusp.event.impl;
 
+import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.eventbus.impl.CodecManager;
+import org.vsg.cusp.eventbus.spi.Buffer;
 import org.zeromq.ZMQ.Socket;
 
 import com.google.common.primitives.Ints;
@@ -55,9 +57,17 @@ public class WorkerTrigger {
 		if ("null".equals(msgCodecName)) {
 			
 		}
-		else {
+		else if ("operation-event".equals(OperationEventMessageCodec.NAME))  {
 			
-			MessageCodec  msgCodec =  codecManager.getCodec(msgCodecName);			
+			MessageCodec<?,OperationEvent>  msgCodec =  codecManager.getCodec(msgCodecName);
+			
+			Buffer buffer = Buffer.factory.buffer( java.util.Arrays.copyOfRange(msgBody, locTo, msgBody.length) );
+			
+			OperationEvent event = msgCodec.decodeFromWire( 0 , buffer);
+			
+
+			//codecManager.decodeFromWire();
+			
 		}
 		
 

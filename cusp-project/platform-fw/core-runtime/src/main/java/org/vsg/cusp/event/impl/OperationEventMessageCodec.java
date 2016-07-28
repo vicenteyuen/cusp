@@ -5,7 +5,7 @@ package org.vsg.cusp.event.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
+import java.util.StringTokenizer;
 
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.event.MessageCodec;
@@ -15,26 +15,45 @@ import org.vsg.cusp.eventbus.spi.Buffer;
  * @author Vicente Yuen
  *
  */
-public class OperationEventMessageCodec implements MessageCodec<OperationEvent, byte[]> {
+public class OperationEventMessageCodec implements MessageCodec<OperationEvent, OperationEvent> {
 	
 	public static final byte SYSTEMCODEC_ID = -1;
 	
+	public static final String NAME = "operation-event";
 
 	@Override
 	public void encodeToWire(Buffer buffer, OperationEvent s) {
 		
-		System.out.println("bind");
+		buffer
+			.appendString( s.assoClassName() )
+			.appendString(":")
+			.appendString( s.getEventId())
+			;
+		buffer.appendString( "|" );
+		
+		//buffer.appendString( "|" );
+		buffer.appendString( convertToString(s.assoBindMethod()).toString() );
+
 		
 	}
 
 	@Override
-	public byte[] decodeFromWire(int pos, Buffer buffer) {
+	public OperationEvent decodeFromWire(int pos, Buffer buffer) {
+		StringTokenizer st = new StringTokenizer( new String(buffer.getBytes()) , "\\|" );
+		String eventId = st.nextToken();
+		
+		String methodName = st.nextToken();
+
+		
+		System.out.println( eventId);
+		System.out.println(methodName);
 		
 		return null;
 	}
 
 	@Override
-	public byte[] transform(OperationEvent s) {
+	public OperationEvent transform(OperationEvent s) {
+		/*
 	
 		String clsName = s.assoClassName();
 		
@@ -52,8 +71,9 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 		result.append("}");
 		
 		byte[] resultByte = result.toString().getBytes(Charset.forName("UTF-8"));
+		*/
 		
-		return resultByte;
+		return s;
 	}
 	
 	
@@ -88,7 +108,7 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 	@Override
 	public String name() {
 		// TODO Auto-generated method stub
-		return "operation-event";
+		return NAME;
 	}
 
 	@Override

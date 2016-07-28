@@ -140,10 +140,7 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 			Buffer buffer = Buffer.factory.buffer();
 			
 			msgCodec.encodeToWire( buffer , body);
-			
-			
-			mainBody = msgCodec.transform(body);
-			//msgCodec.encodeToWire(null, s);
+			mainBody = buffer.getBytes();
 			
 			
 			
