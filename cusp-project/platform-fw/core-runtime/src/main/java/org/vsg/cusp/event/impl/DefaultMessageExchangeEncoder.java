@@ -1,6 +1,9 @@
 package org.vsg.cusp.event.impl;
 
-import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 import org.vsg.cusp.core.utils.CommonUtils;
 import org.vsg.cusp.event.Message;
@@ -30,80 +33,58 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 
 
 	@Override
-	public byte[] encode(Message msg) {
+	public byte[] encode(Message<byte[]> msg) {
 
-		
-		RequestMessageEncoder reqMsgEncoder =  reqMsg.getRequestMessageEncoder();
-		
-		byte[] body = reqMsgEncoder.encode((Message<byte[]>)msg);
-		
-		ReqMessageModel  reqMsgModel = reqMsgSchemaEncoder.genFromBodyContent(body, reqMsg);
-		
-		byte[] headerBytes = Bytes.concat(
-				new byte[]{reqMsgModel.getApiCodeId()},
-				Shorts.toByteArray(reqMsgModel.getVersion()),
-				Longs.toByteArray( reqMsgModel.getCorrelationId()),
-				reqMsgModel.getClientMac()
-			);
-		
-		byte[] totalBytes = headerBytes;
+		// --- local mac ---
+        byte[] mac = null;
+		try {
+			InetAddress IP = InetAddress.getLocalHost();
+			mac = NetworkInterface.getByInetAddress(IP).getHardwareAddress();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		String uid = CommonUtils.getUid( mac );
 
-		
-		long totalLength = totalBytes.length;
-		
-		
-		String uid = CommonUtils.getUid( reqMsgModel.getClientMac() );
-		System.out.println(uid);
 		// --- paurse corrent id array ---
 		String[] correlationIds = uid.split("\\.");
 		byte[] correlationIdsPrefix =Longs.toByteArray( Long.parseLong( correlationIds[0] ) ) ;
 		byte[] correlationIdsSuffix =Longs.toByteArray( Long.parseLong( correlationIds[1] ) ) ;
 		byte[] correlationIdsSeq = Ints.toByteArray( 0 );
 
-		
-
-		
-		byte[] all = Bytes.concat( 
-				Longs.toByteArray( totalLength ) ,
-				new byte[]{Message.TYPE_REQ}, 
-				reqMsgModel.getClientMac(),
+		// --- construct base msg ---
+		byte[] msgBytes = Bytes.concat(
+				new byte[]{msg.msgType()},
+				mac,
 				Longs.toByteArray( System.currentTimeMillis() ),
 				correlationIdsPrefix,
 				correlationIdsSuffix,
 				correlationIdsSeq,
-				totalBytes);
-		
-		
-		return all;
+				msg.body()
+				);
+		byte[] allBytes = Bytes.concat(Longs.toByteArray( msgBytes.length ) ,msgBytes);
+
+		return allBytes;
 	}
+	
+
 
 	@Override
-	public Message decode(byte[] msgBytes) {
-		// TODO Auto-generated method stub
+	public Message<byte[]> decode(byte[] msgBytes) {
+
 		ByteArrayMessageImpl _inst = new ByteArrayMessageImpl();
 		
 		// --- parse message header ---
-		parseMessageHeader(msgBytes, (AbstractMessage<byte[]>) _inst);
-		
-		/*
-		ReqMessageModel reqMsgModel = reqMsgSchemaEncoder.decode(msgBytes);
-		
-		// --- decode message type ---
-		byte apiCodeId = reqMsgModel.getApiCodeId();
-
-
-		if (reqMsg.getApiId() == apiCodeId) {
-			RequestMessageDecoder reqMsgDecoder =  reqMsg.getRequestManagerDecoder();
-			_inst = reqMsgDecoder.decode( reqMsgModel.getBody() );
-		}
-		*/
-
+		parseMessageFromBytes(msgBytes, (AbstractMessage<byte[]>) _inst);
 		
 		return _inst;
 	}
 	
 	
-	private void parseMessageHeader(byte[] inputContent , AbstractMessage<byte[]> msg) {
+	private void parseMessageFromBytes(byte[] inputContent , AbstractMessage<byte[]> msg) {
 		int locFrom = 0;
 		int locTo = locFrom + Long.BYTES;
 		
@@ -120,10 +101,20 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 		locFrom = locTo;
 		locTo = locFrom + 6;
 		try {
-			msg.headers().add("PUBLISHER", new String(java.util.Arrays.copyOfRange(inputContent, locFrom, locTo),"UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			byte[] macBytes = java.util.Arrays.copyOfRange(inputContent, locFrom, locTo);
+			
+            StringBuffer sb = new StringBuffer(); 			
+            for(int i=0;i<macBytes.length;i++){  
+                if(i!=0){  
+                    sb.append("-");  
+                }  
+                //mac[i] & 0xFF 是为了把byte转化为正整数  
+                String s = Integer.toHexString(macBytes[i] & 0xFF);  
+                sb.append(s.length()==1?0+s:s);  
+            } 			
+			msg.headers().add("PUBLISHER", sb.toString());
+		} finally {
+			
 		}
 
 		locFrom = locTo;
@@ -143,41 +134,21 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 		int corrIdSeq = Ints.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
 
 		
-
 		
-		/*
-		ReqMessageModel model = new ReqMessageModel();
-		short index = 0;
-		model.setApiCodeId( inputContent[index++] );
-		
-		// --- get version content ---
-		int locFrom = index++;
-		int locTo = locFrom + Short.BYTES;
-		
-		short version = Shorts.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
-		model.setVersion( version );
-	
-		// --- get correlationId ---
+		/**
+		 * build array content
+		 */
+		msg.setBodyPos(locTo);
 		locFrom = locTo;
-		locTo = locFrom + Longs.BYTES;
-		long correlationId = Longs.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
-		model.setCorrelationId( correlationId );
-
+		locTo = inputContent.length;
 		
-		// --- get client mac ---
-		locFrom = locTo;
-		locTo = locFrom + 6;
-		byte[] clientMac = java.util.Arrays.copyOfRange(inputContent, locFrom, locTo);
-		model.setClientMac(clientMac);
+		/**
+		 * parse body from msgContent
+		 * 
+		 */
+		byte[] body = java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) ;
+		msg.setBody(body);
 		
-		StringBuilder output = new StringBuilder();
-		for (byte con : clientMac) {
-			output.append(con).append(" ");
-		}
-		locFrom = locTo;
-		int bodyLength = inputContent.length;
-		byte[] bodyContent = java.util.Arrays.copyOfRange(inputContent, locFrom, bodyLength);
-		*/		
 	}
 	
 	

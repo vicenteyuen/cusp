@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.impl.WorkerTrigger;
+import org.vsg.cusp.eventbus.impl.CodecManager;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
@@ -76,8 +77,13 @@ public class ReqRepWorker implements RunnableFuture {
 	
 	private int workerPort = 5066;
 	
+	private  CodecManager codecManager;
 	
-
+	@Inject
+	public void setCodecManager(CodecManager codecManager) {
+		this.codecManager = codecManager;
+	}
+	
 	@Override
 	public void run() {
 		StringBuilder clientSocket = new StringBuilder();
@@ -100,16 +106,15 @@ public class ReqRepWorker implements RunnableFuture {
 	            	
 	            	// --- parse job message ---
 	            	if (null != message) {
-	            		Message msgRef = encoder.decode(message);
+	            		Message<byte[]> msgRef = encoder.decode(message);
 	            		
 	            		/**
 	            		 * trigger event handle 
 	            		 */
-	            		
 	            		WorkerTrigger trggerService = new WorkerTrigger();
+	            		trggerService.setCodecManager( codecManager );
 	            		trggerService.setReplySocket( requester );
 	            		trggerService.receiveMessage(msgRef);
-	            		
 	            		trggerService.trigger();
           		
 	            		

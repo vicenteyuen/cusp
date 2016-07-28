@@ -50,7 +50,6 @@ public class ZmqcmdHelper {
 			requester.connect(senderHost);			
 			if (null != encoder && senderHosts.size() > 0) {
 				byte[] content = encoder.encode(message);
-
 				requester.send(content, 0);
 				
 				// --- reply content ---

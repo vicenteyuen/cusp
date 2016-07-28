@@ -39,6 +39,10 @@ public abstract class AbstractMessage<T> implements Message<T> , MessageAware<T>
 		return headers;
 	}
 	
+	public void setHeaders(MultiMap headers) {
+		this.headers = headers;
+	}
+	
 	private T body;
 
 
@@ -63,6 +67,12 @@ public abstract class AbstractMessage<T> implements Message<T> , MessageAware<T>
 	
 	void setHeadPos(int headPos) {
 		this.headPos = headPos;
+	}
+	
+	private int bodyPos;
+	
+	void setBodyPos(int bodyPos) {
+		this.bodyPos = bodyPos;
 	}
 
 }

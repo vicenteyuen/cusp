@@ -127,18 +127,6 @@ public class PromiseImpl implements Promise {
 					
 					producer.send(operEvent, handler);
 
-	
-					//eventBus.p
-					// --- send event msg to run ---
-					// execute method 
-					/*
-					Method bindMethod = operEvent.assoBindMethod();
-					
-					Class<?>  cls = Class.forName( operEvent.assoClassName() );
-					Object inst = cls.newInstance();
-					bindMethod.invoke( inst ,flow.getFlowManager());
-					*/
-					
 					// ---- count value ---
 					countDownLatch.countDown();
 					

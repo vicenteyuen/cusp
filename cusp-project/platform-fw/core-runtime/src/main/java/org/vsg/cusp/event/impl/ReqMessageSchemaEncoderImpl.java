@@ -8,6 +8,11 @@ import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.google.common.primitives.Shorts;
 
+/**
+ * @deprecated
+ * @author ruanweibiao
+ *
+ */
 public class ReqMessageSchemaEncoderImpl implements ReqMessageSchemaDecoder , ReqMessageSchemaEncoder {
 	
 

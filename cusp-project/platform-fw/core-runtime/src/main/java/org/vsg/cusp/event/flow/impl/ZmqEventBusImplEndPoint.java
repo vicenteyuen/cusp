@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.event.common.Service;
+import org.vsg.cusp.event.impl.AbstractMessage;
+import org.vsg.cusp.event.impl.ByteArrayMessageImpl;
 import org.vsg.cusp.event.impl.MessageImpl;
 import org.vsg.cusp.event.impl.ZmqcmdHelper;
 import org.vsg.cusp.eventbus.AsyncResult;
@@ -37,6 +39,9 @@ import org.vsg.cusp.eventbus.impl.MessageProducerImpl;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
+
+import com.google.common.primitives.Bytes;
+import com.google.common.primitives.Ints;
 
 
 public class ZmqEventBusImplEndPoint implements EventBus , Service{
@@ -92,8 +97,12 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 	public <T> EventBus send(String address, Object message,
 			DeliveryOptions options,
 			Handler<AsyncResult<Message<T>>> replyHandler) {
-		sendOrPubInternal(
-				createMessage(true, address, options.getHeaders(), message,	options.getCodecName()), options, replyHandler);
+		
+		// --- bind headers handle ---
+		
+		
+		AbstractMessage<T> msg = createMessage(true, address, options.getHeaders(), message,	options.getCodecName());
+		sendOrPubInternal(msg, options, replyHandler);
 		return this;
 	}
 
@@ -106,21 +115,52 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 	@Override
 	public EventBus publish(String address, Object message,
 			DeliveryOptions options) {
-		sendOrPubInternal(
-				createMessage(false, address, options.getHeaders(), message,
-						options.getCodecName()), options, null);
+		AbstractMessage<byte[]> msg = createMessage(false, address, options.getHeaders(), message,
+				options.getCodecName());
+		
+		
+		sendOrPubInternal(msg, options, null);
 		return this;
 	}
 
-	public MessageImpl createMessage(boolean send, String address,
+	public <T> AbstractMessage<T> createMessage(boolean send, String address,
 			MultiMap headers, Object body, String codecName) {
 		Objects.requireNonNull(address, "no null address accepted");
-		MessageCodec codec = codecManager.lookupCodec(body, codecName);
-		MessageImpl msg = new MessageImpl(address, body, codec, true);
-		return msg;
+		
+		// --- create byte message ---
+		ByteArrayMessageImpl msg = new ByteArrayMessageImpl();
+		msg.setHeaders( headers );
+		msg.setAddress(address);
+		
+		byte[] mainBody = null;
+		if (null != codecName) {
+			MessageCodec<Object,byte[]> msgCodec = codecManager.getCodec(codecName);
+			
+			mainBody = msgCodec.transform(body);
+			msgCodec.encodeToWire(null, s);
+			
+			
+			
+		} else {
+			MessageCodec codec = codecManager.lookupCodec(body, codecName);
+			
+			codecName = codec.name();			
+			codec.transform( body );
+
+		}
+		Objects.requireNonNull(codecName, "code Name is not define.");		
+		Objects.requireNonNull(mainBody, "Could not find the body content.");
+		
+		
+		byte[] cnOffset = Ints.toByteArray( codecName.length() );
+		
+		msg.setBody( Bytes.concat( cnOffset , codecName.getBytes() , mainBody ) );
+		
+		
+		return (AbstractMessage<T>)msg;
 	}
 
-	private <T> void sendOrPubInternal(MessageImpl message,
+	private <T> void sendOrPubInternal(AbstractMessage<T> message,
 			DeliveryOptions options,
 			Handler<AsyncResult<Message<T>>> replyHandler) {
 		checkStarted();
@@ -154,12 +194,12 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 	}
 
 	private <T> HandlerRegistration<T> createReplyHandlerRegistration(
-			MessageImpl message, DeliveryOptions options,
+			AbstractMessage<T> message, DeliveryOptions options,
 			Handler<AsyncResult<Message<T>>> replyHandler) {
 		if (replyHandler != null) {
 			long timeout = options.getSendTimeout();
 			String replyAddress = generateReplyAddress();
-			message.setReplyAddress(replyAddress);
+			//message.setReplyAddress(replyAddress);
 			Handler<Message<T>> simpleReplyHandler = convertHandler(replyHandler);
 
 			Context context = ZMQ.context(1);
@@ -223,7 +263,8 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 	public <T> MessageProducer<T> sender(String address, DeliveryOptions options) {
 		Objects.requireNonNull(address, "address");
 		Objects.requireNonNull(options, "options");
-
+		
+		// --- create byte producer handle ---
 		MessageProducerImpl msgProdImpl = new MessageProducerImpl<>(this,address, true,	options);
 		return msgProdImpl;
 	}
@@ -317,12 +358,12 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 	 */
 	protected class SendContextImpl<T> implements SendContext<T> {
 
-		public MessageImpl message;
+		public AbstractMessage<T> message;
 		public DeliveryOptions options;
 		public HandlerRegistration<T> handlerRegistration;
 		public Iterator<Handler<SendContext>> iter;
 
-		public SendContextImpl(MessageImpl message, DeliveryOptions options,
+		public SendContextImpl(AbstractMessage<T> message, DeliveryOptions options,
 				HandlerRegistration<T> handlerRegistration) {
 			this.message = message;
 			this.options = options;
@@ -352,35 +393,22 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 
 		@Override
 		public boolean send() {
-			return message.send();
+			//return message.send();
+			return false;
 		}
 	}
 
 	protected <T> void sendOrPub(SendContextImpl<T> sendContext) {
-		MessageImpl message = sendContext.message;
+		AbstractMessage<T> message = sendContext.message;
 		
 		// --- message send ---
 		cmdHelper.messageSent(message, options);
 		// metrics.messageSent(message.address(), !message.send(), true, false);
-		deliverMessageLocally(sendContext);
 	}
 
-	protected <T> void deliverMessageLocally(SendContextImpl<T> sendContext) {
-		if (!deliverMessageLocally(sendContext.message)) {
-			// no handlers
-			/*
-			 * metrics.replyFailure(sendContext.message.address,
-			 * ReplyFailure.NO_HANDLERS); if (sendContext.handlerRegistration !=
-			 * null) {
-			 * sendContext.handlerRegistration.sendAsyncResultFailure(ReplyFailure
-			 * .NO_HANDLERS, "No handlers for address " +
-			 * sendContext.message.address); }
-			 */
-		}
-	}
 
-	public <T> void sendReply(MessageImpl replyMessage,
-			MessageImpl replierMessage, DeliveryOptions options,
+	public <T> void sendReply(AbstractMessage<T> replyMessage,
+			AbstractMessage<T> replierMessage, DeliveryOptions options,
 			Handler<AsyncResult<Message<T>>> replyHandler) {
 		if (replyMessage.address() == null) {
 			throw new IllegalStateException("address not specified");

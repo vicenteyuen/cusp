@@ -53,6 +53,7 @@ public class CodecManager {
 				DOUBLE_MESSAGE_CODEC, BOOLEAN_MESSAGE_CODEC,
 				SHORT_MESSAGE_CODEC, CHAR_MESSAGE_CODEC, BYTE_MESSAGE_CODEC);
 	}
+	
 
 	public MessageCodec lookupCodec(Object body, String codecName) {
 		MessageCodec codec;

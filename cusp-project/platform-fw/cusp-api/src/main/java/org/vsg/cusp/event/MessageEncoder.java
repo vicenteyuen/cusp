@@ -11,7 +11,7 @@ public interface MessageEncoder {
 	 * @param msg support any class to covert 
 	 * @return
 	 */
-	byte[] encode(Message<?> msg);
+	byte[] encode(Message<byte[]> msg);
 	
 	
 	/**
@@ -19,6 +19,6 @@ public interface MessageEncoder {
 	 * @param msgBytes
 	 * @return
 	 */
-	Message<?> decode(byte[] msgBytes);
+	Message<byte[]> decode(byte[] msgBytes);
 
 }

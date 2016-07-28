@@ -22,13 +22,11 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 
 	@Override
 	public void encodeToWire(Buffer buffer, OperationEvent s) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public byte[] decodeFromWire(int pos, Buffer buffer) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

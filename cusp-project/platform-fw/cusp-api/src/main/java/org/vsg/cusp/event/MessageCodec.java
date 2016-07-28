@@ -19,7 +19,7 @@ public interface MessageCodec<S, R> {
 	 * @return the transformed message
 	 */
 	R transform(S s);
-
+	
 	/**
 	 * The codec name. Each codec must have a unique name. This is used to
 	 * identify a codec when sending a message and for unregistering codecs.
