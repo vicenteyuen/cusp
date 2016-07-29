@@ -13,6 +13,7 @@ import org.vsg.cusp.event.flow.impl.FlowManagerImpl;
 import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;
 import org.vsg.cusp.event.impl.PromiseProvider;
+import org.vsg.cusp.event.impl.ResResultMessageCodec;
 import org.vsg.cusp.event.impl.ZmqcmdHelper;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.EventBus;
@@ -68,6 +69,8 @@ public class EventModule extends AbstractModule {
 
 			CodecManager codecManager = new CodecManager();
 			codecManager.registerCodec(new OperationEventMessageCodec());
+			codecManager.registerCodec(new ResResultMessageCodec());
+			
 			this.bind(CodecManager.class).toInstance( codecManager );
 
 			EventBusOptions ebOptions = parseConfForEventBus(jsonConf);
