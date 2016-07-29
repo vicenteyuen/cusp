@@ -13,6 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.inject.Inject;
 
+import org.rapidoid.bytes.BytesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
@@ -138,12 +139,19 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 			MessageCodec<Object,byte[]> msgCodec = codecManager.getCodec(codecName);
 			
 			Buffer buffer = Buffer.factory.buffer();
-			
 			msgCodec.encodeToWire( buffer , body);
 			mainBody = buffer.getBytes();
 			
+			// --- remove byte ---
+			int cIndex = 0;
+			for (int tmpEmpty = mainBody.length-1 ; tmpEmpty > 0 ; tmpEmpty --) {
+				if (mainBody[tmpEmpty] != 0 ) {
+					break;
+				}
+				cIndex++;
+			}
 			
-			
+			mainBody = java.util.Arrays.copyOfRange(mainBody, 0, mainBody.length - cIndex);
 		} else {
 			MessageCodec codec = codecManager.lookupCodec(body, codecName);
 			
