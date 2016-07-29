@@ -17,7 +17,7 @@ public interface OperationEvent {
 	String getEventId();
 	
 	// ---- associa method ---
-	void setRuntimeArgument(Serializable[] arguments);
+	void setRuntimeArgument(Serializable... arguments);
 	
 	Serializable[] getRuntimeArgument();
 	

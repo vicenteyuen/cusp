@@ -83,6 +83,8 @@ public class EventFlowTestCase01 {
 		OperationEvent  event5 =  eventFlow.getOperEvent("testCase5@" + MockOperationEventCls.class.getName());
 		
 		try {
+			event1.setRuntimeArgument("savem");
+			
 
 			
 			prom.addOperationEvent(event1);

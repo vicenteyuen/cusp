@@ -158,7 +158,7 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 						String fullId = shortId + "@" + cls.getName();
 						
 						OperationEventImpl oeImpl =  loadClassOperEvents.get(fullId);
-						OperationEventImpl shortOEImpl =  loadClassOperEvents.get(shortId);
+						//OperationEventImpl shortOEImpl =  loadClassOperEvents.get(shortId);
 						
 						if (null == oeImpl) {
 							oeImpl = new OperationEventImpl();

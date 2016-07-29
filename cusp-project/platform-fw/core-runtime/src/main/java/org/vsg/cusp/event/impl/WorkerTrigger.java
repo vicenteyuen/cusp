@@ -61,8 +61,9 @@ public class WorkerTrigger {
 			
 			MessageCodec<?,OperationEvent>  msgCodec =  codecManager.getCodec(msgCodecName);
 			
-			Buffer buffer = Buffer.factory.buffer( java.util.Arrays.copyOfRange(msgBody, locTo, msgBody.length) );
-			
+			int maxLength = msgBody.length - locTo;
+			Buffer buffer = Buffer.buffer( maxLength );
+			buffer.appendBytes( java.util.Arrays.copyOfRange(msgBody, locTo, msgBody.length)  );
 			OperationEvent event = msgCodec.decodeFromWire( 0 , buffer);
 			
 

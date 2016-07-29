@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.StringTokenizer;
 
 import org.vsg.cusp.concurrent.OperationEvent;
+import org.vsg.cusp.concurrent.impl.OperationEventImpl;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.eventbus.spi.Buffer;
 
@@ -30,29 +31,40 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 			.appendString( s.getEventId())
 			;
 		buffer.appendString( "|" );
-		
-		//buffer.appendString( "|" );
 		buffer.appendString( convertToString(s.assoBindMethod()).toString() );
+
+		StringBuilder argmentString = convertToString(s.getRuntimeArgument());
+		if (argmentString.length() > 0) {
+			buffer.appendString( "|" );
+		}
+		buffer.appendString(argmentString.toString());		
+		
 
 		
 	}
 
 	@Override
 	public OperationEvent decodeFromWire(int pos, Buffer buffer) {
-		StringBuilder content = new StringBuilder();
-
+	
+		
+		OperationEventImpl oeImpl = new OperationEventImpl();
 		
 
 		StringTokenizer st = new StringTokenizer( new String(buffer.getBytes()) , "\\|" );
 		String eventId = st.nextToken();
 		
 		String methodName = st.nextToken();
-
 		
 		System.out.println( eventId);
 		System.out.println(methodName);
+
+		if (st.hasMoreTokens()) {
+			String params = st.nextToken();
+			System.out.println(params);
+		}
 		
-		return null;
+		
+		return oeImpl;
 	}
 
 	@Override
