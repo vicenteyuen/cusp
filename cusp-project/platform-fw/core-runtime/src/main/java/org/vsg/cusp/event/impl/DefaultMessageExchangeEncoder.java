@@ -104,7 +104,7 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
                 String s = Integer.toHexString(macBytes[i] & 0xFF);  
                 sb.append(s.length()==1?0+s:s);  
             } 			
-			msg.headers().add("PUBLISHER", sb.toString());
+			msg.headers().add(Message.HeaderKey.PUBLISHER, sb.toString());
 		} finally {
 			
 		}
@@ -112,6 +112,7 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 		locFrom = locTo;
 		locTo = locFrom + Long.BYTES;		
 		long publisherSentTime = Longs.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
+		msg.headers().add(Message.HeaderKey.SENT_TIME, Long.toString( publisherSentTime ));
 
 		locFrom = locTo;
 		locTo = locFrom + Long.BYTES;
@@ -124,6 +125,11 @@ public class DefaultMessageExchangeEncoder implements MessageEncoder {
 		locFrom = locTo;
 		locTo = locFrom + Integer.BYTES;
 		int corrIdSeq = Ints.fromByteArray( java.util.Arrays.copyOfRange(inputContent, locFrom, locTo) );
+		
+		StringBuilder corrId = new StringBuilder(Long.toString( corrIdPrefix ));
+		corrId.append(".").append(Long.toString( corrIdSubfix ));
+		corrId.append(".").append( Integer.toString( corrIdSeq ) );
+		msg.headers().add(Message.HeaderKey.CORRID, corrId.toString());
 
 		
 		

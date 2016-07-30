@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
+import org.vsg.cusp.eventbus.MultiMap;
 import org.vsg.cusp.eventbus.impl.CodecManager;
 import org.vsg.cusp.eventbus.spi.Buffer;
 import org.zeromq.ZMQ.Socket;
@@ -73,6 +74,7 @@ public class WorkerTrigger {
 			
 			Message<byte[]> respMsg = createResponseMsg(msg);
 			
+			System.out.println(respMsg.headers());
 			
 
 			//codecManager.decodeFromWire();
@@ -104,8 +106,24 @@ public class WorkerTrigger {
 	private Message<byte[]> createResponseMsg(Message<byte[]> reqMsg) {
 		ByteArrayMessageImpl msgInst = new ByteArrayMessageImpl();
 		msgInst.setMsgType( Message.TYPE_REP );
-		msgInst.setHeaders( reqMsg.headers() );
 		
+		// --- construct header ---
+		MultiMap headers = MultiMap.caseInsensitiveMultiMap();
+		headers.add( Message.HeaderKey.REPLIER , reqMsg.headers().get( Message.HeaderKey.PUBLISHER ));
+		headers.add( Message.HeaderKey.SENT_TIME , Long.toString( System.currentTimeMillis() ));
+		
+		String fullCorrId = reqMsg.headers().get( Message.HeaderKey.CORRID );
+		String[] corrIds = fullCorrId.split("\\.");
+		
+		int corrSeq = Integer.parseInt( corrIds[2] );
+		int newSeq = corrSeq+1;
+		
+		StringBuilder corrId = new StringBuilder(corrIds[0]);
+		corrId.append(".").append( corrIds[1] );
+		corrId.append(".").append( Integer.toString( newSeq ) );
+		headers.add( Message.HeaderKey.CORRID , corrId.toString());
+
+		msgInst.setHeaders( headers );
 		
 		return msgInst;
 	}

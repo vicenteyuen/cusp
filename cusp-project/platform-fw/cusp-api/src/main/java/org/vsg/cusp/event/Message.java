@@ -12,6 +12,18 @@ public interface Message<T> {
 	
 	public static final byte TYPE_REP = 2;
 	
+	static public class HeaderKey {
+		
+		public static final String CORRID = "CORRID";
+		
+		public static final String PUBLISHER = "PUBLISHER";
+		
+		public static final String REPLIER = "REPLIER";
+		
+		public static final String SENT_TIME = "ST";
+		
+	}
+	
 	
 	/**
 	 * Set the message type	
