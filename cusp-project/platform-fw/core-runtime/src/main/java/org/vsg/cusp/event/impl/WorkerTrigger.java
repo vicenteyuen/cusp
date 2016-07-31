@@ -74,7 +74,13 @@ public class WorkerTrigger {
 			
 			Message<byte[]> respMsg = createResponseMsg(msg);
 			
-			System.out.println(respMsg.headers());
+			ResResult resResult = new ResResult();
+			resResult.setCmdNum( (short)1 );
+			resResult.setData( TaskStatus.PENDING );
+			
+			
+			constructBody(respMsg , resResult);
+			
 			
 
 			//codecManager.decodeFromWire();
@@ -128,6 +134,15 @@ public class WorkerTrigger {
 		return msgInst;
 	}
 	
+	private void constructBody(Message<byte[]> reqMsg , ResResult resResult) {
+		
+		ResResultMessageCodec  resResultMessageCodes = (ResResultMessageCodec)codecManager.lookupCodec(  resResult , "resresult");
+		
+		Buffer buffer = Buffer.buffer(1024);
+		resResultMessageCodes.encodeToWire( buffer , resResult);
+
+		
+	}
 	
 	public void trigger() {
 		replySocket.send(new String("hello reply"));

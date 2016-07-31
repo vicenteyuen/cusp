@@ -13,6 +13,8 @@ public class ResResult implements Serializable {
 	private short cmdNum;
 	
 	private String msg;
+	
+	private Object data;
 
 	public short getCmdNum() {
 		return cmdNum;
@@ -28,6 +30,14 @@ public class ResResult implements Serializable {
 
 	public void setMsg(String msg) {
 		this.msg = msg;
+	}
+
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
 	}
 	
 	

@@ -10,6 +10,7 @@ public class ResResultMessageCodec implements MessageCodec<ResResult, ResResult>
 	@Override
 	public void encodeToWire(Buffer buffer, ResResult s) {
 
+
 	}
 
 	@Override
