@@ -37,7 +37,7 @@ public class CorrelationIdGeneratorTest {
 	
 	@Test
 	public void test_case01() throws Exception {
-		
+		/*
 		CorrelationIdGenerator inst = CorrelationIdGenerator.genInstance( mac );
 		
 		for (int i = 0 ; i < 999999999 ; i++) {
@@ -49,6 +49,7 @@ public class CorrelationIdGeneratorTest {
 			}
 			existedValues.add(value);
 		}
+		*/
 	}
 	
 }

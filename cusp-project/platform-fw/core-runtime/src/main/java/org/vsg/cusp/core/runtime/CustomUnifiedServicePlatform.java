@@ -9,14 +9,15 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.security.AccessControlException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -30,8 +31,9 @@ import org.vsg.cusp.core.LifecycleState;
 import org.vsg.cusp.core.ServEngine;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.io.Files;
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -63,10 +65,16 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
         }
         return ClassLoader.getSystemClassLoader();
     }
-
-
+     
+    /**
+     *  load server environment 
+     */
     public void load() {
-
+    	
+    	// pre load runtime module
+    	loadRuntimeModules();
+    	
+    	/*
         long t1 = System.nanoTime();
         
         try {
@@ -118,13 +126,54 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
         
     }
+    
     
     /**
      * define all engines
      */
     private List<Module> modules = new ArrayList<Module>();
+    
+    
+    private void loadRuntimeModules() {
+    	try {
+
+    		
+    		Enumeration<URL>  urls =  this.getClass().getClassLoader().getResources("META-INF/modules");
+    		while (urls.hasMoreElements()) {
+    			URL url = urls.nextElement();
+    			
+    			
+    			File urlFile = new File( url.toURI() );
+
+    			if (!urlFile.exists()) {
+    				continue;
+    			}
+
+    			
+    			
+    			// --- read file ---
+    			List<String> allLines = Files.readLines(urlFile, Charset.forName("UTF-8") );
+    			
+    			for (String line : allLines) {
+    				
+    				Class<AbstractModule> cls = (Class<AbstractModule>)Class.forName( line );
+    				
+    				AbstractModule module = cls.newInstance();
+    				
+    				modules.add( module );
+    				
+    			}
+    			
+    		}
+		} catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException | URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    }
 
 
     /*
@@ -220,6 +269,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
         
         try {
         	
+        	System.out.println(modules);
 			// --- create inject ---
 			Stage stage = Stage.PRODUCTION;
 			Injector injector = Guice.createInjector( stage , this.modules);
