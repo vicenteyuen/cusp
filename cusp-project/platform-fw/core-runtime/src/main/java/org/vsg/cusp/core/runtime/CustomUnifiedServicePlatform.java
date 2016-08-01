@@ -1,4 +1,4 @@
-package org.vsg.cusp.core;
+package org.vsg.cusp.core.runtime;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,12 +23,15 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vsg.cusp.core.modules.AbstractContainerModule;
+import org.vsg.cusp.core.Lifecycle;
+import org.vsg.cusp.core.LifecycleException;
+import org.vsg.cusp.core.LifecycleListener;
+import org.vsg.cusp.core.LifecycleState;
+import org.vsg.cusp.core.ServEngine;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.eventbus.EventBus;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -211,33 +214,31 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 		
 		long t1 = System.nanoTime();
 		
+		lock.lock();
 		
         setState(LifecycleState.STARTING);
         
         try {
         	
-			lock.lock();
+			// --- create inject ---
+			Stage stage = Stage.PRODUCTION;
+			Injector injector = Guice.createInjector( stage , this.modules);
 			
+			// ---- start service all ---
+			startAllServices(injector);
+			
+			
+
 			// --- start and boot container ---
 			ContainerBase cb = new ContainerBase();
+			
 			// --- set parent class loader ---
 			File cuspHome = new File(System.getProperty("cusp.home"));
 			
 			cb.setCuspHome(cuspHome);
 			cb.setParentClassLoader( parentClassLoader );
-			cb.init();
-			
-			// --- init another instance ---
-			for (Module module : this.modules) {
-				if (module instanceof AbstractContainerModule) {
-					((AbstractContainerModule)module).setRunningContainer( cb );
-				}
-			}
-			
-			// --- create inject ---
-			Stage stage = Stage.PRODUCTION;
-			Injector injector = Guice.createInjector( stage , this.modules);
-			
+			cb.setInjector( injector );
+			cb.init();			
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -255,6 +256,20 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 		// --- exist program ---
 		Runtime.getRuntime().exit(0);
 	}
+	
+	/**
+	 * start all service pre define 
+	 * @param injector
+	 */
+	private void startAllServices(Injector injector) {
+		
+	}
+	
+	
+	private void addShutdownHook() {
+		
+	}
+	
 	
 	
     private volatile ServerSocket awaitSocket = null;

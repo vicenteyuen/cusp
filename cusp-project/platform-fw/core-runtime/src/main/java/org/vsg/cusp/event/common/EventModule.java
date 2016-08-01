@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
+import org.vsg.cusp.event.EventMethodRegister;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.Promise;
@@ -82,6 +83,11 @@ public class EventModule extends AbstractModule {
 			
 			// --- reset promise ---
 			this.bind( Promise.class ).toProvider( PromiseProvider.class );
+			
+			
+			// ---- register method ---
+			this.bind( EventMethodRegister.class ).to( org.vsg.cusp.event.register.EcacheEventMethodRegister.class ).in(Scopes.SINGLETON);
+			
 			
 			// --- operation event bus ---
 			/*

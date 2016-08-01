@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vsg.cusp.core;
+package org.vsg.cusp.core.runtime;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -12,6 +12,9 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.core.Container;
+
+import com.google.inject.Injector;
 
 /**
  * @author Vicente Yuen
@@ -29,6 +32,8 @@ public class ContainerBase implements Container{
 	private Map<String,ClassLoader> supportCompClsMapping = new LinkedHashMap<String,ClassLoader>();
 	
 	private Map<String , File> supportedCompsPathMapping = new LinkedHashMap<String, File>();
+	
+	private Injector injector;
 	
 	// --- start container base 
 	
@@ -77,6 +82,11 @@ public class ContainerBase implements Container{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	
+	public void	setInjector(Injector injector) {
+		this.injector = injector;
 	}
 	
 	@Override

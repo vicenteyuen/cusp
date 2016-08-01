@@ -3,7 +3,7 @@
  */
 package org.vsg.cusp.event.impl;
 
-import org.vsg.cusp.event.common.Service;
+import org.vsg.cusp.core.Service;
 
 /**
  * 

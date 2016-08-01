@@ -5,6 +5,8 @@ package org.vsg.cusp.core;
 
 import java.net.URL;
 
+import org.vsg.cusp.core.runtime.CustomUnifiedServicePlatform;
+
 /**
  * @author Vicente Yuen
  *

@@ -42,13 +42,6 @@ public class JeroMQServEngine implements EventBusServEngine , Runnable {
 		this.worker = worker;
 	}
 	
-	
-
-	@Override
-	public void setRunningContainer(Container container) {
-		// TODO Auto-generated method stub
-		this.container = container;
-	}
 
 	@Override
 	public void init(Map<String, String> arguments) {

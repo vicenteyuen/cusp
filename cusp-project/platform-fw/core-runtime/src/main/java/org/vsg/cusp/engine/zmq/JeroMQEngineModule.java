@@ -8,12 +8,12 @@ import java.util.concurrent.RunnableFuture;
 
 import org.vsg.cusp.core.EventBusServEngine;
 import org.vsg.cusp.core.ServEngine;
-import org.vsg.cusp.core.modules.AbstractContainerModule;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
 import org.vsg.cusp.event.impl.MessageProvider;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.name.Names;
 
@@ -22,7 +22,7 @@ import com.google.inject.name.Names;
  * @author Vicente Yuen
  *
  */
-public class JeroMQEngineModule extends AbstractContainerModule implements ServEngine, Runnable{
+public class JeroMQEngineModule extends AbstractModule implements ServEngine, Runnable{
 
 
 

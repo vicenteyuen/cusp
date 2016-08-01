@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.vsg.cusp.core.EventBusServEngine;
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.core.Service;
 import org.vsg.cusp.engine.zmq.JeroMQEngineModule;
 import org.vsg.cusp.engine.zmq.JeroMQServEngine;
 import org.vsg.cusp.event.common.EventModule;
-import org.vsg.cusp.event.common.Service;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.eventbus.EventBus;
@@ -36,7 +36,7 @@ public class EventFlowTestCase01 {
 	public void startEngineOrService() {
 		// --- start engine ---
 		EventBusServEngine  eventBusServEngine = inject.getInstance( EventBusServEngine.class );
-		eventBusServEngine.start();
+
 		
 		
 		// --- start engine ---

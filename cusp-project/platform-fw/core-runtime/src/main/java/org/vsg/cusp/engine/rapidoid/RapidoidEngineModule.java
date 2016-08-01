@@ -38,7 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.MethodParametersMetaInfo;
 import org.vsg.cusp.core.ServEngine;
-import org.vsg.cusp.core.modules.AbstractContainerModule;
 import org.vsg.cusp.core.utils.ClassFilter;
 import org.vsg.cusp.core.utils.ClassUtils;
 import org.vsg.cusp.engine.rapidoid.specimpl.AsyncHttpRequestImpl;
@@ -46,12 +45,13 @@ import org.vsg.cusp.engine.rapidoid.specimpl.AsyncHttpRequestImpl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.inject.AbstractModule;
 
 /**
  * @author Vicente Yuen
  *
  */
-public class RapidoidEngineModule extends AbstractContainerModule implements ServEngine, Runnable {
+public class RapidoidEngineModule extends AbstractModule implements ServEngine ,Runnable {
 	
 	private static Logger logger = LoggerFactory.getLogger(RapidoidEngineModule.class);	
 
@@ -94,12 +94,14 @@ public class RapidoidEngineModule extends AbstractContainerModule implements Ser
 			
 
 			// --- bind http service ---
-			FastHttp http = setup.http();			
+			FastHttp http = setup.http();	
+			/*
 			Map<String,ClassLoader> compsClsLoader =  getRunningContainer().getComponentsClassLoader();
 			Set<Map.Entry<String, ClassLoader>> entries = compsClsLoader.entrySet();
 			for (Map.Entry<String, ClassLoader> entry : entries ) {
 				initComponentService(entry.getKey() , entry.getValue() , http);
-			}			
+			}
+			*/			
 			
 			logger.info("listen http port : [" + port + "].");
 		} catch (Exception e) {
@@ -137,6 +139,7 @@ public class RapidoidEngineModule extends AbstractContainerModule implements Ser
 	}
 	
 	private void initComponentService(String compName , ClassLoader clsLoader , FastHttp http) {
+		/*
 		File compDir = getRunningContainer().getComponentsPath().get(compName);
 		
 		File confFile = new File(compDir , "comp.json");
@@ -203,11 +206,13 @@ public class RapidoidEngineModule extends AbstractContainerModule implements Ser
 		/**
 		 * inject all path for handle
 		 */
+		/*
 		for (Class<?> cls : allFoundCls) {
 			
 			implementForRestPath(cls , contextPath , http);
 
 		}
+		*/
 
 		
 		

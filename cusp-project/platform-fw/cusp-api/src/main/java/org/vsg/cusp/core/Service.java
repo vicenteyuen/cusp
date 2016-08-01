@@ -1,4 +1,4 @@
-package org.vsg.cusp.event.common;
+package org.vsg.cusp.core;
 
 public interface Service {
 
