@@ -6,10 +6,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.InetAddress;
+import java.net.JarURLConnection;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.AccessControlException;
@@ -18,11 +18,12 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.ServiceLoader;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.jar.JarFile;
 
 import org.apache.commons.io.IOUtils;
+import org.ehcache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.Lifecycle;
@@ -142,34 +143,31 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
     	try {
 
     		
-    		Enumeration<URL>  urls =  this.getClass().getClassLoader().getResources("META-INF/modules");
+    		Enumeration<URL>  urls =  getClass().getClassLoader().getResources("META-INF/modules");
     		while (urls.hasMoreElements()) {
     			URL url = urls.nextElement();
     			
-    			
-    			File urlFile = new File( url.toURI() );
+    			if (url.getProtocol().equals("jar")) {
+    				JarURLConnection uc = (JarURLConnection)url.openConnection();
+    				List<String> allLines = IOUtils.readLines(uc.getInputStream() , Charset.forName("UTF-8"));
 
-    			if (!urlFile.exists()) {
-    				continue;
-    			}
-
-    			
-    			
-    			// --- read file ---
-    			List<String> allLines = Files.readLines(urlFile, Charset.forName("UTF-8") );
-    			
-    			for (String line : allLines) {
-    				
-    				Class<AbstractModule> cls = (Class<AbstractModule>)Class.forName( line );
-    				
-    				AbstractModule module = cls.newInstance();
-    				
-    				modules.add( module );
-    				
+        			for (String line : allLines) {
+        				
+        				if (line.startsWith("#")) {
+        					continue;
+        				}
+        				
+        				Class<AbstractModule> cls = (Class<AbstractModule>)Class.forName( line );
+        				
+        				AbstractModule module = cls.newInstance();
+        				
+        				modules.add( module );
+        				
+        			}
     			}
     			
     		}
-		} catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException | URISyntaxException e) {
+		} catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException  e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -269,8 +267,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
         setState(LifecycleState.STARTING);
         
         try {
-        	
-        	System.out.println(modules);
+
 			// --- create inject ---
 			Stage stage = Stage.PRODUCTION;
 			Injector injector = Guice.createInjector( stage , this.modules);
@@ -314,6 +311,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 	 */
 	private void startAllServices(Injector injector) {
 		
+
 	}
 	
 	

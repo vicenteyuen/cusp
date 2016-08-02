@@ -1,14 +1,16 @@
 package org.vsg.cusp.core;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-
-import org.vsg.cusp.core.utils.CommonUtils;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Enumeration;
 
 public class IPAddressTest {
 
-    public static void main(String[] args) throws SocketException{    
+    public static void main(String[] args) throws IOException, URISyntaxException{
+    	/*
         try{    
                 //获得本机的InetAddress信息    
                 InetAddress IP = InetAddress.getLocalHost();    
@@ -43,8 +45,19 @@ public class IPAddressTest {
         }    
         catch(java.net.UnknownHostException e){    
                 e.printStackTrace();    
-        }    
-}    
+        }
+        */
+    	
+    	
+    	Enumeration<URL>  urls =  IPAddressTest.class.getClassLoader().getResources("META-INF/modules");
+    	
+		while (urls.hasMoreElements()) {
+			URL url = urls.nextElement();
+			File file = new File(url.toURI());
+			System.out.println(file.exists());
+		}
+    	
+    }    
 //将InetAddress 中的信息显示出来    
 public static void showInfo(InetAddress IP){    
         String name = IP.getHostName();    
