@@ -12,7 +12,10 @@ import org.vsg.cusp.event.EventMethodRegister;
  * @author ruanweibiao
  *
  */
-public class EcacheEventMethodRegister implements EventMethodRegister {
+public class EhcacheEventMethodRegister implements EventMethodRegister {
+	
+	
+	
 
 	/* (non-Javadoc)
 	 * @see org.vsg.cusp.event.EventMethodRegister#registerEvent(java.lang.String, org.vsg.cusp.event.EventMethodDescription)

@@ -6,19 +6,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.InetAddress;
+import java.net.JarURLConnection;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -32,11 +34,12 @@ import org.vsg.cusp.core.LifecycleState;
 import org.vsg.cusp.core.ServEngine;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.io.Files;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Stage;
 
@@ -66,6 +69,8 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
         }
         return ClassLoader.getSystemClassLoader();
     }
+    
+    private Map<String, Map<String,String>> bootEngines = new LinkedHashMap<String, Map<String,String>>();
      
     /**
      *  load server environment 
@@ -75,14 +80,14 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
     	// pre load runtime module
     	loadRuntimeModules();
     	
-    	/*
+
         long t1 = System.nanoTime();
         
         try {
         	File file = new File(this.configFile);
         	JSONObject jObj = (JSONObject)JSON.parse( IOUtils.toString(file.toURI() , "utf-8") );
         	
-        	JSONArray engines = jObj.getJSONArray("engines");
+        	JSONArray engines = jObj.getJSONArray("boot-engines");
         	for (Iterator<JSONObject> engineIter = (Iterator<JSONObject>)(Iterator)engines.iterator(); engineIter.hasNext();) {
         		JSONObject jsonObj = engineIter.next();
         		
@@ -95,18 +100,8 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
         		for (Map.Entry<String, Object> entry : entries) {
         			argsMap.put(entry.getKey(), entry.getValue().toString());
         		}
-
         		
-        		Class<ServEngine> servEngineCls = (Class<ServEngine>)Class.forName(className);
-
-        		ServEngine inst =  servEngineCls.newInstance();
-        		inst.init(argsMap);
-        		
-        		// ---  add engine module ---
-        		if (inst instanceof Module) {
-        			modules.add( (Module) inst );
-        		}
-
+        		bootEngines.put( className , argsMap);
         	}
         	
         	// --- custom server ---
@@ -117,17 +112,8 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+		} 
+		
         
     }
     
@@ -142,34 +128,31 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
     	try {
 
     		
-    		Enumeration<URL>  urls =  this.getClass().getClassLoader().getResources("META-INF/modules");
+    		Enumeration<URL>  urls =  getClass().getClassLoader().getResources("META-INF/modules");
     		while (urls.hasMoreElements()) {
     			URL url = urls.nextElement();
     			
-    			
-    			File urlFile = new File( url.toURI() );
+    			if (url.getProtocol().equals("jar")) {
+    				JarURLConnection uc = (JarURLConnection)url.openConnection();
+    				List<String> allLines = IOUtils.readLines(uc.getInputStream() , Charset.forName("UTF-8"));
 
-    			if (!urlFile.exists()) {
-    				continue;
-    			}
-
-    			
-    			
-    			// --- read file ---
-    			List<String> allLines = Files.readLines(urlFile, Charset.forName("UTF-8") );
-    			
-    			for (String line : allLines) {
-    				
-    				Class<AbstractModule> cls = (Class<AbstractModule>)Class.forName( line );
-    				
-    				AbstractModule module = cls.newInstance();
-    				
-    				modules.add( module );
-    				
+        			for (String line : allLines) {
+        				
+        				if (line.startsWith("#")) {
+        					continue;
+        				}
+        				
+        				Class<AbstractModule> cls = (Class<AbstractModule>)Class.forName( line );
+        				
+        				AbstractModule module = cls.newInstance();
+        				
+        				modules.add( module );
+        				
+        			}
     			}
     			
     		}
-		} catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException | URISyntaxException e) {
+		} catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException  e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -269,8 +252,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
         setState(LifecycleState.STARTING);
         
         try {
-        	
-        	System.out.println(modules);
+
 			// --- create inject ---
 			Stage stage = Stage.PRODUCTION;
 			Injector injector = Guice.createInjector( stage , this.modules);
@@ -314,6 +296,28 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 	 */
 	private void startAllServices(Injector injector) {
 		
+		// --- start engince ---
+		Set<Map.Entry<String, Map<String,String>>>  engineServiceSet =  bootEngines.entrySet();
+		for (Map.Entry<String, Map<String,String>> engineItem : engineServiceSet) {
+			
+			try {
+				Class  engineCls = Class.forName( engineItem.getKey() );
+				
+				ServEngine servEngine =  injector.getInstance(Key.get(ServEngine.class, engineCls));
+				
+				servEngine.init( engineItem.getValue() );
+				
+				servEngine.start();
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+
 	}
 	
 	

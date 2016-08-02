@@ -86,7 +86,7 @@ public class EventModule extends AbstractModule {
 			
 			
 			// ---- register method ---
-			this.bind( EventMethodRegister.class ).to( org.vsg.cusp.event.register.EcacheEventMethodRegister.class ).in(Scopes.SINGLETON);
+			this.bind( EventMethodRegister.class ).to( org.vsg.cusp.event.register.EhcacheEventMethodRegister.class ).in(Scopes.SINGLETON);
 			
 			
 			// --- operation event bus ---
