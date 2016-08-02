@@ -10,6 +10,16 @@ import org.vsg.cusp.event.register.EhcacheRegisterEngine;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
+import java.util.Map;
+
+import org.ehcache.CacheManager;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.vsg.cusp.core.ServEngine;
+
+import com.google.inject.AbstractModule;
+
 public class EmbbedCacheModule extends AbstractModule {
 
 
@@ -24,9 +34,7 @@ public class EmbbedCacheModule extends AbstractModule {
 	    .build();
 		
 		this.bind( CacheManager.class ).toInstance( cacheManager );
-		
-		this.bind( ServEngine.class ).to( EhcacheRegisterEngine.class ).in( Scopes.SINGLETON );
-		
+>>>>>>> refs/remotes/origin/dev
 
 	}
 
