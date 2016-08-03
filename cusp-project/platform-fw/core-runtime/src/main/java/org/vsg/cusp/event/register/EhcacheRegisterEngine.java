@@ -8,15 +8,18 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.ehcache.CacheManager;
+import org.vsg.cusp.core.EngineCompLoaderService;
 import org.vsg.cusp.core.ServEngine;
 
 /**
  * @author vison
  *
  */
-public class EhcacheRegisterEngine implements ServEngine {
+public class EhcacheRegisterEngine implements ServEngine , EngineCompLoaderService {
 
 	private CacheManager cacheManager;
+	
+	
 	
 	@Inject
 	public EhcacheRegisterEngine(CacheManager cacheManager) {
@@ -28,9 +31,7 @@ public class EhcacheRegisterEngine implements ServEngine {
 	 */
 	@Override
 	public void start() throws Exception {
-		// TODO Auto-generated method stub
 		
-		System.out.println("cache manager : " + this.cacheManager);
 
 	}
 
@@ -39,8 +40,15 @@ public class EhcacheRegisterEngine implements ServEngine {
 	 */
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
 
+	}
+
+	
+	
+	@Override
+	public void appendLoadService(ClassLoader classLoader) {
+		// TODO Auto-generated method stub
+		System.out.println("running rolder : " + classLoader);
 	}
 
 	/* (non-Javadoc)
@@ -48,7 +56,6 @@ public class EhcacheRegisterEngine implements ServEngine {
 	 */
 	@Override
 	public void init(Map<String, String> arguments) {
-		// TODO Auto-generated method stub
 
 	}
 

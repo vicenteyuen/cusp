@@ -89,6 +89,16 @@ public class ContainerBase implements Container{
 		this.injector = injector;
 	}
 	
+	public Injector getInjector() {
+		return this.injector;
+	}
+	
+	
+	private void reflash() {
+		
+	}
+	
+	
 	@Override
 	public Map<String,ClassLoader> getComponentsClassLoader() {
 		return this.supportCompClsMapping;

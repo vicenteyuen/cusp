@@ -27,11 +27,13 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.core.EngineCompLoaderService;
 import org.vsg.cusp.core.Lifecycle;
 import org.vsg.cusp.core.LifecycleException;
 import org.vsg.cusp.core.LifecycleListener;
 import org.vsg.cusp.core.LifecycleState;
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.core.ServiceHolder;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -272,7 +274,27 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 			cb.setCuspHome(cuspHome);
 			cb.setParentClassLoader( parentClassLoader );
 			cb.setInjector( injector );
-			cb.init();			
+			cb.init();
+			
+			
+			// --- init multi component environment ---
+			Map<String, File> components =  cb.getComponentsPath();
+			
+			Set<Map.Entry<String, File>> entries = components.entrySet();
+			
+			for (Map.Entry<String, File> entry : entries) {
+				
+				MicroComponentInitializer init = new MicroComponentInitializer();
+				init.setContainer( cb );
+				init.setCompName( entry.getKey() );
+				
+				Thread runThread = new Thread(init);
+				
+				// --- start component thread ---
+				runThread.start();
+			}
+
+			
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -297,6 +319,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 	 */
 	private void startAllServices(Injector injector) {
 		
+		ServiceHolder serviceHolder =  injector.getInstance(ServiceHolder.class);
 
 		// --- start engince ---
 		Set<Map.Entry<String, Map<String,String>>>  engineServiceSet =  bootEngines.entrySet();
@@ -307,6 +330,14 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 				ServEngine servEngine =  injector.getInstance(Key.get(ServEngine.class, Names.named(engineCls.getName()) ));
 				servEngine.init( engineItem.getValue() );
 				servEngine.start();
+				
+				
+				if (servEngine instanceof EngineCompLoaderService) {
+					// --- add engine comploader service ---
+					EngineCompLoaderService ecls = (EngineCompLoaderService)servEngine;
+					serviceHolder.addEngineCompLoaderService( ecls );				
+				}
+				
 				
 				addShutdownHook( servEngine );
 				
