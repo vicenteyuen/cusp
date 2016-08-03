@@ -5,6 +5,12 @@
       "host":"localhost",
       "port":"8100"
     }
+  },{
+    "class-name":"org.vsg.cusp.engine.rapidoid.RapidoidEngine",
+    "args":{
+      "host":"localhost",
+      "port":"8100"
+    }  
   }/*,{
     "class-name":"org.vsg.cusp.engine.zmq.JeroMQServEngine",
     "args":{
