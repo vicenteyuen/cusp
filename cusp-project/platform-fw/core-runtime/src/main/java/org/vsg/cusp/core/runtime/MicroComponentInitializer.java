@@ -3,6 +3,7 @@
  */
 package org.vsg.cusp.core.runtime;
 
+import java.io.File;
 import java.util.List;
 
 import org.vsg.cusp.core.EngineCompLoaderService;
@@ -54,9 +55,11 @@ public class MicroComponentInitializer implements Runnable {
 		
 		ClassLoader compClassLoader = getContainer().getComponentsClassLoader().get( this.compName );
 		
+		File homePath = getContainer().getComponentsPath().get(this.compName);
+		
 		for (EngineCompLoaderService  engineCompLoaderService : engineCompLoaderServices ) {
 			
-			engineCompLoaderService.appendLoadService( compClassLoader );
+			engineCompLoaderService.appendLoadService( homePath , compClassLoader );
 		
 		}
 

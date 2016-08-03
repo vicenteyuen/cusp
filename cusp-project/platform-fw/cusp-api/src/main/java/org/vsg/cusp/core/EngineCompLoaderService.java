@@ -1,5 +1,7 @@
 package org.vsg.cusp.core;
 
+import java.io.File;
+
 /**
  * 
  * @author define Engine component loader service
@@ -7,6 +9,6 @@ package org.vsg.cusp.core;
  */
 public interface EngineCompLoaderService {
 	
-	void appendLoadService(ClassLoader classLoader);
+	void appendLoadService(File homePath , ClassLoader classLoader);
 
 }

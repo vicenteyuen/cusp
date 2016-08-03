@@ -15,7 +15,7 @@ import org.vsg.cusp.core.ServEngine;
  * @author vison
  *
  */
-public class EhcacheRegisterEngine implements ServEngine , EngineCompLoaderService {
+public class EhcacheRegisterEngine implements ServEngine {
 
 	private CacheManager cacheManager;
 	
@@ -43,13 +43,6 @@ public class EhcacheRegisterEngine implements ServEngine , EngineCompLoaderServi
 
 	}
 
-	
-	
-	@Override
-	public void appendLoadService(ClassLoader classLoader) {
-		// TODO Auto-generated method stub
-		System.out.println("running rolder : " + classLoader);
-	}
 
 	/* (non-Javadoc)
 	 * @see org.vsg.cusp.core.ServEngine#init(java.util.Map)

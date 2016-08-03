@@ -3,13 +3,18 @@
  */
 package org.vsg.cusp.engine.rapidoid;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.Callable;
@@ -21,6 +26,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.container.AsyncResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
@@ -33,7 +39,13 @@ import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.EngineCompLoaderService;
 import org.vsg.cusp.core.MethodParametersMetaInfo;
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.core.utils.ClassFilter;
+import org.vsg.cusp.core.utils.ClassUtils;
 import org.vsg.cusp.engine.rapidoid.specimpl.AsyncHttpRequestImpl;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * @author ruanweibiao
@@ -74,14 +86,7 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 			
 
 			// --- bind http service ---
-			FastHttp http = setup.http();	
-			/*
-			Map<String,ClassLoader> compsClsLoader =  getRunningContainer().getComponentsClassLoader();
-			Set<Map.Entry<String, ClassLoader>> entries = compsClsLoader.entrySet();
-			for (Map.Entry<String, ClassLoader> entry : entries ) {
-				initComponentService(entry.getKey() , entry.getValue() , http);
-			}
-			*/			
+
 			
 			logger.info("listen http port : [" + port + "].");
 		} catch (Exception e) {
@@ -118,14 +123,12 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 		this.arguments = arguments;
 	}
 	
-	private void initComponentService(String compName , ClassLoader clsLoader , FastHttp http) {
-		/*
-		File compDir = getRunningContainer().getComponentsPath().get(compName);
+	private void initComponentService(File  homePath , ClassLoader clsLoader , FastHttp http) {
 		
-		File confFile = new File(compDir , "comp.json");
+		File confFile = new File(homePath , "comp.json");
 		
 		if (!confFile.exists()) {
-			logger.warn("Could not find \"comp.json\" file under the " + compDir);
+			logger.warn("Could not find \"comp.json\" file under the " + homePath);
 		}
 		
 		Set<String> scanPackages = new LinkedHashSet<String>();
@@ -186,13 +189,13 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 		/**
 		 * inject all path for handle
 		 */
-		/*
+
 		for (Class<?> cls : allFoundCls) {
 			
 			implementForRestPath(cls , contextPath , http);
 
 		}
-		*/
+
 
 		
 		
@@ -415,8 +418,11 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 
 
 	@Override
-	public void appendLoadService(ClassLoader classLoader) {
-		// TODO Auto-generated method stub
+	public void appendLoadService(File homePath , ClassLoader classLoader) {
+		FastHttp http = setup.http();
+		
+		initComponentService(homePath , classLoader , http);
+		
 		
 	}	
 	
