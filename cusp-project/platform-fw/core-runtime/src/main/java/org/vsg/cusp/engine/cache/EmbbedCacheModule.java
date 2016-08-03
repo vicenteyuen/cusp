@@ -34,7 +34,6 @@ public class EmbbedCacheModule extends AbstractModule {
 	    .build();
 		
 		this.bind( CacheManager.class ).toInstance( cacheManager );
->>>>>>> refs/remotes/origin/dev
 
 	}
 
