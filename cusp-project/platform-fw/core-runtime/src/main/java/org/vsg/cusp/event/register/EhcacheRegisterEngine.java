@@ -29,7 +29,8 @@ public class EhcacheRegisterEngine implements ServEngine {
 	@Override
 	public void start() throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("start chche");
+		
+		System.out.println("cache manager : " + this.cacheManager);
 
 	}
 

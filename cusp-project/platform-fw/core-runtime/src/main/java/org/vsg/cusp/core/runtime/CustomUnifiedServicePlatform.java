@@ -21,13 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.jar.JarFile;
 
 import org.apache.commons.io.IOUtils;
-import org.ehcache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.Lifecycle;
@@ -45,6 +42,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Stage;
+import com.google.inject.name.Names;
 
 public class CustomUnifiedServicePlatform implements Lifecycle {
 	
@@ -305,13 +303,12 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 		for (Map.Entry<String, Map<String,String>> engineItem : engineServiceSet) {
 			
 			try {
-				Class  engineCls = Class.forName( engineItem.getKey() );
-				
-				ServEngine servEngine =  injector.getInstance(Key.get(ServEngine.class, engineCls));
-				
+				Class engineCls = Class.forName( engineItem.getKey() );
+				ServEngine servEngine =  injector.getInstance(Key.get(ServEngine.class, Names.named(engineCls.getName()) ));
 				servEngine.init( engineItem.getValue() );
-				
 				servEngine.start();
+				
+				addShutdownHook( servEngine );
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -326,7 +323,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 	}
 	
 	
-	private void addShutdownHook() {
+	private void addShutdownHook(ServEngine servEngine) {
 		
 	}
 	
