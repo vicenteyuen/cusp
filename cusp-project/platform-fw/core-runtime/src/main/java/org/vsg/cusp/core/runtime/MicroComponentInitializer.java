@@ -81,11 +81,9 @@ public class MicroComponentInitializer implements Runnable {
 		
 		for (EngineCompLoaderService  engineCompLoaderService : engineCompLoaderServices ) {
 			
-
+			engineCompLoaderService.appendLoadService( homePath , compClassLoader );
 			preScanClzes.addAll( engineCompLoaderService.supportAnnotationScan() );
-
-			engineCompLoaderService.appendLoadService( homePath , compClassLoader );			
-			
+		
 		}
 		
 		
