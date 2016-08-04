@@ -427,15 +427,14 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 
 
 	@Override
-	public Set<Class> supportAnnotationScan() {
+	public void scanClassForAnnoation(
+			Map<Class, Collection<Class>> annotationClsBinding) {
 		// TODO Auto-generated method stub
-		Set<Class> allAnnoations = new LinkedHashSet<Class>();
 		
-		allAnnoations.add( Path.class );
-		
-		return allAnnoations;
 	}
-	
+
+
+
 	
 	
 	

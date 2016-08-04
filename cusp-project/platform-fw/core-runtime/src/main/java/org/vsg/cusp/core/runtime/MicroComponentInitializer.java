@@ -5,9 +5,12 @@ package org.vsg.cusp.core.runtime;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
@@ -15,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.EngineCompLoaderService;
 import org.vsg.cusp.core.ServiceHolder;
-import org.vsg.cusp.engine.rapidoid.RapidoidEngineModule;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -79,10 +81,11 @@ public class MicroComponentInitializer implements Runnable {
 		
 		Set<Class> preScanClzes = new LinkedHashSet<Class>();
 		
+		
+		Map<Class, Collection<Class>> annotationMapping = new LinkedHashMap<Class , Collection<Class>>();
+		
 		for (EngineCompLoaderService  engineCompLoaderService : engineCompLoaderServices ) {
-			
-			engineCompLoaderService.appendLoadService( homePath , compClassLoader );
-			preScanClzes.addAll( engineCompLoaderService.supportAnnotationScan() );
+			engineCompLoaderService.scanClassForAnnoation( annotationMapping );
 		
 		}
 		
@@ -96,7 +99,6 @@ public class MicroComponentInitializer implements Runnable {
 		
 		
 		Injector  inject = parentInjector.createChildInjector(psaModule);
-
 
 		
 
