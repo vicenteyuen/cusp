@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.EngineCompLoaderService;
 import org.vsg.cusp.core.MethodParametersMetaInfo;
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.core.runtime.InjecterHandler;
 import org.vsg.cusp.core.utils.ClassFilter;
 import org.vsg.cusp.core.utils.ClassUtils;
 import org.vsg.cusp.engine.rapidoid.specimpl.AsyncHttpRequestImpl;
@@ -46,12 +47,13 @@ import org.vsg.cusp.engine.rapidoid.specimpl.AsyncHttpRequestImpl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.inject.Injector;
 
 /**
  * @author ruanweibiao
  *
  */
-public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Runnable {
+public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Runnable , InjecterHandler {
 
 	private static Logger logger = LoggerFactory.getLogger(RapidoidEngineModule.class);	
 
@@ -417,18 +419,24 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 	}
 
 
-	@Override
+
 	public void appendLoadService(File homePath , ClassLoader classLoader) {
 		FastHttp http = setup.http();
 		
-		initComponentService(homePath , classLoader , http);
+		//initComponentService(homePath , classLoader , http);
 		
 	}
 
 
 	@Override
-	public void scanClassForAnnoation(
-			Map<Class, Collection<Class>> annotationClsBinding) {
+	public void scanClassForAnnoation(File homePath , ClassLoader classLoader , Map<Class, Collection<Class>> annotationClsBinding) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void handle(Injector injector) {
 		// TODO Auto-generated method stub
 		
 	}

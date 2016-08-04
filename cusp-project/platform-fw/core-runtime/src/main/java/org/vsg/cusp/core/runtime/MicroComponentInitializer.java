@@ -5,7 +5,11 @@ package org.vsg.cusp.core.runtime;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -62,16 +66,7 @@ public class MicroComponentInitializer implements Runnable {
 	public void run() {
 		
 		Injector parentInjector = container.getInjector();
-		
-		
-		// --- scan supported annotations ---
-		
-		
-		// --- get booted engines ---
-		ServiceHolder  serviceHolder = parentInjector.getInstance( ServiceHolder.class);
-		
-		List<EngineCompLoaderService> engineCompLoaderServices =  serviceHolder.getEngineCompLoaderServices();
-		
+
 		ClassLoader compClassLoader = getContainer().getComponentsClassLoader().get( this.compName );
 		
 		File homePath = getContainer().getComponentsPath().get(this.compName);
@@ -79,13 +74,25 @@ public class MicroComponentInitializer implements Runnable {
 		// --- config home path --
 		configration(homePath);
 		
+		// --- scan supported annotations ---
+		scanAnnotaions(scanPackages , compClassLoader);
+		
+		
+		// --- get booted engines ---
+		ServiceHolder  serviceHolder = parentInjector.getInstance( ServiceHolder.class);
+		
+		List<EngineCompLoaderService> engineCompLoaderServices =  serviceHolder.getEngineCompLoaderServices();		
+		
+		
+		
+		
 		Set<Class> preScanClzes = new LinkedHashSet<Class>();
 		
 		
 		Map<Class, Collection<Class>> annotationMapping = new LinkedHashMap<Class , Collection<Class>>();
 		
 		for (EngineCompLoaderService  engineCompLoaderService : engineCompLoaderServices ) {
-			engineCompLoaderService.scanClassForAnnoation( annotationMapping );
+			engineCompLoaderService.scanClassForAnnoation( homePath , compClassLoader ,  annotationMapping );
 		
 		}
 		
@@ -135,6 +142,57 @@ public class MicroComponentInitializer implements Runnable {
 		}		
 	}
 	
+	
+	/**
+	 * 
+	 * @param candidatePackages
+	 * @return the map of class mapping annoation class
+	 */
+	private Map<Class<?>, Collection<Class<?>>> scanAnnotaions(Set<String> candidatePackages , ClassLoader compClassLoader) {
+		
+		/**
+		 * scan support annotations
+		 */
+		
+		Set<Class> annotationsSupported = new LinkedHashSet<Class>();
+    	try {
+    		
+    		Enumeration<URL>  urls =  getClass().getClassLoader().getResources("META-INF/annotations-scan");
+    		while (urls.hasMoreElements()) {
+    			URL url = urls.nextElement();
+    			
+    			if (url.getProtocol().equals("jar")) {
+    				JarURLConnection uc = (JarURLConnection)url.openConnection();
+    				List<String> allLines = IOUtils.readLines(uc.getInputStream() , Charset.forName("UTF-8"));
+
+        			for (String line : allLines) {
+        				
+        				if (line.startsWith("#")) {
+        					continue;
+        				}
+        				
+        				Class<?> cls = (Class<?>)Class.forName( line );
+        				
+        				annotationsSupported.add( cls );
+        				
+        			}
+    			}
+    			
+    		}
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+    	
+    	/**
+    	 * scan all class for support 
+    	 */
+    	
+    	
+    	
+		return null;
+	}
 
 
 }

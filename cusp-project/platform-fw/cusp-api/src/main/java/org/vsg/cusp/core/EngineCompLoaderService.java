@@ -11,9 +11,6 @@ import java.util.Map;
  */
 public interface EngineCompLoaderService {
 	
-	void appendLoadService(File homePath , ClassLoader classLoader);
-	
-	
-	void scanClassForAnnoation(Map<Class, Collection<Class>> annotationClsBinding );
+	void scanClassForAnnoation(File homePath , ClassLoader classLoader , Map<Class, Collection<Class>> annotationClsBinding);
 	
 }
