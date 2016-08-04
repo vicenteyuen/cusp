@@ -216,9 +216,7 @@ public class AnnotationReflectionUtils {
 				if (entryPath.startsWith(rootEntryPath)
 						&& entryPath.endsWith(".class")) {
 					int entryLength = entryPath.length();
-					String className = entryPath
-							.replaceAll(File.separator, ".").substring(0,
-									entryLength - 6);
+					String className = entryPath.replaceAll(File.separator, ".").substring(0,entryLength - 6);
 					Class<?> foundClass = checkCandidate(className,
 							searchedAnnotation);
 					if (foundClass != null)

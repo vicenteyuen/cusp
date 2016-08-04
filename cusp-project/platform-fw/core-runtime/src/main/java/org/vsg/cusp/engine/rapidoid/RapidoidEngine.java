@@ -423,8 +423,20 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 		
 		initComponentService(homePath , classLoader , http);
 		
+	}
+
+
+	@Override
+	public Set<Class> supportAnnotationScan() {
+		// TODO Auto-generated method stub
+		Set<Class> allAnnoations = new LinkedHashSet<Class>();
 		
-	}	
+		allAnnoations.add( Path.class );
+		
+		return allAnnoations;
+	}
+	
+	
 	
 	
 
