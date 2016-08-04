@@ -1,6 +1,7 @@
 package org.vsg.cusp.core;
 
 import java.io.File;
+import java.util.Set;
 
 /**
  * 
@@ -10,5 +11,8 @@ import java.io.File;
 public interface EngineCompLoaderService {
 	
 	void appendLoadService(File homePath , ClassLoader classLoader);
+	
+	
+	Set<Class> supportAnnotationScan();
 
 }
