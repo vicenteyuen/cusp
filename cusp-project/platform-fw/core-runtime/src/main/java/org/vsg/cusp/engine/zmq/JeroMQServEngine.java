@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.Container;
 import org.vsg.cusp.core.EventBusServEngine;
-import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
+import org.vsg.cusp.core.ServEngine;
 
 /**
  * @author Vicente Yuen

@@ -14,6 +14,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.AccessControlException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -263,7 +264,8 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 			// ---- start service all ---
 			startAllServices(injector);
 			
-			
+			// --- check all servic is started ---
+			awaitAllServEngineStart();
 
 			// --- start and boot container ---
 			ContainerBase cb = new ContainerBase();
@@ -337,8 +339,6 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 					EngineCompLoaderService ecls = (EngineCompLoaderService)servEngine;
 					serviceHolder.addEngineCompLoaderService( ecls );				
 				}
-				
-				
 				addShutdownHook( servEngine );
 				
 			} catch (Exception e) {
@@ -348,13 +348,19 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 			
 			
 		}
-		
-
-
 	}
 	
 	
+	private Collection<ServEngine> servEngineStarted = new ArrayList<ServEngine>();
+	
+	
 	private void addShutdownHook(ServEngine servEngine) {
+		
+		servEngineStarted.add( servEngine );
+		
+	}
+	
+	private void awaitAllServEngineStart() {
 		
 	}
 	

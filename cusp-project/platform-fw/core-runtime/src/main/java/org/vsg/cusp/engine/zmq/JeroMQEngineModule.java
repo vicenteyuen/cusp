@@ -22,7 +22,7 @@ import com.google.inject.name.Names;
  * @author Vicente Yuen
  *
  */
-public class JeroMQEngineModule extends AbstractModule implements ServEngine, Runnable{
+public class JeroMQEngineModule extends AbstractModule {
 
 
 
@@ -52,35 +52,7 @@ public class JeroMQEngineModule extends AbstractModule implements ServEngine, Ru
 	
 	
 	
-	
 
-	@Override
-	public void run() {
-		
-
-		
-	}
-
-	@Override
-	public void start() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void stop() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	private Map<String, String> arguments;	
-
-	@Override
-	public void init(Map<String, String> arguments) {
-		// TODO Auto-generated method stub
-		this.arguments = arguments;		
-	}
-	
 	
 	
 }
