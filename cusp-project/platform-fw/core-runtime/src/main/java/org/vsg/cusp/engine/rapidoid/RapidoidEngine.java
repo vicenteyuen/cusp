@@ -14,12 +14,14 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
+import javax.tools.JavaCompiler;
 import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
@@ -38,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.EngineCompLoaderService;
 import org.vsg.cusp.core.MethodParametersMetaInfo;
+import org.vsg.cusp.core.MicroCompInjector;
 import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.core.runtime.InjecterHandler;
 import org.vsg.cusp.core.utils.ClassFilter;
@@ -124,86 +127,8 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 		// TODO Auto-generated method stub
 		this.arguments = arguments;
 	}
-	
-	private void initComponentService(File  homePath , ClassLoader clsLoader , FastHttp http) {
-		
-		File confFile = new File(homePath , "comp.json");
-		
-		if (!confFile.exists()) {
-			logger.warn("Could not find \"comp.json\" file under the " + homePath);
-		}
-		
-		Set<String> scanPackages = new LinkedHashSet<String>();
-		
-		String contextPath = "";
-		// --- init config setting ---
-		try {
-			// --- scan rest api , parse json file ---
-			JSONObject jObj = (JSONObject)JSON.parse( IOUtils.toString(confFile.toURI() , "utf-8") );
-			
-			// --- load to package scan package ---
-			JSONArray scanPackageArr = jObj.getJSONArray("package-scan");
-	    	for (Iterator<String> spIter =  (Iterator<String>)(Iterator)scanPackageArr.iterator() ; spIter.hasNext(); ) {
-	    		String onePackage = spIter.next();
-	    		scanPackages.add( onePackage);
-	    	}
-	    	
-	    	contextPath = jObj.getString("context-path") == null ? "" : jObj.getString("context-path");
-	    	
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		List<Class<?>> allFoundCls = new Vector<Class<?>>();
-		
-		// --- show scan package ---
-		for (String packageItem : scanPackages) {
-			
-			List<Class<?>> allCls =  ClassUtils.getClasses( packageItem , clsLoader , new ClassFilter() {
-
-				@Override
-				public boolean filter(Class<?> clsInput) {
-					// TODO Auto-generated method stub
-					Path pathMarkInClass = clsInput.getAnnotation(Path.class);
-					
-					Method[] methodsInCls = clsInput.getMethods();
-					
-					boolean markExisted = pathMarkInClass != null;
-					
-					for (Method method : methodsInCls) {
-						Path pathMarkOnMethod = method.getAnnotation(Path.class);
-						
-						if (!markExisted) {
-							markExisted = pathMarkOnMethod != null;
-							break;
-						}
-					}
-					return markExisted;
-				}
-				
-			});
-			
-			allFoundCls.addAll( allCls );
-		}
-		
-		
-		/**
-		 * inject all path for handle
-		 */
-
-		for (Class<?> cls : allFoundCls) {
-			
-			implementForRestPath(cls , contextPath , http);
-
-		}
-
-
-		
-		
-	}	
-
-	private void implementForRestPath(Class<?> cls , String contextPath,FastHttp http) {
+	private void implementForRestPath(Class<?> cls , Object inst ,  String contextPath,FastHttp http) {
 		Path clsPathinst = cls.getAnnotation(Path.class);
 		
 		String basePath = "";
@@ -214,8 +139,6 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 		try {
 			List<String> restPathList = new Vector<String>();
 			
-			// --- append set the service ---
-			Object inst = cls.newInstance();
 			
 			
 			Method[] methods = cls.getMethods();
@@ -297,13 +220,7 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 
 	}
 	
@@ -420,19 +337,45 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 
 
 
-	public void appendLoadService(File homePath , ClassLoader classLoader) {
-		FastHttp http = setup.http();
-		
-		//initComponentService(homePath , classLoader , http);
-		
-	}
-
-
 	@Override
-	public void scanClassForAnnoation(File homePath , ClassLoader classLoader , Map<Class, Collection<Class>> annotationClsBinding) {
-		// TODO Auto-generated method stub
+	public void doCompInject(MicroCompInjector microCompInjector) {
+		FastHttp http = setup.http();		
+		
+		Injector injector = microCompInjector.getInjector();
+		
+		Collection<Class<?>> supportedCls = supportAnnotationClz(microCompInjector.getAnnotationMaps());
+		
+		
+		for (Class<?> cls : supportedCls) {
+			Object inst =  injector.getInstance( cls );
+			implementForRestPath(cls , inst , microCompInjector.getContextPath() , http);
+		}
+
+
 		
 	}
+	
+	private Collection<Class<?>> supportAnnotationClz(Map<Class<?>, Collection<Class<?>>>  annotationMap ) {
+		
+		Collection<Class<?>> result = new Vector<Class<?>>();
+		
+		Set<Entry<Class<?>, Collection<Class<?>>>> entryMapSet =   annotationMap.entrySet();
+		
+		for (Entry<Class<?>, Collection<Class<?>>> entry : entryMapSet) {
+			 Collection<Class<?>> annotations =  entry.getValue();
+			 
+			 if (!annotations.contains( Path.class )) {
+				 continue;
+			 }
+			 
+			 result.add( entry.getKey() );
+			
+		}
+		
+		
+		return result;
+	}
+	
 
 
 	@Override

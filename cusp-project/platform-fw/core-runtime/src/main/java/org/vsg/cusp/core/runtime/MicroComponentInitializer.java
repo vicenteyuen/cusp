@@ -5,6 +5,7 @@ package org.vsg.cusp.core.runtime;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -16,12 +17,18 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
+
+import javax.ws.rs.Path;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.EngineCompLoaderService;
+import org.vsg.cusp.core.MicroCompInjector;
 import org.vsg.cusp.core.ServiceHolder;
+import org.vsg.cusp.core.utils.ClassFilter;
+import org.vsg.cusp.core.utils.ClassUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -75,43 +82,38 @@ public class MicroComponentInitializer implements Runnable {
 		configration(homePath);
 		
 		// --- scan supported annotations ---
-		scanAnnotaions(scanPackages , compClassLoader);
+		Map<Class<?>, Collection<Class<?>>>  annotationMaps = scanAnnotaions(scanPackages , compClassLoader);
 		
+		// --- create micro component module ---
+		PreScanAnnotationModule psaModule = new PreScanAnnotationModule();
+		psaModule.setPreInstanceClzes( annotationMaps.keySet() );
+
+		
+		Injector  inject = parentInjector.createChildInjector(psaModule);
+
+		
+		MicroCompInjector mci = new MicroCompInjector();
+		mci.setInjector(inject);
+		mci.setAnnotationMaps( annotationMaps );
+		mci.setHomeClassLoader( compClassLoader );
+		mci.setHomePath( homePath );
+		mci.setContextPath( contextPath );
 		
 		// --- get booted engines ---
 		ServiceHolder  serviceHolder = parentInjector.getInstance( ServiceHolder.class);
 		
 		List<EngineCompLoaderService> engineCompLoaderServices =  serviceHolder.getEngineCompLoaderServices();		
-		
-		
-		
-		
-		Set<Class> preScanClzes = new LinkedHashSet<Class>();
-		
-		
-		Map<Class, Collection<Class>> annotationMapping = new LinkedHashMap<Class , Collection<Class>>();
+
 		
 		for (EngineCompLoaderService  engineCompLoaderService : engineCompLoaderServices ) {
-			engineCompLoaderService.scanClassForAnnoation( homePath , compClassLoader ,  annotationMapping );
-		
+			engineCompLoaderService.doCompInject(mci );
 		}
 		
-		
-		// --- create micro component module ---
-		PreScanAnnotationModule psaModule = new PreScanAnnotationModule();
-		psaModule.setHomePath( homePath );
-		psaModule.setHomeClassLoader( compClassLoader );
-		psaModule.setPreDefinedScanAnnotation( preScanClzes );
-		psaModule.setScanPackages(scanPackages);
-		
-		
-		Injector  inject = parentInjector.createChildInjector(psaModule);
-
-		
-
 	}
 	
 	private Set<String> scanPackages = new LinkedHashSet<String>();
+	
+	private String contextPath;
 	
 	private void configration(File homePath) {
 		File confFile = new File(homePath , "comp.json");
@@ -121,7 +123,6 @@ public class MicroComponentInitializer implements Runnable {
 		}
 		
 		
-		String contextPath = "";
 		// --- init config setting ---
 		try {
 			// --- scan rest api , parse json file ---
@@ -188,10 +189,65 @@ public class MicroComponentInitializer implements Runnable {
     	/**
     	 * scan all class for support 
     	 */
-    	
-    	
-    	
-		return null;
+    	Map<Class<?>,Collection<Class<?>>>  clzAnnotationMapping = new LinkedHashMap<Class<?>, Collection<Class<?>>>();
+		
+		// --- show scan package ---
+		for (String packageItem : scanPackages) {
+			
+			  ClassUtils.getClasses( packageItem , compClassLoader , new ClassFilter() {
+
+				@Override
+				public boolean filter(Class<?> clsInput) {
+					// TODO Auto-generated method stub
+					
+					Collection<Class<?>> assoClzzes =  clzAnnotationMapping.get( clsInput );
+					if (null == assoClzzes) {
+						assoClzzes = new Vector<Class<?>>();
+					}
+					
+					for (Class annotationCls : annotationsSupported) {
+						boolean markExisted = filterForOneAnnoation(clsInput , annotationCls);
+						
+						if (!markExisted) {
+							continue;
+						}
+						assoClzzes.add( annotationCls );
+					}
+					
+					if (!assoClzzes.isEmpty()) {
+						
+						clzAnnotationMapping.put( clsInput , assoClzzes);
+						
+					}
+					return false;
+					
+
+				}
+
+				
+				private boolean filterForOneAnnoation(Class<?> clsInput , Class annotationCls) {
+					Path pathMarkInClass = clsInput.getAnnotation(Path.class);
+					
+					Method[] methodsInCls = clsInput.getMethods();
+					
+					boolean markExisted = pathMarkInClass != null;
+					
+					for (Method method : methodsInCls) {
+						Path pathMarkOnMethod = method.getAnnotation(Path.class);
+						
+						if (!markExisted) {
+							markExisted = pathMarkOnMethod != null;
+							break;
+						}
+					}
+					return markExisted;				
+				}				
+				
+			});
+			  
+		}
+		
+		return clzAnnotationMapping;
 	}
 
 
