@@ -3,15 +3,11 @@
  */
 package org.vsg.cusp.engine.rapidoid;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,16 +15,15 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
 
-import javax.tools.JavaCompiler;
 import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.container.AsyncResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
@@ -38,25 +33,23 @@ import org.rapidoid.setup.OnRoute;
 import org.rapidoid.setup.Setup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.core.CountDownLatchAware;
 import org.vsg.cusp.core.EngineCompLoaderService;
+import org.vsg.cusp.core.LifecycleState;
 import org.vsg.cusp.core.MethodParametersMetaInfo;
 import org.vsg.cusp.core.MicroCompInjector;
 import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.core.runtime.InjecterHandler;
-import org.vsg.cusp.core.utils.ClassFilter;
-import org.vsg.cusp.core.utils.ClassUtils;
 import org.vsg.cusp.engine.rapidoid.specimpl.AsyncHttpRequestImpl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.google.inject.Injector;
 
 /**
  * @author ruanweibiao
  *
  */
-public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Runnable , InjecterHandler {
+public class RapidoidEngine implements ServEngine, 
+	EngineCompLoaderService , Runnable , InjecterHandler , CountDownLatchAware {
 
 	private static Logger logger = LoggerFactory.getLogger(RapidoidEngineModule.class);	
 
@@ -91,6 +84,7 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 			
 
 			// --- bind http service ---
+			countDownLatch.await();
 
 			
 			logger.info("listen http port : [" + port + "].");
@@ -116,6 +110,8 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			
 		}
 			
 	}
@@ -377,11 +373,34 @@ public class RapidoidEngine implements ServEngine, EngineCompLoaderService , Run
 	}
 	
 
+    private volatile LifecycleState state = LifecycleState.NEW; 	
+	
+	@Override
+	public LifecycleState getState() {
+		return state;
+	}
+
+	
+
+	@Override
+	public void setState(LifecycleState newState) {
+		// TODO Auto-generated method stub
+		state = newState;
+	}
+
 
 	@Override
 	public void handle(Injector injector) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private CountDownLatch countDownLatch;
+
+
+	@Override
+	public void setCountDownLatch(CountDownLatch countDownLatch) {
+		this.countDownLatch = countDownLatch;
 	}
 
 

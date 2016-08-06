@@ -22,12 +22,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.core.CountDownLatchAware;
 import org.vsg.cusp.core.EngineCompLoaderService;
 import org.vsg.cusp.core.Lifecycle;
 import org.vsg.cusp.core.LifecycleException;
@@ -318,18 +320,28 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 	/**
 	 * start all service pre define 
 	 * @param injector
+	 * @throws InterruptedException 
 	 */
-	private void startAllServices(Injector injector) {
+	private void startAllServices(Injector injector) throws InterruptedException {
 		
 		ServiceHolder serviceHolder =  injector.getInstance(ServiceHolder.class);
 
 		// --- start engince ---
 		Set<Map.Entry<String, Map<String,String>>>  engineServiceSet =  bootEngines.entrySet();
+
+		CountDownLatch startSignal = new CountDownLatch( engineServiceSet.size() );		
+		
 		for (Map.Entry<String, Map<String,String>> engineItem : engineServiceSet) {
 			
 			try {
 				Class engineCls = Class.forName( engineItem.getKey() );
 				ServEngine servEngine =  injector.getInstance(Key.get(ServEngine.class, Names.named(engineCls.getName()) ));
+				
+				if (servEngine instanceof CountDownLatchAware) {
+					CountDownLatchAware cdla = (CountDownLatchAware)servEngine;
+					cdla.setCountDownLatch( startSignal );
+				}
+				
 				servEngine.init( engineItem.getValue() );
 				servEngine.start();
 				
@@ -348,6 +360,8 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 			
 			
 		}
+		
+		startSignal.await();
 	}
 	
 	

@@ -4,6 +4,7 @@
 package org.vsg.cusp.engine.zmq;
 
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RunnableFuture;
@@ -14,14 +15,15 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.Container;
+import org.vsg.cusp.core.CountDownLatchAware;
 import org.vsg.cusp.core.EventBusServEngine;
-import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.core.LifecycleState;
 
 /**
  * @author Vicente Yuen
  *
  */
-public class JeroMQServEngine implements EventBusServEngine , Runnable {
+public class JeroMQServEngine implements EventBusServEngine , Runnable ,  CountDownLatchAware {
 	
 	private static Logger logger = LoggerFactory.getLogger(JeroMQServEngine.class);	
 	
@@ -83,6 +85,33 @@ public class JeroMQServEngine implements EventBusServEngine , Runnable {
 		execService.execute( worker );
 		execService.shutdown();
 		
+		
+		countDownLatch.countDown();
+		
+	}
+
+
+    private volatile LifecycleState state = LifecycleState.NEW;
+    
+	@Override
+	public LifecycleState getState() {
+		// TODO Auto-generated method stub
+		return state;
+	}
+	
+
+	@Override
+	public void setState(LifecycleState newState) {
+		// TODO Auto-generated method stub
+		state = newState;
+	}	
+
+	
+	private CountDownLatch countDownLatch;
+	
+	@Override
+	public void setCountDownLatch(CountDownLatch countDownLatch) {
+		this.countDownLatch = countDownLatch;		
 	}
 
 	
