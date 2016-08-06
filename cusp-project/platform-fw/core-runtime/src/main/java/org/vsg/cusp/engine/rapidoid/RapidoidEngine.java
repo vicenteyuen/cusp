@@ -76,18 +76,16 @@ public class RapidoidEngine implements ServEngine,
 		int port = Integer.parseInt( arguments.get("port") );
 
 		try {
-
+			setState( LifecycleState.STARTING );
 			setup.address(host);
 			setup.port(port);
 			
 			serv = setup.listen();
 			
-
 			// --- bind http service ---
-			countDownLatch.await();
-
-			
 			logger.info("listen http port : [" + port + "].");
+			countDownLatch.countDown();
+			setState( LifecycleState.STARTED );
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

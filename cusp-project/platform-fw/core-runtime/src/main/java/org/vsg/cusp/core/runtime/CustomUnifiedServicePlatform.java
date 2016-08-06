@@ -266,9 +266,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 			// ---- start service all ---
 			startAllServices(injector);
 			
-			// --- check all servic is started ---
-			awaitAllServEngineStart();
-
+			
 			// --- start and boot container ---
 			ContainerBase cb = new ContainerBase();
 			
@@ -357,10 +355,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
 		}
-		
 		startSignal.await();
 	}
 	
@@ -373,11 +368,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 		servEngineStarted.add( servEngine );
 		
 	}
-	
-	private void awaitAllServEngineStart() {
-		
-	}
-	
+
 	
 	
     private volatile ServerSocket awaitSocket = null;
