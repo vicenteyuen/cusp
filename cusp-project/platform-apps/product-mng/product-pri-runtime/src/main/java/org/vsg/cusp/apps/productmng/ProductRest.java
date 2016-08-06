@@ -46,8 +46,6 @@ public class ProductRest {
 			ResponseBuilder rb = Response.ok("hello world, VISON , my dear");
 			rb.type( MediaType.TEXT_PLAIN );
 			
-			System.out.println("show event bus : " + eventBus);
-			
 			
 			ef = efm.getFlow("product/test.example");
 			
@@ -68,6 +66,8 @@ public class ProductRest {
 				}
 				
 			};
+			
+			
 			
 			//ef.fire("org.vsg.cusp.evetimst.case1", new LinkedHashMap<String,Object>(), eventHandler);
 			//ef.fire("org.vsg.cusp.evetimst.case2", new LinkedHashMap<String,Object>(), eventHandler);

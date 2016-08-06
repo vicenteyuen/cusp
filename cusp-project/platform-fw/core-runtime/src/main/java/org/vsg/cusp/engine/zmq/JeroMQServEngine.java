@@ -78,6 +78,7 @@ public class JeroMQServEngine implements EventBusServEngine , Runnable ,  CountD
 		// --- message exchange encoder ---
 		//DefaultMessageExchangeEncoder dme = new DefaultMessageExchangeEncoder();
 		//worker.setEncoder(dme);
+		setState( LifecycleState.STARTING );
 		
 		ExecutorService execService = Executors.newCachedThreadPool();
 
@@ -85,9 +86,9 @@ public class JeroMQServEngine implements EventBusServEngine , Runnable ,  CountD
 		execService.execute( worker );
 		execService.shutdown();
 		
-		
 		countDownLatch.countDown();
 		
+		setState( LifecycleState.STARTED );
 	}
 
 

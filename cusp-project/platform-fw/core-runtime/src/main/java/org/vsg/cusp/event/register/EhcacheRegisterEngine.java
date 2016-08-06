@@ -34,7 +34,11 @@ public class EhcacheRegisterEngine implements ServEngine ,  CountDownLatchAware 
 	@Override
 	public void start() throws Exception {
 		
+		setState( LifecycleState.STARTING );
+		
 		countDownLatch.countDown();
+		
+		setState( LifecycleState.STARTED );
 
 	}
 
