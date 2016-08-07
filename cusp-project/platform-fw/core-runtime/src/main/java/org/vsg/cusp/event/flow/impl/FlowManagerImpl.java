@@ -10,13 +10,13 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.vsg.cusp.concurrent.EventFlow;
-import org.vsg.cusp.concurrent.EventInfo;
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
 import org.vsg.cusp.concurrent.impl.MultiNodeEventFlowImpl;
 import org.vsg.cusp.concurrent.impl.OperationEventImpl;
 import org.vsg.cusp.concurrent.impl.SingleNodeEventFlowImpl;
 import org.vsg.cusp.core.utils.AnnotationReflectionUtils;
+import org.vsg.cusp.event.annotations.EventInfo;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.event.flow.PromiseAware;

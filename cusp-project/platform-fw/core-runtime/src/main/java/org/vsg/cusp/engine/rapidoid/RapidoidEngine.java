@@ -344,9 +344,6 @@ public class RapidoidEngine implements ServEngine,
 			Object inst =  injector.getInstance( cls );
 			implementForRestPath(cls , inst , microCompInjector.getContextPath() , http);
 		}
-
-
-		
 	}
 	
 	private Collection<Class<?>> supportAnnotationClz(Map<Class<?>, Collection<Class<?>>>  annotationMap ) {

@@ -3,7 +3,11 @@
  */
 package org.vsg.cusp.engine.zmq;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,14 +20,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.Container;
 import org.vsg.cusp.core.CountDownLatchAware;
+import org.vsg.cusp.core.EngineCompLoaderService;
 import org.vsg.cusp.core.EventBusServEngine;
 import org.vsg.cusp.core.LifecycleState;
+import org.vsg.cusp.core.MicroCompInjector;
+import org.vsg.cusp.event.annotations.BeanService;
+
+import com.google.inject.Injector;
 
 /**
  * @author Vicente Yuen
  *
  */
-public class JeroMQServEngine implements EventBusServEngine , Runnable ,  CountDownLatchAware {
+public class JeroMQServEngine implements EventBusServEngine , Runnable,CountDownLatchAware , EngineCompLoaderService {
 	
 	private static Logger logger = LoggerFactory.getLogger(JeroMQServEngine.class);	
 	
@@ -75,9 +84,6 @@ public class JeroMQServEngine implements EventBusServEngine , Runnable ,  CountD
 	public void run() {
 		
 
-		// --- message exchange encoder ---
-		//DefaultMessageExchangeEncoder dme = new DefaultMessageExchangeEncoder();
-		//worker.setEncoder(dme);
 		setState( LifecycleState.STARTING );
 		
 		ExecutorService execService = Executors.newCachedThreadPool();
@@ -114,6 +120,45 @@ public class JeroMQServEngine implements EventBusServEngine , Runnable ,  CountD
 	public void setCountDownLatch(CountDownLatch countDownLatch) {
 		this.countDownLatch = countDownLatch;		
 	}
+
+
+	@Override
+	public void doCompInject(MicroCompInjector microCompInjector) {
+		Injector injector = microCompInjector.getInjector();
+		/*
+		Collection<Class<?>> supportedCls = supportAnnotationClz(microCompInjector.getAnnotationMaps());
+		
+		for (Class<?> cls : supportedCls) {
+			Object inst =  injector.getInstance( cls );
+			
+			// --- regist bean ----
+			System.out.println("inst " + inst);
+			
+		}
+		*/		
+		
+	}
+	
+	private Collection<Class<?>> supportAnnotationClz(Map<Class<?>, Collection<Class<?>>>  annotationMap ) {
+		
+		Collection<Class<?>> result = new Vector<Class<?>>();
+		
+		Set<Entry<Class<?>, Collection<Class<?>>>> entryMapSet =   annotationMap.entrySet();
+		
+		for (Entry<Class<?>, Collection<Class<?>>> entry : entryMapSet) {
+			 Collection<Class<?>> annotations =  entry.getValue();
+			 
+			 if (!annotations.contains( BeanService.class )) {
+				 continue;
+			 }
+			 
+			 result.add( entry.getKey() );
+			
+		}
+		
+		
+		return result;
+	}	
 
 	
 	

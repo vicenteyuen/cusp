@@ -1,1 +1,2 @@
 javax.ws.rs.Path
+org.vsg.cusp.event.annotations.BeanService

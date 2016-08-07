@@ -1,4 +1,4 @@
-package org.vsg.cusp.concurrent;
+package org.vsg.cusp.event.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
