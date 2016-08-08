@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.utils.CorrelationIdGenerator;
 
+import com.google.common.primitives.Ints;
+
 /**
  * @author Vicente Yuen
  *
@@ -37,6 +39,14 @@ public class CorrelationIdGeneratorTest {
 	
 	@Test
 	public void test_case01() throws Exception {
+		
+		String v1 = "1.0.0";
+		String v2 = "1.0.1";
+		
+		byte[] v1Bytes = v1.getBytes();
+		
+		int value= Ints.fromByteArray( v1Bytes );
+		System.out.println(value);
 		/*
 		CorrelationIdGenerator inst = CorrelationIdGenerator.genInstance( mac );
 		

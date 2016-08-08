@@ -11,20 +11,18 @@ import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.RunnableFuture;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.rapidoid.annotation.Run;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.Container;
 import org.vsg.cusp.core.CountDownLatchAware;
 import org.vsg.cusp.core.EngineCompLoaderService;
-import org.vsg.cusp.core.EventBusServEngine;
 import org.vsg.cusp.core.LifecycleState;
 import org.vsg.cusp.core.MicroCompInjector;
+import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.event.annotations.BeanService;
 
 import com.google.inject.Injector;
@@ -33,7 +31,7 @@ import com.google.inject.Injector;
  * @author Vicente Yuen
  *
  */
-public class MasterEventBusServEngine implements EventBusServEngine , Runnable,CountDownLatchAware , EngineCompLoaderService {
+public class MasterEventBusServEngine implements ServEngine , Runnable,CountDownLatchAware , EngineCompLoaderService {
 	
 	private static Logger logger = LoggerFactory.getLogger(MasterEventBusServEngine.class);	
 	
@@ -89,6 +87,7 @@ public class MasterEventBusServEngine implements EventBusServEngine , Runnable,C
 		execService.execute( reqRepBroker );
 		execService.execute( worker );
 		execService.shutdown();
+
 		
 		
 		// --- count down the current handle ---
@@ -125,6 +124,9 @@ public class MasterEventBusServEngine implements EventBusServEngine , Runnable,C
 	@Override
 	public void doCompInject(MicroCompInjector microCompInjector) {
 		Injector injector = microCompInjector.getInjector();
+		
+		
+		System.out.println("injector : " + injector);
 		/*
 		Collection<Class<?>> supportedCls = supportAnnotationClz(microCompInjector.getAnnotationMaps());
 		

@@ -43,8 +43,11 @@ public class EventBusMasterEngineModule extends AbstractModule {
 		this.bind(Runnable.class).annotatedWith(Names.named("RequestResponseWorker")).to(ReqRepWorker.class).in( Scopes.SINGLETON );
 		
 		
-		// --- start mqbroker ---
+		// --- start mqbroker and master worker ---
 		this.bind( ServEngine.class ).annotatedWith( Names.named( MasterEventBusServEngine.class.getName())).to( MasterEventBusServEngine.class ).in(Scopes.SINGLETON);
+		
+		
+		// --- scan register method register ---
 		
 	}
 
