@@ -6,8 +6,8 @@ import java.util.List;
 import org.vsg.cusp.core.EventBusServEngine;
 import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.core.Service;
-import org.vsg.cusp.engine.zmq.JeroMQEngineModule;
-import org.vsg.cusp.engine.zmq.JeroMQServEngine;
+import org.vsg.cusp.engine.zmq.EventBusMasterEngineModule;
+import org.vsg.cusp.engine.zmq.MasterEventBusServEngine;
 import org.vsg.cusp.event.common.EventModule;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.Promise;
@@ -25,7 +25,7 @@ public class EventFlowTestCase01 {
 	private Injector inject;
 	
 	public void initModule() {
-		JeroMQEngineModule mqEngineModule = new JeroMQEngineModule();
+		EventBusMasterEngineModule mqEngineModule = new EventBusMasterEngineModule();
 		EventModule evtMod = new EventModule();
 		
 		inject = Guice.createInjector(mqEngineModule , evtMod);

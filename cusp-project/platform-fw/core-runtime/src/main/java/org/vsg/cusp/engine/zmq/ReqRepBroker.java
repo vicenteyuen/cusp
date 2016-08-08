@@ -5,23 +5,20 @@ package org.vsg.cusp.engine.zmq;
 
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zeromq.ZFrame;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
-import org.zeromq.ZMsg;
 
 /**
  * @author Vicente Yuen
  *
  */
-public class ReqRepBroker implements RunnableFuture {
+public class ReqRepBroker implements Runnable {
 	
 	
 	private static Logger logger = LoggerFactory.getLogger( ReqRepBroker.class );
@@ -34,62 +31,8 @@ public class ReqRepBroker implements RunnableFuture {
 	public ReqRepBroker(int brokerPort) {
 		this.brokerPort = brokerPort;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.concurrent.Future#cancel(boolean)
-	 */
-	@Override
-	public boolean cancel(boolean mayInterruptIfRunning) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.concurrent.Future#isCancelled()
-	 */
-	@Override
-	public boolean isCancelled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.concurrent.Future#isDone()
-	 */
-	@Override
-	public boolean isDone() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.concurrent.Future#get()
-	 */
-	@Override
-	public Object get() throws InterruptedException, ExecutionException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.concurrent.Future#get(long, java.util.concurrent.TimeUnit)
-	 */
-	@Override
-	public Object get(long timeout, TimeUnit unit) throws InterruptedException,
-			ExecutionException, TimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	private int brokerPort = 8701;
 	

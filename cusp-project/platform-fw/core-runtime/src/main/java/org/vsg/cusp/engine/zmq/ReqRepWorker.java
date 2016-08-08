@@ -17,7 +17,7 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
 
-public class ReqRepWorker implements RunnableFuture {
+public class ReqRepWorker implements Runnable {
 	
 	private static Logger logger = LoggerFactory.getLogger( ReqRepWorker.class );	
 	
@@ -29,26 +29,7 @@ public class ReqRepWorker implements RunnableFuture {
 	public ReqRepWorker(int workerPort) {
 		this.workerPort = workerPort;
 	}
-	
 
-
-	@Override
-	public boolean cancel(boolean mayInterruptIfRunning) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isCancelled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isDone() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
 	private  MessageEncoder encoder;
 	
@@ -61,19 +42,6 @@ public class ReqRepWorker implements RunnableFuture {
 		this.encoder = encoder;
 	}
 
-	@Override
-	public Object get() throws InterruptedException, ExecutionException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object get(long timeout, TimeUnit unit) throws InterruptedException,
-			ExecutionException, TimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	
 	private int workerPort = 5066;
 	

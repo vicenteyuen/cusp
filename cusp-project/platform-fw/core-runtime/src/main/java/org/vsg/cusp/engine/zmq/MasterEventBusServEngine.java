@@ -16,6 +16,7 @@ import java.util.concurrent.RunnableFuture;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.rapidoid.annotation.Run;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.Container;
@@ -32,23 +33,21 @@ import com.google.inject.Injector;
  * @author Vicente Yuen
  *
  */
-public class JeroMQServEngine implements EventBusServEngine , Runnable,CountDownLatchAware , EngineCompLoaderService {
+public class MasterEventBusServEngine implements EventBusServEngine , Runnable,CountDownLatchAware , EngineCompLoaderService {
 	
-	private static Logger logger = LoggerFactory.getLogger(JeroMQServEngine.class);	
+	private static Logger logger = LoggerFactory.getLogger(MasterEventBusServEngine.class);	
 	
 	private Map<String, String> arguments;	
 	
 	private Container container;
 	
+	private Runnable reqRepBroker;
 	
-	
-	private RunnableFuture reqRepBroker;
-	
-	private RunnableFuture worker;
+	private Runnable worker;
 	
 	@Inject
-	public JeroMQServEngine(@Named("RequestResponseBroker") RunnableFuture reqRepBroker,
-			@Named("RequestResponseWorker") RunnableFuture worker) {
+	public MasterEventBusServEngine(@Named("RequestResponseBroker") Runnable reqRepBroker,
+			@Named("RequestResponseWorker") Runnable worker) {
 		this.reqRepBroker = reqRepBroker;
 		this.worker = worker;
 	}
@@ -82,8 +81,7 @@ public class JeroMQServEngine implements EventBusServEngine , Runnable,CountDown
 
 	@Override
 	public void run() {
-		
-
+		// --- start lifecycle state ---
 		setState( LifecycleState.STARTING );
 		
 		ExecutorService execService = Executors.newCachedThreadPool();
@@ -92,6 +90,8 @@ public class JeroMQServEngine implements EventBusServEngine , Runnable,CountDown
 		execService.execute( worker );
 		execService.shutdown();
 		
+		
+		// --- count down the current handle ---
 		countDownLatch.countDown();
 		
 		setState( LifecycleState.STARTED );
