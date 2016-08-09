@@ -40,7 +40,7 @@ public class ProductRest {
 	
 	@GET
 	@Path("/{id}")
-	public void getProduct(AsyncResponse asyncResponse , @PathParam("id") String productId , Integer test) throws InterruptedException  {
+	public void getProduct(AsyncResponse asyncResponse , @PathParam("id") String productId , int hello) throws InterruptedException  {
 		
 
 		
@@ -68,7 +68,7 @@ public class ProductRest {
 				}
 			};
 			
-			asyncResponse.resume("hello");
+			asyncResponse.resume("get out");
 			
 			
 			// --- call remove event ---

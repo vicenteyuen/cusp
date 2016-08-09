@@ -50,7 +50,7 @@ import com.google.inject.Injector;
  *
  */
 public class RapidoidEngine implements ServEngine, 
-	EngineCompLoaderService , Runnable , InjecterHandler , CountDownLatchAware {
+	EngineCompLoaderService , Runnable ,  CountDownLatchAware {
 
 	private static Logger logger = LoggerFactory.getLogger(RapidoidEngineModule.class);	
 
@@ -180,12 +180,6 @@ public class RapidoidEngine implements ServEngine,
 
 
 										try {
-											
-											for (Object param : mpMetaInfo.getParams()) {
-												System.out.println("param : " + param + " , " + param.getClass());
-											}
-
-											
 											Object returnVal = method.invoke(inst , mpMetaInfo.getParams());
 										} catch (Exception e) {
 											// TODO Auto-generated catch block
@@ -395,12 +389,6 @@ public class RapidoidEngine implements ServEngine,
 		state = newState;
 	}
 
-
-	@Override
-	public void handle(Injector injector) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	private CountDownLatch countDownLatch;
 
