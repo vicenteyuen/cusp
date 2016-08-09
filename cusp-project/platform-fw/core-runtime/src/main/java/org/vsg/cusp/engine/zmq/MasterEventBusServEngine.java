@@ -62,7 +62,6 @@ public class MasterEventBusServEngine implements ServEngine , Runnable,CountDown
 	 */
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
 		Thread threadHook = new Thread(this);
 		threadHook.start();
 	}
@@ -125,10 +124,11 @@ public class MasterEventBusServEngine implements ServEngine , Runnable,CountDown
 	public void doCompInject(MicroCompInjector microCompInjector) {
 		Injector injector = microCompInjector.getInjector();
 		
-		
-		System.out.println("injector : " + injector);
+		//System.out.println(microCompInjector.getAnnotationMaps());
 		/*
+
 		Collection<Class<?>> supportedCls = supportAnnotationClz(microCompInjector.getAnnotationMaps());
+		
 		
 		for (Class<?> cls : supportedCls) {
 			Object inst =  injector.getInstance( cls );
@@ -137,7 +137,8 @@ public class MasterEventBusServEngine implements ServEngine , Runnable,CountDown
 			System.out.println("inst " + inst);
 			
 		}
-		*/		
+		*/
+
 		
 	}
 	

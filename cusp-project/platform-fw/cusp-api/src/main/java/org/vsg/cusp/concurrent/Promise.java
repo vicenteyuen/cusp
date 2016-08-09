@@ -1,16 +1,21 @@
-package org.vsg.cusp.event.flow;
+package org.vsg.cusp.concurrent;
 
-import org.vsg.cusp.concurrent.EventFlow;
-import org.vsg.cusp.concurrent.OperationEvent;
+import org.vsg.cusp.eventbus.spi.ServiceHelper;
 
-public interface Promise<V> {
+
+
+public interface Promise<V> extends Callback<V>{
 	
 	
+	static final PromiseFactory factory = ServiceHelper.loadFactory(PromiseFactory.class);
+	  
+	/*
 	void setFlow(EventFlow eventFlow);
 	
 	
 	// --- base promise call back
 	Promise<V> addOperationEvent(OperationEvent event);
+	*/
 
 	/**
 	 * Waits for this future to be completed

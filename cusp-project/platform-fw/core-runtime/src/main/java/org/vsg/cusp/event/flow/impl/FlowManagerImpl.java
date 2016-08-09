@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.OperationEvent;
+import org.vsg.cusp.concurrent.Promise;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
 import org.vsg.cusp.concurrent.impl.MultiNodeEventFlowImpl;
 import org.vsg.cusp.concurrent.impl.OperationEventImpl;
@@ -18,7 +19,6 @@ import org.vsg.cusp.concurrent.impl.SingleNodeEventFlowImpl;
 import org.vsg.cusp.core.utils.AnnotationReflectionUtils;
 import org.vsg.cusp.event.annotations.EventInfo;
 import org.vsg.cusp.event.flow.FlowManager;
-import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.event.flow.PromiseAware;
 import org.vsg.cusp.event.impl.PromiseProvider;
 import org.vsg.cusp.eventbus.EventBus;
@@ -79,7 +79,7 @@ public class FlowManagerImpl implements FlowManager, EventBusAware {
 
 			if (eventFlow instanceof PromiseAware) {
 				Promise<?> promiseInst = promiseProvider.get();
-				promiseInst.setFlow( eventFlow );
+				//promiseInst.setFlow( eventFlow );
 				PromiseAware promiseAware = ((PromiseAware)eventFlow);
 				promiseAware.setPromise( promiseInst );
 			}

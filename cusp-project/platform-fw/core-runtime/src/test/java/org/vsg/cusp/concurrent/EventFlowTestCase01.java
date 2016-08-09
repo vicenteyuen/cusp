@@ -3,14 +3,10 @@ package org.vsg.cusp.concurrent;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.vsg.cusp.core.EventBusServEngine;
-import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.core.Service;
 import org.vsg.cusp.engine.zmq.EventBusMasterEngineModule;
-import org.vsg.cusp.engine.zmq.MasterEventBusServEngine;
 import org.vsg.cusp.event.common.EventModule;
 import org.vsg.cusp.event.flow.FlowManager;
-import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.eventbus.EventBus;
 
 import com.google.inject.Guice;
@@ -35,7 +31,7 @@ public class EventFlowTestCase01 {
 	
 	public void startEngineOrService() {
 		// --- start engine ---
-		EventBusServEngine  eventBusServEngine = inject.getInstance( EventBusServEngine.class );
+		//EventBusServEngine  eventBusServEngine = inject.getInstance( EventBusServEngine.class );
 
 		
 		
@@ -84,14 +80,13 @@ public class EventFlowTestCase01 {
 		
 		try {
 			event1.setRuntimeArgument("savem");
-			
-
-			
+			/*			
 			prom.addOperationEvent(event1);
 			prom.addOperationEvent(event2);
 			prom.addOperationEvent(event3);
 			prom.addOperationEvent(event4);
 			prom.addOperationEvent(event5);
+			*/
 			
 			// --- add promise on done event ---
 			prom.sync();

@@ -2,7 +2,6 @@ package org.vsg.cusp.concurrent;
 
 import org.vsg.cusp.event.annotations.EventInfo;
 import org.vsg.cusp.event.flow.FlowManager;
-import org.vsg.cusp.event.flow.Promise;
 
 
 public class MockOperationEventCls {
@@ -17,7 +16,7 @@ public class MockOperationEventCls {
 		Promise promInst = eventFlow.promise(EventFlow.MODE_LOCAL);
 	
 		OperationEvent currentEvent = eventFlow.getOperEvent("testCase1@" + MockOperationEventCls2.class.getName());
-		promInst.addOperationEvent( currentEvent );
+		//promInst.addOperationEvent( currentEvent );
 
 		System.out.println("flow manager 1 start : " + eventFlow);			
 		

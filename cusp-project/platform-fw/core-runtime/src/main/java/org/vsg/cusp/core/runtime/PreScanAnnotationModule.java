@@ -34,8 +34,7 @@ public class PreScanAnnotationModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		// TODO Auto-generated method stub
-		
-		// --- bind all instance ---
+
 		for (Class<?> clsInst : preInstanceClzes) {
 			this.bind( clsInst );
 		}

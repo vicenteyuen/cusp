@@ -1,4 +1,4 @@
-package org.vsg.cusp.event.impl;
+package org.vsg.cusp.concurrent.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,11 +14,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.concurrent.Callback;
 import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.ExecTaskFuture;
 import org.vsg.cusp.concurrent.OperationEvent;
+import org.vsg.cusp.concurrent.Promise;
 import org.vsg.cusp.event.Message;
-import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.DeliveryOptions;
 import org.vsg.cusp.eventbus.EventBus;
@@ -29,18 +30,7 @@ public class PromiseImpl implements Promise {
 
 	private static Logger logger = LoggerFactory.getLogger( PromiseImpl.class );
 	
-	private EventFlow flow;
-	
-	
-	public EventFlow getFlow() {
-		return flow;
-	}
-	
 
-	@Override
-	public void setFlow(EventFlow flow) {
-		this.flow = flow;
-	}
 	
 	private AbstractExecutorService execService = new ThreadPoolExecutor(10 , 5000 , 10l , TimeUnit.SECONDS , new LinkedBlockingDeque<Runnable>());;
 	
@@ -56,7 +46,7 @@ public class PromiseImpl implements Promise {
 	private List<OperationEvent> operationEvents = new ArrayList<OperationEvent>();
 
 
-	@Override
+
 	public Promise addOperationEvent(OperationEvent event) {
 		// TODO Auto-generated method stub
 		Objects.requireNonNull(event);
@@ -120,6 +110,7 @@ public class PromiseImpl implements Promise {
 
 				@Override
 				public void run() {
+					/*
 					EventBus eventBus = flow.getEventBus();
 					DeliveryOptions options = new DeliveryOptions();
 					options.setCodecName( "operation-event" );
@@ -129,6 +120,7 @@ public class PromiseImpl implements Promise {
 
 					// ---- count value ---
 					countDownLatch.countDown();
+					*/
 					
 				}
 				
@@ -153,6 +145,14 @@ public class PromiseImpl implements Promise {
 		 */
 	
 	
+	}
+
+
+
+	@Override
+	public void onDone(Object result, Throwable error) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

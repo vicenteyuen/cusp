@@ -1,6 +1,5 @@
 package org.vsg.cusp.apps.productmng;
 
-import java.util.LinkedHashMap;
 import java.util.concurrent.Future;
 
 import javax.inject.Inject;
@@ -12,10 +11,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import org.vsg.cusp.concurrent.EventFlow;
-import org.vsg.cusp.event.flow.FlowManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.vsg.cusp.concurrent.Callback;
+import org.vsg.cusp.event.DefaultRuntimeParams;
+import org.vsg.cusp.event.EventTrigger;
+import org.vsg.cusp.event.RuntimeParam;
 import org.vsg.cusp.eventbus.AsyncResult;
-import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
 
 
@@ -30,24 +32,24 @@ import org.vsg.cusp.eventbus.Handler;
 public class ProductRest {
 	
 	@Inject
-	private EventBus eventBus;
+	private EventTrigger eventTrigger;
+	
+	private static Logger logger = LoggerFactory.getLogger( ProductRest.class );
 	
 	
-	private FlowManager efm;
 	
 	@GET
 	@Path("/{id}")
-	public void getProduct(AsyncResponse asyncResponse , @PathParam("id") String productId , int test) throws InterruptedException  {
+	public void getProduct(AsyncResponse asyncResponse , @PathParam("id") String productId , Integer test) throws InterruptedException  {
 		
-		EventFlow ef = null;
+
 		
 		try {
+			logger.info("call method.");
 			// --- call response handle ---
 			ResponseBuilder rb = Response.ok("hello world, VISON , my dear");
 			rb.type( MediaType.TEXT_PLAIN );
-			
-			
-			ef = efm.getFlow("product/test.example");
+
 			
 			Handler<AsyncResult<Future>> eventHandler = new Handler<AsyncResult<Future>>() {
 
@@ -64,52 +66,59 @@ public class ProductRest {
 					}
 					
 				}
-				
 			};
 			
+			asyncResponse.resume("hello");
 			
 			
-			//ef.fire("org.vsg.cusp.evetimst.case1", new LinkedHashMap<String,Object>(), eventHandler);
-			//ef.fire("org.vsg.cusp.evetimst.case2", new LinkedHashMap<String,Object>(), eventHandler);
-			
+			// --- call remove event ---
+			DefaultRuntimeParams runParams = new DefaultRuntimeParams();
+			runParams.addRuntimeParam( new RuntimeParam("testparam1" , String.class, "test value1") );
+			eventTrigger.fire("testCase1", runParams , new Callback() {
 
+				@Override
+				public void onDone(Object result, Throwable error)
+						throws Exception {
+					System.out.println("invoke test case 1" + result);					
+				}
+				
+			});
+
+			
+			DefaultRuntimeParams runParams2 = new DefaultRuntimeParams();
+			runParams2.addRuntimeParam( new RuntimeParam("testparam2" , Integer.TYPE, 5) );
+			eventTrigger.fire("testparam2", runParams , new Callback() {
+
+				@Override
+				public void onDone(Object result, Throwable error)
+						throws Exception {
+					System.out.println("invoke test case 2" + result);						
+				}
+				
+			});
+
+			
+			DefaultRuntimeParams runParams3 = new DefaultRuntimeParams();
+			runParams3.addRuntimeParam( new RuntimeParam("testparam3" , Integer.TYPE, 10) );
+			eventTrigger.fire("testparam3", runParams , new Callback() {
+
+				@Override
+				public void onDone(Object result, Throwable error)
+						throws Exception {
+					System.out.println("invoke test case 3" + result);						
+					
+				}
+				
+			});
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error( e.getMessage() );
 		} finally {
-			if (null != ef) {
-				ef.fireAtEnd( new Handler<AsyncResult>() {
 
-					@Override
-					public void handle(AsyncResult event) {
-						// TODO Auto-generated method stub
-						
-					}
-					
-				});
-			}
+
 		}
-		
-        /*		
-		CountDownLatch latch = new CountDownLatch(2);
-		vertx.eventBus().localConsumer("moduleStarted").handler(message -> {
-			System.out.println(message.body());
-			latch.countDown();
-		});
-
-		
-		// --- call service verticle ---
-		vertx.deployVerticle("service:vertx.mods.vertx-services" , res -> {
-			
-			System.out.println("product : " + productId + " , " + res.succeeded() );
-
-			// --- call response handle ---
-            Response jaxrs = Response.ok("hello world, VISON").type(MediaType.TEXT_PLAIN).build();
-            asyncResponse.resume(jaxrs);	
-			
-		});
-		*/
 
 
 		

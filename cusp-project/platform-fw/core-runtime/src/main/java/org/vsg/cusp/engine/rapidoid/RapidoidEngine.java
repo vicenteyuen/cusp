@@ -27,6 +27,7 @@ import javax.ws.rs.container.AsyncResponse;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.Resp;
 import org.rapidoid.net.Server;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.OnRoute;
@@ -122,7 +123,7 @@ public class RapidoidEngine implements ServEngine,
 		this.arguments = arguments;
 	}
 
-	private void implementForRestPath(Class<?> cls , Object inst ,  String contextPath,FastHttp http) {
+	private void implementForRestPath(Class<?> cls , Object inst ,  String contextPath, FastHttp http) {
 		Path clsPathinst = cls.getAnnotation(Path.class);
 		
 		String basePath = "";
@@ -132,8 +133,6 @@ public class RapidoidEngine implements ServEngine,
 		
 		try {
 			List<String> restPathList = new Vector<String>();
-			
-			
 			
 			Method[] methods = cls.getMethods();
 			
@@ -162,7 +161,7 @@ public class RapidoidEngine implements ServEngine,
 					if (httpMethods.contains( HttpMethod.GET )) {
 						// --- bind request ---
 						OnRoute route = new OnRoute(http, setup.defaults(), org.rapidoid.util.Constants.GET, fullPath.toString());
-
+						
 						route.serve(new ReqHandler() {
 							private static final long serialVersionUID = 3162459205800800468L;
 
@@ -178,8 +177,20 @@ public class RapidoidEngine implements ServEngine,
 									public AsyncHttpRequestImpl call() throws Exception {
 										// TODO Auto-generated method stub
 										injectParameterInstanceToMethod(mpMetaInfo , hreq , fullPath.toString());
-										
-										Object returnVal = method.invoke(inst , mpMetaInfo.getParams());
+
+
+										try {
+											
+											for (Object param : mpMetaInfo.getParams()) {
+												System.out.println("param : " + param + " , " + param.getClass());
+											}
+
+											
+											Object returnVal = method.invoke(inst , mpMetaInfo.getParams());
+										} catch (Exception e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
 										
 										// --- close request ---
 										hreq.close();
@@ -291,6 +302,8 @@ public class RapidoidEngine implements ServEngine,
 			
 			Req orgReq = req.getReq();
 			
+			Resp resp = orgReq.response();
+			
 			Map<String , String> pathParams = parsePathParameter(orgReq.path() , patternPath);			
 			
 			// --- parse any class type ---
@@ -338,7 +351,6 @@ public class RapidoidEngine implements ServEngine,
 		Injector injector = microCompInjector.getInjector();
 		
 		Collection<Class<?>> supportedCls = supportAnnotationClz(microCompInjector.getAnnotationMaps());
-		
 		
 		for (Class<?> cls : supportedCls) {
 			Object inst =  injector.getInstance( cls );

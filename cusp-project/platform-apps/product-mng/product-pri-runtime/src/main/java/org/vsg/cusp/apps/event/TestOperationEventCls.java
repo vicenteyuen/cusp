@@ -2,10 +2,10 @@ package org.vsg.cusp.apps.event;
 
 import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.OperationEvent;
+import org.vsg.cusp.concurrent.Promise;
 import org.vsg.cusp.event.annotations.BeanService;
 import org.vsg.cusp.event.annotations.EventInfo;
 import org.vsg.cusp.event.flow.FlowManager;
-import org.vsg.cusp.event.flow.Promise;
 
 @BeanService
 public class TestOperationEventCls {
@@ -20,7 +20,7 @@ public class TestOperationEventCls {
 		Promise promInst = eventFlow.promise(EventFlow.MODE_LOCAL);
 	
 		OperationEvent currentEvent = eventFlow.getOperEvent("testCase1@" + TestOperationEventCls.class.getName());
-		promInst.addOperationEvent( currentEvent );
+		//promInst.addOperationEvent( currentEvent );
 
 		System.out.println("flow manager 1 start : " + eventFlow);			
 		

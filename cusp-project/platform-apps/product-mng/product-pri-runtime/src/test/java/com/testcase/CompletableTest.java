@@ -6,14 +6,14 @@ import java.util.concurrent.ExecutionException;
 public class CompletableTest {
 
 	   public static void main(String... args) throws ExecutionException, InterruptedException {
-		   /*
+
 	        CompletableFuture<String> future = CompletableFuture.supplyAsync( () -> doSomethingAndReturnA() );
 	        
 	        future.thenApply(a -> convertToB(a));
 
 	        String i = future.get();
 	        System.out.println("out : " + i);
-	        */
+
 		   
 		   
 		   

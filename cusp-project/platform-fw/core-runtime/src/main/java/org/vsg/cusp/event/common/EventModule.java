@@ -5,11 +5,11 @@ import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.concurrent.Promise;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
 import org.vsg.cusp.event.EventMethodRegister;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.flow.FlowManager;
-import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.event.flow.impl.FlowManagerImpl;
 import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;

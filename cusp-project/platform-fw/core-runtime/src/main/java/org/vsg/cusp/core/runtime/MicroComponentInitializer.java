@@ -5,10 +5,12 @@ package org.vsg.cusp.core.runtime;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -17,7 +19,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.ws.rs.Path;
 
@@ -162,6 +163,7 @@ public class MicroComponentInitializer implements Runnable {
     		while (urls.hasMoreElements()) {
     			URL url = urls.nextElement();
     			
+
     			if (url.getProtocol().equals("jar")) {
     				JarURLConnection uc = (JarURLConnection)url.openConnection();
     				List<String> allLines = IOUtils.readLines(uc.getInputStream() , Charset.forName("UTF-8"));
@@ -184,7 +186,6 @@ public class MicroComponentInitializer implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
-		
     	
     	/**
     	 * scan all class for support 
@@ -198,11 +199,10 @@ public class MicroComponentInitializer implements Runnable {
 
 				@Override
 				public boolean filter(Class<?> clsInput) {
-					// TODO Auto-generated method stub
-					
+
 					Collection<Class<?>> assoClzzes =  clzAnnotationMapping.get( clsInput );
 					if (null == assoClzzes) {
-						assoClzzes = new Vector<Class<?>>();
+						assoClzzes = new ArrayList<Class<?>>();
 					}
 					
 					for (Class annotationCls : annotationsSupported) {
@@ -224,29 +224,17 @@ public class MicroComponentInitializer implements Runnable {
 
 				}
 
-				
 				private boolean filterForOneAnnoation(Class<?> clsInput , Class annotationCls) {
-					Path pathMarkInClass = clsInput.getAnnotation(Path.class);
-					
-					Method[] methodsInCls = clsInput.getMethods();
-					
+					Annotation pathMarkInClass = clsInput.getAnnotation(annotationCls);
 					boolean markExisted = pathMarkInClass != null;
-					
-					for (Method method : methodsInCls) {
-						Path pathMarkOnMethod = method.getAnnotation(Path.class);
-						
-						if (!markExisted) {
-							markExisted = pathMarkOnMethod != null;
-							break;
-						}
-					}
+
 					return markExisted;				
 				}				
 				
 			});
 			  
 		}
-		
+
 		return clzAnnotationMapping;
 	}
 

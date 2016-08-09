@@ -1,7 +1,6 @@
 package org.vsg.cusp.concurrent;
 
 import org.vsg.cusp.event.flow.FlowManager;
-import org.vsg.cusp.event.flow.Promise;
 import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.Handler;
