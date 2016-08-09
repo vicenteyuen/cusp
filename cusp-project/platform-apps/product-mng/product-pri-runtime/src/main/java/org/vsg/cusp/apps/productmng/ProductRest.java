@@ -87,7 +87,7 @@ public class ProductRest {
 			
 			DefaultRuntimeParams runParams2 = new DefaultRuntimeParams();
 			runParams2.addRuntimeParam( new RuntimeParam("testparam2" , Integer.TYPE, 5) );
-			eventTrigger.fire("testparam2", runParams , new Callback() {
+			eventTrigger.fire("testCase2", runParams , new Callback() {
 
 				@Override
 				public void onDone(Object result, Throwable error)
@@ -100,7 +100,7 @@ public class ProductRest {
 			
 			DefaultRuntimeParams runParams3 = new DefaultRuntimeParams();
 			runParams3.addRuntimeParam( new RuntimeParam("testparam3" , Integer.TYPE, 10) );
-			eventTrigger.fire("testparam3", runParams , new Callback() {
+			eventTrigger.fire("testCase3", runParams , new Callback() {
 
 				@Override
 				public void onDone(Object result, Throwable error)

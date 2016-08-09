@@ -7,12 +7,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.event.EventMethodRegister;
 import org.vsg.cusp.event.EventTrigger;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
 import org.vsg.cusp.event.impl.EventTriggerImpl;
 import org.vsg.cusp.event.impl.MessageProvider;
+import org.vsg.cusp.event.register.EhcacheEventMethodRegister;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -49,8 +51,10 @@ public class EventBusMasterEngineModule extends AbstractModule {
 		// --- start mqbroker and master worker ---
 		this.bind( ServEngine.class ).annotatedWith( Names.named( MasterEventBusServEngine.class.getName())).to( MasterEventBusServEngine.class ).in(Scopes.SINGLETON);
 		
-
 		bindClientEndpoint();
+		
+		
+		bindEventMethodCache();
 	}
 
 	
@@ -72,6 +76,11 @@ public class EventBusMasterEngineModule extends AbstractModule {
 		this.bind(EventTrigger.class ).to( EventTriggerImpl.class ).in( Scopes.SINGLETON );
 		
 		
+	}
+	
+	
+	private void bindEventMethodCache() {
+		this.bind( EventMethodRegister.class ).to(EhcacheEventMethodRegister.class).in( Scopes.SINGLETON );
 	}
 
 	

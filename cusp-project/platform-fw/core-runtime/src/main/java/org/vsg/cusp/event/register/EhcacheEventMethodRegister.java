@@ -21,7 +21,7 @@ public class EhcacheEventMethodRegister implements EventMethodRegister {
 	 * @see org.vsg.cusp.event.EventMethodRegister#registerEvent(java.lang.String, org.vsg.cusp.event.EventMethodDescription)
 	 */
 	@Override
-	public void registerEvent(String eventId,
+	public void registerEvent(String eventName,
 			EventMethodDescription methodDescription) {
 		// TODO Auto-generated method stub
 
@@ -31,8 +31,10 @@ public class EhcacheEventMethodRegister implements EventMethodRegister {
 	 * @see org.vsg.cusp.event.EventMethodRegister#findAllRegisterEventsById(java.lang.String)
 	 */
 	@Override
-	public Set<EventMethodDescription> findAllRegisterEventsById(String eventId) {
-		// TODO Auto-generated method stub
+	public Set<EventMethodDescription> findAllRegisterEventsByName(String eventName) {
+		
+		System.out.println("event name : " + eventName);
+
 		return null;
 	}
 
@@ -40,7 +42,7 @@ public class EhcacheEventMethodRegister implements EventMethodRegister {
 	 * @see org.vsg.cusp.event.EventMethodRegister#unRegisterEvent(java.lang.String)
 	 */
 	@Override
-	public void unRegisterEvent(String eventId) {
+	public void unRegisterEvent(String eventName) {
 		// TODO Auto-generated method stub
 
 	}

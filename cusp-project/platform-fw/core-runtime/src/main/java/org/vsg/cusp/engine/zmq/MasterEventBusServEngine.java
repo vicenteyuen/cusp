@@ -23,6 +23,7 @@ import org.vsg.cusp.core.EngineCompLoaderService;
 import org.vsg.cusp.core.LifecycleState;
 import org.vsg.cusp.core.MicroCompInjector;
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.event.EventMethodRegister;
 import org.vsg.cusp.event.annotations.BeanService;
 
 import com.google.inject.Injector;
@@ -124,20 +125,20 @@ public class MasterEventBusServEngine implements ServEngine , Runnable,CountDown
 	public void doCompInject(MicroCompInjector microCompInjector) {
 		Injector injector = microCompInjector.getInjector();
 		
-		//System.out.println(microCompInjector.getAnnotationMaps());
-		/*
-
+		// --- bind to cache ---
 		Collection<Class<?>> supportedCls = supportAnnotationClz(microCompInjector.getAnnotationMaps());
+		
+		EventMethodRegister eventMethodReg = injector.getInstance( EventMethodRegister.class );
 		
 		
 		for (Class<?> cls : supportedCls) {
 			Object inst =  injector.getInstance( cls );
 			
-			// --- regist bean ----
-			System.out.println("inst " + inst);
+			// --- register bean method ----
+
 			
 		}
-		*/
+		
 
 		
 	}

@@ -16,7 +16,7 @@ public interface EventMethodRegister {
 	 * @param eventId
 	 * @param methodDescription
 	 */
-	void registerEvent(String eventId , EventMethodDescription methodDescription);
+	void registerEvent(String eventName , EventMethodDescription methodDescription);
 	
 	
 	/**
@@ -24,11 +24,11 @@ public interface EventMethodRegister {
 	 * @param eventId
 	 * @return
 	 */
-	Set<EventMethodDescription> findAllRegisterEventsById(String eventId);
+	Set<EventMethodDescription> findAllRegisterEventsByName(String eventName);
 	
 	/**
 	 * unregister all event methind binding event 
 	 * @param eventId
 	 */
-	void unRegisterEvent(String eventId);
+	void unRegisterEvent(String eventName);
 }
