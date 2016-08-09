@@ -103,7 +103,6 @@ public class AsyncHttpRequestImpl {
 
 			@Override
 			public boolean resume(Object entity) {
-				System.out.println("resume : " + entity);
 				
 				synchronized (responseLock) {
 					if (done) {
@@ -126,7 +125,6 @@ public class AsyncHttpRequestImpl {
 			protected boolean internalResume(Object entity) {
 				
 				Resp resp = req.response();
-				System.out.println("return entity : " + resp);
 
 				if (entity instanceof Response) {
 					
