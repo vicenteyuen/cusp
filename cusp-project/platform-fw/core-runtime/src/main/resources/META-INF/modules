@@ -2,4 +2,3 @@
 org.vsg.cusp.engine.cache.EmbbedCacheModule
 org.vsg.cusp.engine.rapidoid.RapidoidEngineModule
 # Event Bus end point handle 
-#org.vsg.cusp.event.common.EventModule

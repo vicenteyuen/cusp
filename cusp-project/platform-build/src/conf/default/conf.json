@@ -1,6 +1,6 @@
 {
   "boot-engines": [{
-    "class-name":"org.vsg.cusp.event.register.EhcacheRegisterEngine",
+    "class-name":"org.vsg.cusp.engine.cache.EhcacheRegisterEngine",
     "args":{
       "host":"localhost",
       "port":"8100"
