@@ -61,7 +61,12 @@
   	<dependency>
   		<groupId>ch.qos.logback</groupId>
   		<artifactId>logback-classic</artifactId>
-  	</dependency>  	  	
+  	</dependency>
+  	<dependency>
+  		<groupId>org.vsg</groupId>
+  		<artifactId>jeromq-engine-plugin</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
   <dependencyManagement>
   	<dependencies>

@@ -1,6 +1,7 @@
 package org.vsg.cusp.concurrent.impl;
 
-import org.vsg.cusp.event.AsyncResult;
+import org.vsg.cusp.concurrent.AsyncResult;
+
 
 public class AsyncResultImpl<T> implements AsyncResult<T> {
 

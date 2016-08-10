@@ -8,13 +8,13 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.vsg.cusp.concurrent.AsyncResult;
 import org.vsg.cusp.concurrent.Callback;
-import org.vsg.cusp.event.AsyncResult;
+import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.event.DeliveryOptions;
 import org.vsg.cusp.event.EventMethodDescription;
 import org.vsg.cusp.event.EventMethodRegister;
 import org.vsg.cusp.event.EventTrigger;
-import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageBus;
 import org.vsg.cusp.event.RuntimeParams;

@@ -6,8 +6,8 @@ import java.util.Queue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vsg.cusp.event.AsyncResult;
-import org.vsg.cusp.event.Handler;
+import org.vsg.cusp.concurrent.AsyncResult;
+import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.eventbus.MessageConsumer;
 import org.zeromq.ZMQ.Socket;

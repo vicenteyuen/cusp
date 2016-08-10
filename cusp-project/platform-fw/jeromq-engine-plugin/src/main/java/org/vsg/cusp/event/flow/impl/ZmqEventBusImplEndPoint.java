@@ -15,11 +15,11 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.concurrent.AsyncResult;
+import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.core.Buffer;
 import org.vsg.cusp.core.Service;
-import org.vsg.cusp.event.AsyncResult;
 import org.vsg.cusp.event.DeliveryOptions;
-import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.event.impl.AbstractMessage;

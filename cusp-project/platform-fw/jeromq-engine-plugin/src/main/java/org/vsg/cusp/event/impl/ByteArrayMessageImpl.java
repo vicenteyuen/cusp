@@ -1,8 +1,8 @@
 package org.vsg.cusp.event.impl;
 
-import org.vsg.cusp.event.AsyncResult;
+import org.vsg.cusp.concurrent.AsyncResult;
+import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.event.DeliveryOptions;
-import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.Message;
 
 

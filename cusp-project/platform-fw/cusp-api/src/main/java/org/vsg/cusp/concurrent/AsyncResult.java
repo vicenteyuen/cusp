@@ -1,4 +1,4 @@
-package org.vsg.cusp.event;
+package org.vsg.cusp.concurrent;
 
 public interface AsyncResult<T> {
 

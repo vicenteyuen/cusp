@@ -1,6 +1,5 @@
-package org.vsg.cusp.event.flow;
+package org.vsg.cusp.concurrent;
 
-import org.vsg.cusp.concurrent.Promise;
 
 public interface PromiseAware {
 	

@@ -1,7 +1,7 @@
 package org.vsg.cusp.eventbus;
 
-import org.vsg.cusp.event.AsyncResult;
-import org.vsg.cusp.event.Handler;
+import org.vsg.cusp.concurrent.AsyncResult;
+import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.event.Message;
 
 public interface MessageConsumer<T> {

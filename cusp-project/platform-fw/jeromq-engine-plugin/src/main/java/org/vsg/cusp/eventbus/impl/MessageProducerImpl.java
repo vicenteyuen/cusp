@@ -3,9 +3,9 @@ package org.vsg.cusp.eventbus.impl;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import org.vsg.cusp.event.AsyncResult;
+import org.vsg.cusp.concurrent.AsyncResult;
+import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.event.DeliveryOptions;
-import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.eventbus.EventBus;
 import org.vsg.cusp.eventbus.MessageConsumer;

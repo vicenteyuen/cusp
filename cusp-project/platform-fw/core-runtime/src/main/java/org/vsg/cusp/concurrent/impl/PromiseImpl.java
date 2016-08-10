@@ -14,17 +14,13 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vsg.cusp.concurrent.Callback;
+import org.vsg.cusp.concurrent.AsyncResult;
 import org.vsg.cusp.concurrent.ExecTaskFuture;
+import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.Promise;
-import org.vsg.cusp.event.AsyncResult;
-import org.vsg.cusp.event.DeliveryOptions;
-import org.vsg.cusp.event.Handler;
-import org.vsg.cusp.event.Message;
-import org.vsg.cusp.eventbus.EventBus;
-import org.vsg.cusp.eventbus.EventFlow;
-import org.vsg.cusp.eventbus.MessageProducer;
+
+import com.google.inject.spi.Message;
 
 public class PromiseImpl implements Promise {
 

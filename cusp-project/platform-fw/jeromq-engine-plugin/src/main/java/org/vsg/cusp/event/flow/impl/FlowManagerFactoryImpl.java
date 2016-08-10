@@ -9,9 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.vsg.cusp.concurrent.AsyncResult;
+import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
-import org.vsg.cusp.event.AsyncResult;
-import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.FlowManagerFactory;

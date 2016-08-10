@@ -13,11 +13,11 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.concurrent.AsyncResult;
 import org.vsg.cusp.concurrent.Callback;
-import org.vsg.cusp.event.AsyncResult;
+import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.event.DefaultRuntimeParams;
 import org.vsg.cusp.event.EventTrigger;
-import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.RuntimeParam;
 
 

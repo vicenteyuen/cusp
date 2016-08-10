@@ -5,14 +5,13 @@ import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.concurrent.AsyncResult;
+import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.concurrent.Promise;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
-import org.vsg.cusp.event.AsyncResult;
 import org.vsg.cusp.event.EventMethodRegister;
-import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.flow.FlowManager;
-import org.vsg.cusp.event.flow.impl.FlowManagerImpl;
 import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;
 import org.vsg.cusp.event.impl.PromiseProvider;
@@ -66,7 +65,7 @@ public class EventModule extends AbstractModule {
 			
 			this.bind( FlowManagerOptions.class ).toInstance( options  );
 
-			this.bind(FlowManager.class).to( FlowManagerImpl.class ).in( Scopes.SINGLETON );
+			//this.bind(FlowManager.class).to( FlowManagerImpl.class ).in( Scopes.SINGLETON );
 
 			CodecManager codecManager = new CodecManager();
 			codecManager.registerCodec(new OperationEventMessageCodec());
