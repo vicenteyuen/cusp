@@ -3,6 +3,7 @@
  */
 package org.vsg.cusp.engine.zmq;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,8 +24,10 @@ import org.vsg.cusp.core.EngineCompLoaderService;
 import org.vsg.cusp.core.LifecycleState;
 import org.vsg.cusp.core.MicroCompInjector;
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.event.EventMethodDescription;
 import org.vsg.cusp.event.EventMethodRegister;
 import org.vsg.cusp.event.annotations.BeanService;
+import org.vsg.cusp.event.annotations.EventInfo;
 
 import com.google.inject.Injector;
 
@@ -134,14 +137,48 @@ public class MasterEventBusServEngine implements ServEngine , Runnable,CountDown
 		for (Class<?> cls : supportedCls) {
 			Object inst =  injector.getInstance( cls );
 			
-			// --- register bean method ----
-
+			/**
+			 * scan event method to bind handle 
+			 */
+			Collection<EventMethodDescription> eventMethodDescColl = scanEventMethodDesc(inst);
+			
+			/**
+			 * define event method desc 
+			 */
+			for (EventMethodDescription eventMethodDesc : eventMethodDescColl) {
+				eventMethodReg.registerEvent( eventMethodDesc.getEventName() , eventMethodDesc);
+			}
 			
 		}
 		
-
-		
 	}
+	
+	private Collection<EventMethodDescription> scanEventMethodDesc(Object inst) {
+		Collection<EventMethodDescription> eventMethodDescColl = new Vector<EventMethodDescription>();
+		
+		Class<?>  clz =  inst.getClass();
+		
+		
+		Method[] runtimeMethods = clz.getMethods();
+		
+		
+		for (Method runtimeMethod : runtimeMethods) {
+			
+			EventInfo methodEnvInfo = runtimeMethod.getAnnotation(EventInfo.class);
+			
+			if (methodEnvInfo == null) {
+				continue;
+			}
+			
+			String eventName = methodEnvInfo.id();
+			
+			eventMethodDescColl.add( EventMethodDescription.getMethodDescription(eventName, clz, runtimeMethod) );
+		}
+		
+		
+		return eventMethodDescColl;
+	}
+	
 	
 	private Collection<Class<?>> supportAnnotationClz(Map<Class<?>, Collection<Class<?>>>  annotationMap ) {
 		

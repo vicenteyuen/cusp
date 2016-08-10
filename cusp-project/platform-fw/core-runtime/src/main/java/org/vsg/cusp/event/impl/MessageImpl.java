@@ -2,14 +2,14 @@ package org.vsg.cusp.event.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.cusp.event.AsyncResult;
+import org.vsg.cusp.event.DeliveryOptions;
+import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.event.MessageCodecSupport;
 import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
-import org.vsg.cusp.eventbus.AsyncResult;
 import org.vsg.cusp.eventbus.CaseInsensitiveHeaders;
-import org.vsg.cusp.eventbus.DeliveryOptions;
-import org.vsg.cusp.eventbus.Handler;
 import org.vsg.cusp.eventbus.MultiMap;
 
 public class MessageImpl<U, T> implements Message<T> , MessageCodecSupport {

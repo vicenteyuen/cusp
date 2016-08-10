@@ -17,16 +17,16 @@ import org.rapidoid.bytes.BytesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.core.Service;
+import org.vsg.cusp.event.AsyncResult;
+import org.vsg.cusp.event.DeliveryOptions;
+import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.event.impl.AbstractMessage;
 import org.vsg.cusp.event.impl.ByteArrayMessageImpl;
 import org.vsg.cusp.event.impl.MessageImpl;
 import org.vsg.cusp.event.impl.ZmqcmdHelper;
-import org.vsg.cusp.eventbus.AsyncResult;
-import org.vsg.cusp.eventbus.DeliveryOptions;
 import org.vsg.cusp.eventbus.EventBus;
-import org.vsg.cusp.eventbus.Handler;
 import org.vsg.cusp.eventbus.MessageConsumer;
 import org.vsg.cusp.eventbus.MessageProducer;
 import org.vsg.cusp.eventbus.MultiMap;
@@ -46,6 +46,11 @@ import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Ints;
 
 
+/**
+ * @deprecated
+ * @author ruanweibiao
+ *
+ */
 public class ZmqEventBusImplEndPoint implements EventBus , Service{
 
 	private static Logger logger = LoggerFactory.getLogger(ZmqEventBusImplEndPoint.class);
@@ -250,18 +255,6 @@ public class ZmqEventBusImplEndPoint implements EventBus , Service{
 		return consumer;
 	}
 
-	@Override
-	public <T> MessageConsumer<T> localConsumer(String address) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <T> MessageConsumer<T> localConsumer(String address,
-			Handler<Message<T>> handler) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public <T> MessageProducer<T> sender(String address) {

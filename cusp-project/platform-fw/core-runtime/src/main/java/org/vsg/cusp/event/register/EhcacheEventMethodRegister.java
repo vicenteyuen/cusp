@@ -3,6 +3,9 @@
  */
 package org.vsg.cusp.event.register;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.vsg.cusp.event.EventMethodDescription;
@@ -15,7 +18,7 @@ import org.vsg.cusp.event.EventMethodRegister;
 public class EhcacheEventMethodRegister implements EventMethodRegister {
 	
 	
-	
+	private Map<String, Set<EventMethodDescription>> localCache = new LinkedHashMap<String,Set<EventMethodDescription>>();
 
 	/* (non-Javadoc)
 	 * @see org.vsg.cusp.event.EventMethodRegister#registerEvent(java.lang.String, org.vsg.cusp.event.EventMethodDescription)
@@ -23,8 +26,18 @@ public class EhcacheEventMethodRegister implements EventMethodRegister {
 	@Override
 	public void registerEvent(String eventName,
 			EventMethodDescription methodDescription) {
-		// TODO Auto-generated method stub
-
+		
+		Set<EventMethodDescription> eventMethodDescVec = new LinkedHashSet<EventMethodDescription>();
+		
+		if (localCache.containsKey(eventName)) {
+			eventMethodDescVec = localCache.get( eventName ); 
+		}
+		
+		eventMethodDescVec.add( methodDescription );
+		
+		// --- put the collection to exist key ---
+		localCache.put( eventName , eventMethodDescVec);
+		
 	}
 
 	/* (non-Javadoc)
@@ -32,10 +45,7 @@ public class EhcacheEventMethodRegister implements EventMethodRegister {
 	 */
 	@Override
 	public Set<EventMethodDescription> findAllRegisterEventsByName(String eventName) {
-		
-		System.out.println("event name : " + eventName);
-
-		return null;
+		return localCache.getOrDefault(eventName  , new LinkedHashSet<EventMethodDescription>());
 	}
 
 	/* (non-Javadoc)
@@ -43,8 +53,10 @@ public class EhcacheEventMethodRegister implements EventMethodRegister {
 	 */
 	@Override
 	public void unRegisterEvent(String eventName) {
-		// TODO Auto-generated method stub
-
+		
+		if (localCache.containsKey(eventName)) {
+			localCache.remove(eventName); 
+		}
 	}
 
 }

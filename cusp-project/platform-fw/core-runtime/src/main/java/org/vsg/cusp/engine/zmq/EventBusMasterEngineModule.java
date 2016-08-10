@@ -10,9 +10,11 @@ import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.event.EventMethodRegister;
 import org.vsg.cusp.event.EventTrigger;
 import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.MessageBus;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
 import org.vsg.cusp.event.impl.EventTriggerImpl;
+import org.vsg.cusp.event.impl.MessageBusImpl;
 import org.vsg.cusp.event.impl.MessageProvider;
 import org.vsg.cusp.event.register.EhcacheEventMethodRegister;
 
@@ -75,6 +77,7 @@ public class EventBusMasterEngineModule extends AbstractModule {
 		
 		this.bind(EventTrigger.class ).to( EventTriggerImpl.class ).in( Scopes.SINGLETON );
 		
+		this.bind( MessageBus.class ).annotatedWith(Names.named("EventMethodMessageBus")).to( MessageBusImpl.class ).in( Scopes.SINGLETON );
 		
 	}
 	

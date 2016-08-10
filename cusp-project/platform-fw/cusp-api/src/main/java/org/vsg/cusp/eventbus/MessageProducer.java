@@ -1,5 +1,8 @@
 package org.vsg.cusp.eventbus;
 
+import org.vsg.cusp.event.AsyncResult;
+import org.vsg.cusp.event.DeliveryOptions;
+import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.Message;
 
 public interface MessageProducer<T> {

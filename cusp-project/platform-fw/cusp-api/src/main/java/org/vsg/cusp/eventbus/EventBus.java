@@ -1,5 +1,8 @@
 package org.vsg.cusp.eventbus;
 
+import org.vsg.cusp.event.AsyncResult;
+import org.vsg.cusp.event.DeliveryOptions;
+import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
 
@@ -126,28 +129,6 @@ public interface EventBus {
 	 */
 	<T> MessageConsumer<T> consumer(String address, Handler<Message<T>> handler);
 
-	/**
-	 * Like {@link #consumer(String)} but the address won't be propagated across
-	 * the cluster.
-	 *
-	 * @param address
-	 *            the address to register it at
-	 * @return the event bus message consumer
-	 */
-	<T> MessageConsumer<T> localConsumer(String address);
-
-	/**
-	 * Like {@link #consumer(String, Handler)} but the address won't be
-	 * propagated across the cluster.
-	 *
-	 * @param address
-	 *            the address that will register it at
-	 * @param handler
-	 *            the handler that will process the received messages
-	 * @return the event bus message consumer
-	 */
-	<T> MessageConsumer<T> localConsumer(String address,
-			Handler<Message<T>> handler);
 
 	/**
 	 * Create a message sender against the specified address.

@@ -3,9 +3,9 @@ package org.vsg.cusp.concurrent.impl;
 import org.vsg.cusp.concurrent.EventFlow;
 import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.Promise;
+import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.eventbus.EventBus;
-import org.vsg.cusp.eventbus.Handler;
 
 public class SingleNodeEventFlowImpl implements EventFlow {
 	

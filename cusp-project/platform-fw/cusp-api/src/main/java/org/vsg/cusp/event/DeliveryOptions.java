@@ -1,8 +1,9 @@
-package org.vsg.cusp.eventbus;
+package org.vsg.cusp.event;
 
 import java.util.Objects;
 
-import org.vsg.cusp.event.Message;
+import org.vsg.cusp.eventbus.CaseInsensitiveHeaders;
+import org.vsg.cusp.eventbus.MultiMap;
 
 public class DeliveryOptions {
 

@@ -16,6 +16,6 @@ public interface EventTrigger {
 	 * @param eventName
 	 * @param params
 	 */
-	<T> void fire(String eventName , RuntimeParams params ,  Callback<T> callback);
+	<T> void fire(String eventName , RuntimeParams params ,  Callback<T> callback) throws Exception;
 
 }

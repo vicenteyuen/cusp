@@ -1,9 +1,9 @@
 package org.vsg.cusp.event.impl;
 
+import org.vsg.cusp.event.AsyncResult;
+import org.vsg.cusp.event.DeliveryOptions;
+import org.vsg.cusp.event.Handler;
 import org.vsg.cusp.event.Message;
-import org.vsg.cusp.eventbus.AsyncResult;
-import org.vsg.cusp.eventbus.DeliveryOptions;
-import org.vsg.cusp.eventbus.Handler;
 
 
 public class ByteArrayMessageImpl extends AbstractMessage<byte[]> {
