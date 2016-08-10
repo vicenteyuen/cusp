@@ -15,6 +15,10 @@ import org.vsg.cusp.eventbus.MessageConsumer;
  *
  */
 public class MessageBusImpl implements MessageBus {
+	
+	
+	
+	
 
 	/* (non-Javadoc)
 	 * @see org.vsg.cusp.event.MessageBus#send(java.lang.String, java.lang.Object, org.vsg.cusp.event.DeliveryOptions, org.vsg.cusp.event.Handler)
@@ -24,7 +28,7 @@ public class MessageBusImpl implements MessageBus {
 			DeliveryOptions options,
 			Handler<AsyncResult<Message<T>>> replyHandler) {
 		
-		System.out.println("address : " + address);
+
 
 		return this;
 	}

@@ -12,6 +12,9 @@ import org.vsg.cusp.eventbus.MessageConsumer;
  */
 public interface MessageBus {
 	
+	public static final String EVENT_METHOD_CHANNEL = "EVT_METHOD_CHANNEL";
+	
+	
 	/**
 	 * 
 	 * @param address the address which is told by sending.
