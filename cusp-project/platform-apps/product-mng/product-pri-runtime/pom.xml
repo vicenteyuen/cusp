@@ -31,6 +31,11 @@
 			<version>1</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.vsg</groupId>
+			<artifactId>event-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<name>应用模块 - 产品管理私有运行模块</name>
 	

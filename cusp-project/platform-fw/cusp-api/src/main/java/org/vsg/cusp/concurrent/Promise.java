@@ -1,6 +1,6 @@
 package org.vsg.cusp.concurrent;
 
-import org.vsg.cusp.eventbus.spi.ServiceHelper;
+import org.vsg.cusp.core.ServiceHelper;
 
 
 

@@ -8,6 +8,7 @@ import org.vsg.cusp.engine.zmq.EventBusMasterEngineModule;
 import org.vsg.cusp.event.common.EventModule;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.eventbus.EventBus;
+import org.vsg.cusp.eventbus.EventFlow;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

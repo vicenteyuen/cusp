@@ -3,13 +3,10 @@ package org.vsg.cusp.engine.cache;
 import java.net.URL;
 
 import org.ehcache.CacheManager;
-import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
-import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.xml.XmlConfiguration;
 import org.vsg.cusp.core.ServEngine;
 import org.vsg.cusp.core.ServiceHolder;
-import org.vsg.cusp.event.register.EhcacheRegisterEngine;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;

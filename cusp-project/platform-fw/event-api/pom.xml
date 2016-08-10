@@ -6,4 +6,11 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>event-api</artifactId>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.vsg</groupId>
+  		<artifactId>cusp-api</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

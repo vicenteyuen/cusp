@@ -7,8 +7,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 
 import org.junit.Test;
+import org.vsg.cusp.core.Buffer;
 import org.vsg.cusp.core.utils.ByteUtils;
-import org.vsg.cusp.eventbus.spi.Buffer;
 
 /**
  * @author Vicente Yuen
