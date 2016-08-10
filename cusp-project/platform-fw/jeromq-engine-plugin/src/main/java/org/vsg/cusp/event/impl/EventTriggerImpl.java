@@ -87,8 +87,16 @@ public class EventTriggerImpl implements EventTrigger {
 		
 		for (EventMethodDescription eventMethodDesc : eventMethodDescSet) {
 			
+			OperationEventImpl eventImpl = new OperationEventImpl();
+			eventImpl.setMethodDescription( eventMethodDesc );
+			eventImpl.setRuntimeArgument( params.getRuntimeParams() );
+			
 			// --- convert to operation object 
-			AbstractMessage<byte[]> msg = createMessage(false, MessageBus.EVENT_METHOD_CHANNEL, deliveryOpts.getHeaders(), "",	deliveryOpts.getCodecName());
+			AbstractMessage<byte[]> msg = createMessage(false, MessageBus.EVENT_METHOD_CHANNEL, deliveryOpts.getHeaders(), eventImpl,	deliveryOpts.getCodecName());
+			
+			/**
+			 * send message to channel
+			 */
 			//messageBus.send(MessageBus.EVENT_METHOD_CHANNEL, "string", deliveryOpts, callbackHandler);			
 		}
 

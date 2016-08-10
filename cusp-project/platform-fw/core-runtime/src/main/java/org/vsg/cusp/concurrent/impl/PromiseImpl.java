@@ -1,26 +1,13 @@
 package org.vsg.cusp.concurrent.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Objects;
-import java.util.Vector;
 import java.util.concurrent.AbstractExecutorService;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vsg.cusp.concurrent.AsyncResult;
-import org.vsg.cusp.concurrent.ExecTaskFuture;
-import org.vsg.cusp.concurrent.Handler;
-import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.concurrent.Promise;
-
-import com.google.inject.spi.Message;
 
 public class PromiseImpl implements Promise {
 
@@ -37,21 +24,6 @@ public class PromiseImpl implements Promise {
 	public void setExecService(AbstractExecutorService execService) {
 		this.execService = execService;
 	}
-	
-	
-	private List<OperationEvent> operationEvents = new ArrayList<OperationEvent>();
-
-
-
-	public Promise addOperationEvent(OperationEvent event) {
-		// TODO Auto-generated method stub
-		Objects.requireNonNull(event);
-
-		operationEvents.add( event );
-
-		return this;
-	}
-	
 
 	@Override
 	public Promise await() {
@@ -76,7 +48,7 @@ public class PromiseImpl implements Promise {
 		/**
 		 * Send pre-define operation event and get the reponse message first.  
 		 */
-		
+		/*
 		CountDownLatch countDownLatch = new CountDownLatch(operationEvents.size());
 		
 		
@@ -106,7 +78,7 @@ public class PromiseImpl implements Promise {
 
 				@Override
 				public void run() {
-					/*
+
 					EventBus eventBus = flow.getEventBus();
 					DeliveryOptions options = new DeliveryOptions();
 					options.setCodecName( "operation-event" );
@@ -116,7 +88,7 @@ public class PromiseImpl implements Promise {
 
 					// ---- count value ---
 					countDownLatch.countDown();
-					*/
+
 					
 				}
 				
@@ -134,7 +106,7 @@ public class PromiseImpl implements Promise {
 			e.printStackTrace();
 		} finally {
 			
-		}
+		}*/
 		
 		/**
 		 * waiting for job task complete and fire 

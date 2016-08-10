@@ -5,10 +5,10 @@ package org.vsg.cusp.event.impl;
 
 import java.lang.reflect.Method;
 
-import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.core.Buffer;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
+import org.vsg.cusp.event.OperationEvent;
 import org.vsg.cusp.eventbus.MultiMap;
 import org.vsg.cusp.eventbus.impl.CodecManager;
 import org.zeromq.ZMQ.Socket;
@@ -90,14 +90,14 @@ public class WorkerTrigger {
 	}
 	
 	private void scheduleAndExecuteEvent(OperationEvent event) {
-		String clsName = event.assoClassName();
+		String clsName = null;
 		
 		try {
 			Class<?> objCls = Thread.currentThread().getContextClassLoader().loadClass( clsName );
 			
 			Object _inst = objCls.newInstance();
 			
-			Method method = event.assoBindMethod();
+			Method method = null;
 
 			//method.invoke( _inst , event.getRuntimeArgument());
 			

@@ -4,9 +4,9 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.vsg.cusp.concurrent.OperationEvent;
 import org.vsg.cusp.core.Buffer;
 import org.vsg.cusp.event.MessageCodec;
+import org.vsg.cusp.event.OperationEvent;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;
 import org.vsg.cusp.eventbus.impl.codes.BooleanMessageCodec;
 import org.vsg.cusp.eventbus.impl.codes.BufferMessageCodec;

@@ -1,6 +1,6 @@
 package org.vsg.cusp.event.flow;
 
-import org.vsg.cusp.concurrent.OperationEvent;
+import org.vsg.cusp.event.OperationEvent;
 import org.vsg.cusp.eventbus.EventFlow;
 
 

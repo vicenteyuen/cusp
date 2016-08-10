@@ -9,10 +9,9 @@ import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.vsg.cusp.concurrent.OperationEvent;
-import org.vsg.cusp.concurrent.impl.OperationEventImpl;
 import org.vsg.cusp.core.Buffer;
 import org.vsg.cusp.event.MessageCodec;
+import org.vsg.cusp.event.OperationEvent;
 
 /**
  * @author Vicente Yuen
@@ -26,10 +25,11 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 
 	@Override
 	public void encodeToWire(Buffer buffer, OperationEvent s) {
+		/*
 		buffer
 			.appendString( s.assoClassName() )
 			.appendString(":")
-			.appendString( s.getEventId())
+			.appendString( s.getEventName())
 			;
 		buffer.appendString( "|" );
 		buffer.appendString( convertToString(s.assoBindMethod()).toString() );
@@ -39,6 +39,7 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 			buffer.appendString( "|" );
 		}
 		buffer.appendString(argmentString.toString());
+		*/
 	}
 
 	@Override
@@ -51,11 +52,11 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 		
 		String classAndEventId = st.nextToken();
 		String[] clsAndEvtIds = classAndEventId.split(":");
-		oeImpl.setAssoClassName( clsAndEvtIds[0] );
-		oeImpl.setEventId( clsAndEvtIds[1] );
+		//oeImpl.setAssoClassName( clsAndEvtIds[0] );
+		//oeImpl.setEventId( clsAndEvtIds[1] );
 		
 		String methodName = st.nextToken();
-		
+		/*
 		String[] methodAndParamTypes = methodName.split(":");
 		Method method = parseToMethod(oeImpl.assoClassName() , methodAndParamTypes[0] , methodAndParamTypes[1].split(","));
 		
@@ -71,7 +72,7 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 			Serializable[]  arguments = paramsColl.toArray(new java.io.Serializable[0]);
 			oeImpl.setRuntimeArgument( arguments );
 		}
-		
+		*/
 		
 		return oeImpl;
 	}
