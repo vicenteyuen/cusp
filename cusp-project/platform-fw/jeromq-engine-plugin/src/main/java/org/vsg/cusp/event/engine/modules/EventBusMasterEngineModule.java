@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vsg.cusp.event.event.modules;
+package org.vsg.cusp.event.engine.modules;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,16 +15,18 @@ import org.vsg.cusp.event.EventTrigger;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageBus;
 import org.vsg.cusp.event.MessageEncoder;
-import org.vsg.cusp.event.MessageInbox;
+import org.vsg.cusp.event.MessageQueueBox;
 import org.vsg.cusp.event.impl.CodecManager;
 import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
 import org.vsg.cusp.event.impl.EventTriggerImpl;
 import org.vsg.cusp.event.impl.MessageBusImpl;
-import org.vsg.cusp.event.impl.MessageInboxImpl;
 import org.vsg.cusp.event.impl.MessageProvider;
+import org.vsg.cusp.event.impl.MessageQueueBoxImpl;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;
 import org.vsg.cusp.event.impl.ResResultMessageCodec;
 import org.vsg.cusp.event.register.EhcacheEventMethodRegister;
+import org.vsg.cusp.eventbus.MessageConsumer;
+import org.vsg.cusp.eventbus.impl.MessageConsumerImpl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -72,8 +74,9 @@ public class EventBusMasterEngineModule extends AbstractModule {
 		bindClientEndpoint();
 		bindEventMethodCache();
 		
-		this.bind( MessageInbox.class ).to( MessageInboxImpl.class ).in( Scopes.SINGLETON );
+		this.bind( MessageQueueBox.class ).to( MessageQueueBoxImpl.class ).in( Scopes.SINGLETON );
 		
+		this.bind( MessageConsumer.class ).to(  MessageConsumerImpl.class).in( Scopes.SINGLETON );
 	}
 
 	

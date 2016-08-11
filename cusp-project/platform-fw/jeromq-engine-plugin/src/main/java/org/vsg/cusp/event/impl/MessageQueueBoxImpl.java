@@ -8,8 +8,9 @@ import javax.inject.Inject;
 import org.vsg.cusp.core.Buffer;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
-import org.vsg.cusp.event.MessageInbox;
+import org.vsg.cusp.event.MessageQueueBox;
 import org.vsg.cusp.event.OperationEvent;
+import org.vsg.cusp.eventbus.MessageConsumer;
 
 import com.google.common.primitives.Ints;
 
@@ -17,13 +18,13 @@ import com.google.common.primitives.Ints;
  * @author ruanweibiao
  *
  */
-public class MessageInboxImpl implements MessageInbox {
+public class MessageQueueBoxImpl implements MessageQueueBox {
 
 	
 	private CodecManager codecManager;
 	
 	@Inject
-	public MessageInboxImpl(CodecManager codecManager) {
+	public MessageQueueBoxImpl(CodecManager codecManager) {
 		this.codecManager = codecManager;
 	}
 	
@@ -32,7 +33,14 @@ public class MessageInboxImpl implements MessageInbox {
 	 * @see org.vsg.cusp.event.MessageInbox#receiveMsg(org.vsg.cusp.event.Message)
 	 */
 	@Override
-	public void receiveMsg(Message<byte[]> msg) {
+	public void receiveMessage(Message<byte[]> msg) {
+		
+		
+		
+		MessageConsumer<byte[]> consumer = null;
+		
+
+		
 		
 		// --- parse content ---
 		byte[] msgBody = msg.body();

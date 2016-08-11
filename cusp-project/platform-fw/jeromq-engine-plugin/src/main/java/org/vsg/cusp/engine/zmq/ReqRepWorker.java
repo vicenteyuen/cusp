@@ -8,9 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageEncoder;
-import org.vsg.cusp.event.MessageInbox;
+import org.vsg.cusp.event.MessageQueueBox;
+import org.vsg.cusp.event.MessageQueueBoxFactory;
 import org.vsg.cusp.event.impl.CodecManager;
-import org.vsg.cusp.event.impl.WorkerTrigger;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
@@ -28,17 +28,10 @@ public class ReqRepWorker implements Runnable {
 		this.workerPort = workerPort;
 	}
 	
-	private MessageInbox msgInbox;
 
-	public MessageInbox getMsgInbox() {
-		return msgInbox;
-	}
-
-	@Inject	
-	public void setMsgInbox(MessageInbox msgInbox) {
-		this.msgInbox = msgInbox;
-	}
-
+	@Inject		
+	private MessageQueueBoxFactory boxFactory;
+	
 	private  MessageEncoder encoder;
 	
 	public MessageEncoder getEncoder() {
@@ -73,7 +66,7 @@ public class ReqRepWorker implements Runnable {
 		requester.connect("tcp://localhost:5561");
 		
 		
-		Objects.requireNonNull( msgInbox , "Message Inbox is not null. ");
+		Objects.requireNonNull( boxFactory , "Message Inbox is not null. ");
 
         try {
         	logger.info("ReqRepWorker Running. ");
@@ -87,7 +80,14 @@ public class ReqRepWorker implements Runnable {
 	            	if (null != message) {
 	            		Message<byte[]> msgRef = encoder.decode(message);
 	            		
-	            		msgInbox.receiveMsg( msgRef );
+	            		// --- get the address ---
+	            		String address = msgRef.address();
+	            		
+	            		// --- get message container from address --
+	            		MessageQueueBox box = boxFactory.getBox(address);
+
+	            		box.receiveMessage( msgRef );
+
 	            		
 	            		/**
 	            		 * fire comsumer object
