@@ -22,7 +22,6 @@ import org.vsg.cusp.event.MessageBus;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.event.RuntimeParams;
 import org.vsg.cusp.eventbus.MultiMap;
-import org.vsg.cusp.eventbus.impl.CodecManager;
 
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Ints;
@@ -97,7 +96,8 @@ public class EventTriggerImpl implements EventTrigger {
 			/**
 			 * send message to channel
 			 */
-			//messageBus.send(MessageBus.EVENT_METHOD_CHANNEL, "string", deliveryOpts, callbackHandler);			
+			messageBus.send(MessageBus.EVENT_METHOD_CHANNEL, msg, deliveryOpts, callbackHandler);
+			
 		}
 
 	}

@@ -1,4 +1,4 @@
-package org.vsg.cusp.eventbus.impl.codes;
+package org.vsg.cusp.event.codes;
 
 import org.vsg.cusp.core.Buffer;
 import org.vsg.cusp.event.MessageCodec;

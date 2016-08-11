@@ -10,7 +10,6 @@ import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.event.OperationEvent;
 import org.vsg.cusp.eventbus.MultiMap;
-import org.vsg.cusp.eventbus.impl.CodecManager;
 import org.zeromq.ZMQ.Socket;
 
 import com.google.common.primitives.Ints;

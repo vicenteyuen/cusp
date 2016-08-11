@@ -12,10 +12,8 @@ import java.util.Map;
 import org.vsg.cusp.concurrent.AsyncResult;
 import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
-import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.FlowManagerFactory;
-import org.vsg.cusp.event.impl.ZmqcmdHelper;
 import org.vsg.cusp.eventbus.EventBusAware;
 import org.vsg.cusp.eventbus.impl.EventBusOptions;
 

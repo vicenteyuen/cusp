@@ -12,10 +12,13 @@ import org.vsg.cusp.event.EventTrigger;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageBus;
 import org.vsg.cusp.event.MessageEncoder;
+import org.vsg.cusp.event.impl.CodecManager;
 import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
 import org.vsg.cusp.event.impl.EventTriggerImpl;
 import org.vsg.cusp.event.impl.MessageBusImpl;
 import org.vsg.cusp.event.impl.MessageProvider;
+import org.vsg.cusp.event.impl.OperationEventMessageCodec;
+import org.vsg.cusp.event.impl.ResResultMessageCodec;
 import org.vsg.cusp.event.register.EhcacheEventMethodRegister;
 
 import com.alibaba.fastjson.JSON;
@@ -43,6 +46,14 @@ public class EventBusMasterEngineModule extends AbstractModule {
 		// --- define pre handle object ---
 		this.bind(Message.class).toProvider( MessageProvider.class );
 		this.bind(MessageEncoder.class).to( DefaultMessageExchangeEncoder.class ).in(  Scopes.SINGLETON  );
+		
+
+		CodecManager codecManager = new CodecManager();
+		codecManager.registerCodec(new OperationEventMessageCodec());
+		codecManager.registerCodec(new ResResultMessageCodec());
+
+		
+		this.bind(CodecManager.class).toInstance( codecManager );
 		
 		
 		// --- set the service --

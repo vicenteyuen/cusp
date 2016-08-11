@@ -10,7 +10,6 @@ import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.ReqMessageModel;
 import org.vsg.cusp.event.RequestMessageEncoder;
-import org.vsg.cusp.eventbus.impl.CodecManager;
 
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Ints;

@@ -1,4 +1,4 @@
-package org.vsg.cusp.eventbus.impl.codes;
+package org.vsg.cusp.event.codes;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;

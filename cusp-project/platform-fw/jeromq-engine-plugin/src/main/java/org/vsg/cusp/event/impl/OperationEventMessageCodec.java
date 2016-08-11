@@ -3,15 +3,18 @@
  */
 package org.vsg.cusp.event.impl;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import org.vsg.cusp.core.Buffer;
+import org.vsg.cusp.event.EventMethodDescription;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.event.OperationEvent;
+import org.vsg.cusp.event.RuntimeParam;
+
+import com.google.common.primitives.Bytes;
 
 /**
  * @author Vicente Yuen
@@ -25,21 +28,32 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 
 	@Override
 	public void encodeToWire(Buffer buffer, OperationEvent s) {
-		/*
+		
+		EventMethodDescription  evtMethodDesc = s.getMethodDescription();
+		
+		/**
+		 * set the event name
+		 */
+		buffer.appendString( evtMethodDesc.getEventName() );
+		buffer.appendString( "|" );
+		
+		/**
+		 * set the event method descprtion
+		 */
 		buffer
-			.appendString( s.assoClassName() )
+			.appendString( evtMethodDesc.getMethodName() )
 			.appendString(":")
-			.appendString( s.getEventName())
+			.appendString( evtMethodDesc.getClzName())
 			;
 		buffer.appendString( "|" );
-		buffer.appendString( convertToString(s.assoBindMethod()).toString() );
+		
+		
+		/**
+		 * convert parameter to string
+		 */
+		buffer.appendBytes( convertToBytes( s.getRuntimeArgument() ));
 
-		StringBuilder argmentString = convertToString(s.getRuntimeArgument());
-		if (argmentString.length() > 0) {
-			buffer.appendString( "|" );
-		}
-		buffer.appendString(argmentString.toString());
-		*/
+
 	}
 
 	@Override
@@ -131,44 +145,68 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 	}
 	
 	
-	private StringBuilder convertToString(Method method) {
-		String methodName = method.getName();
-		Class<?>[] paramTypeCls = method.getParameterTypes();
-		
-		StringBuilder result = new StringBuilder(methodName);
-		result.append(":");
+	private byte[] convertToBytes(Collection<RuntimeParam> params) {
+		byte[] result = null;
 		
 		// --- return  parameter ---
 		StringBuilder paramTypeStr = new StringBuilder();
-		for (Class<?> oneCls : paramTypeCls) {
+		StringBuilder paramNameStr = new StringBuilder();
+		StringBuilder paramValueStr = new StringBuilder();
+		
+		RuntimeParam[] paramArrays = params.toArray(new RuntimeParam[0]);
+		
+		// --- parse param array ---
+		for (int i = 0; i < paramArrays.length ; i++) {
+			RuntimeParam param = paramArrays[i];
+			
+			if (paramNameStr.length() > 0) {
+				paramNameStr.append(",");
+			}
+			
 			if (paramTypeStr.length() > 0) {
 				paramTypeStr.append(",");
 			}
-			paramTypeStr.append(oneCls.getName());		
+			
+			paramNameStr.append( param.getParamName() );
+			paramTypeStr.append( param.getParamClzType().getName() );
+			byte[] contVal = convertParamValueToBytes( param.getParamVal() );
+			paramValueStr.append( contVal.length ).append("`").append( new String(contVal,Charset.forName("UTF-8")) );
 		}
 		
+		
+		
 		if (paramTypeStr.length() == 0) {
-			result.append("void");
+			result = "nil".getBytes(Charset.forName("UTF-8"));
 		} else {
-			result.append(paramTypeStr);
+			
+			// --- merge content ---
+			result = Bytes.concat( 
+				paramNameStr.toString().getBytes(Charset.forName("UTF-8")),
+				";".getBytes(Charset.forName("UTF-8")),
+				paramTypeStr.toString().getBytes(Charset.forName("UTF-8")),
+				";".getBytes(Charset.forName("UTF-8")),
+				paramValueStr.toString().getBytes(Charset.forName("UTF-8"))
+				);
+			
+			
 		}
 		
 		return result;
 	}
 	
-	private StringBuilder convertToString(Serializable[] arguments) {
-		StringBuilder argmentSb = new StringBuilder();
-		if (arguments == null || arguments.length == 0 ) {
-			return argmentSb;
+	private byte[] convertParamValueToBytes(java.io.Serializable paramValue ) {
+		byte[] result = new byte[0];
+		if (paramValue instanceof String) {
+			result = ((String)paramValue).getBytes(Charset.forName("UTF-8"));
 		}
-		for (Serializable arg : arguments) {
-			if (argmentSb.length() > 0) {
-				argmentSb.append(",");
-			}
-			argmentSb.append(arg.toString());
-		}
-		return argmentSb;
+		
+		return result;
+		
 	}
+	
+	
+	
+
 	
 
 	@Override

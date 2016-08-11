@@ -13,12 +13,12 @@ import org.vsg.cusp.event.EventMethodRegister;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
+import org.vsg.cusp.event.impl.CodecManager;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;
 import org.vsg.cusp.event.impl.PromiseProvider;
 import org.vsg.cusp.event.impl.ResResultMessageCodec;
 import org.vsg.cusp.event.impl.ZmqcmdHelper;
 import org.vsg.cusp.eventbus.EventBus;
-import org.vsg.cusp.eventbus.impl.CodecManager;
 import org.vsg.cusp.eventbus.impl.EventBusOptions;
 
 import com.alibaba.fastjson.JSON;
@@ -63,7 +63,7 @@ public class EventModule extends AbstractModule {
 			
 			FlowManagerOptions options = parseConfForManagerOptions(jsonConf);
 			
-			this.bind( FlowManagerOptions.class ).toInstance( options  );
+			//this.bind( FlowManagerOptions.class ).toInstance( options  );
 
 			//this.bind(FlowManager.class).to( FlowManagerImpl.class ).in( Scopes.SINGLETON );
 

@@ -1,4 +1,4 @@
-package org.vsg.cusp.eventbus.impl;
+package org.vsg.cusp.event.impl;
 
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,19 +7,18 @@ import java.util.concurrent.ConcurrentMap;
 import org.vsg.cusp.core.Buffer;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.event.OperationEvent;
-import org.vsg.cusp.event.impl.OperationEventMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.BooleanMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.BufferMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.ByteArrayMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.ByteMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.CharMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.DoubleMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.FloatMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.IntMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.LongMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.NullMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.ShortMessageCodec;
-import org.vsg.cusp.eventbus.impl.codes.StringMessageCodec;
+import org.vsg.cusp.event.codes.BooleanMessageCodec;
+import org.vsg.cusp.event.codes.BufferMessageCodec;
+import org.vsg.cusp.event.codes.ByteArrayMessageCodec;
+import org.vsg.cusp.event.codes.ByteMessageCodec;
+import org.vsg.cusp.event.codes.CharMessageCodec;
+import org.vsg.cusp.event.codes.DoubleMessageCodec;
+import org.vsg.cusp.event.codes.FloatMessageCodec;
+import org.vsg.cusp.event.codes.IntMessageCodec;
+import org.vsg.cusp.event.codes.LongMessageCodec;
+import org.vsg.cusp.event.codes.NullMessageCodec;
+import org.vsg.cusp.event.codes.ShortMessageCodec;
+import org.vsg.cusp.event.codes.StringMessageCodec;
 
 public class CodecManager {
 	// The standard message codecs
