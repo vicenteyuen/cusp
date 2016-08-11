@@ -1,21 +1,26 @@
 /**
  * 
  */
-package org.vsg.cusp.engine.zmq;
+package org.vsg.cusp.event.event.modules;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.engine.zmq.MasterEventBusServEngine;
+import org.vsg.cusp.engine.zmq.ReqRepBroker;
+import org.vsg.cusp.engine.zmq.ReqRepWorker;
 import org.vsg.cusp.event.EventMethodRegister;
 import org.vsg.cusp.event.EventTrigger;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageBus;
 import org.vsg.cusp.event.MessageEncoder;
+import org.vsg.cusp.event.MessageInbox;
 import org.vsg.cusp.event.impl.CodecManager;
 import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
 import org.vsg.cusp.event.impl.EventTriggerImpl;
 import org.vsg.cusp.event.impl.MessageBusImpl;
+import org.vsg.cusp.event.impl.MessageInboxImpl;
 import org.vsg.cusp.event.impl.MessageProvider;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;
 import org.vsg.cusp.event.impl.ResResultMessageCodec;
@@ -65,9 +70,10 @@ public class EventBusMasterEngineModule extends AbstractModule {
 		this.bind( ServEngine.class ).annotatedWith( Names.named( MasterEventBusServEngine.class.getName())).to( MasterEventBusServEngine.class ).in(Scopes.SINGLETON);
 		
 		bindClientEndpoint();
-		
-		
 		bindEventMethodCache();
+		
+		this.bind( MessageInbox.class ).to( MessageInboxImpl.class ).in( Scopes.SINGLETON );
+		
 	}
 
 	

@@ -8,7 +8,6 @@ import org.vsg.cusp.event.DeliveryOptions;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageCodec;
 import org.vsg.cusp.event.MessageCodecSupport;
-import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.vsg.cusp.eventbus.CaseInsensitiveHeaders;
 import org.vsg.cusp.eventbus.MultiMap;
 

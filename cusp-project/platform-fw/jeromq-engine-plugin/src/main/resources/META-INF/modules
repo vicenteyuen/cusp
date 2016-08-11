@@ -1,1 +1,1 @@
-org.vsg.cusp.engine.zmq.EventBusMasterEngineModule
+org.vsg.cusp.event.event.modules.EventBusMasterEngineModule

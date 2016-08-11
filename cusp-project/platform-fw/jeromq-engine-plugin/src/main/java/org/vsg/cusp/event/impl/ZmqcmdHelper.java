@@ -13,6 +13,7 @@ import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
 
 /**
+ * @deprecated
  * @author Vicente Yuen
  *
  */

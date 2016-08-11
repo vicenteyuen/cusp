@@ -1,4 +1,4 @@
-package org.vsg.cusp.event.common;
+package org.vsg.cusp.event.modules;
 
 import java.io.IOException;
 import java.io.InputStream;

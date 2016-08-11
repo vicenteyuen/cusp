@@ -15,6 +15,7 @@ import org.zeromq.ZMQ.Socket;
 import com.google.common.primitives.Ints;
 
 /**
+ * @deprecated
  * @author Vicente Yuen
  *
  */

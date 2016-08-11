@@ -3,10 +3,10 @@
  */
 package org.vsg.cusp.event.impl;
 
-import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import org.vsg.cusp.core.Buffer;
 import org.vsg.cusp.event.EventMethodDescription;
@@ -64,84 +64,80 @@ public class OperationEventMessageCodec implements MessageCodec<OperationEvent, 
 		
 		OperationEventImpl oeImpl = new OperationEventImpl();
 		
+		// --- parse event name ---
+		String eventName =st.nextToken();
+		
+		
+		// --- parse event 
 		String classAndEventId = st.nextToken();
 		String[] clsAndEvtIds = classAndEventId.split(":");
-		//oeImpl.setAssoClassName( clsAndEvtIds[0] );
-		//oeImpl.setEventId( clsAndEvtIds[1] );
 		
-		String methodName = st.nextToken();
-		/*
-		String[] methodAndParamTypes = methodName.split(":");
-		Method method = parseToMethod(oeImpl.assoClassName() , methodAndParamTypes[0] , methodAndParamTypes[1].split(","));
-		
+		EventMethodDescription evtMethodDesc = new EventMethodDescription();
+		evtMethodDesc.setEventName( eventName );
+		evtMethodDesc.setMethodName( clsAndEvtIds[0] );	
+		evtMethodDesc.setClzName( clsAndEvtIds[1] );
 
-		if (st.hasMoreTokens()) {
-			String params = st.nextToken();
-			String[] paramArray = params.split(",");
+		
+		String runtimeParamStr = st.nextToken();
+		Collection<RuntimeParam> runtimeParam = null;
+		
+		try {
+			runtimeParam = parseStringToRuntimeParam(runtimeParamStr);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			oeImpl.setRuntimeArgument( runtimeParam );
 			
-			Collection<java.io.Serializable> paramsColl = new Vector<java.io.Serializable>();
-			for (String singleParam : paramArray) {
-				paramsColl.add( singleParam );
-			}
-			Serializable[]  arguments = paramsColl.toArray(new java.io.Serializable[0]);
-			oeImpl.setRuntimeArgument( arguments );
 		}
-		*/
+
 		
 		return oeImpl;
 	}
 	
-	private Method parseToMethod(String clsName , String methodName , String... paramTypeNames) {
-		Method method = null;
-		try {
-			Class cls = Thread.currentThread().getContextClassLoader().loadClass(clsName);
-			
-			Class[] methodClasses = new Class[paramTypeNames.length];
-			
-			Class methodCls = null;
-			int i = 0;
-			for (String paramTypeName : paramTypeNames) {
-				methodCls = Thread.currentThread().getContextClassLoader().loadClass(paramTypeName);
-				if (null != methodClasses) {
-					methodClasses[i++] = methodCls;
-				}
-			}
-
-			method = cls.getMethod(methodName , methodClasses);
-		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return method;
-		
-		
-	}
-	
-
 	@Override
 	public OperationEvent transform(OperationEvent s) {
-		/*
-	
-		String clsName = s.assoClassName();
-		
-		String eventId = s.getEventId();
-		
-		StringBuilder result = new StringBuilder("{");
-		result.append(clsName).append("=").append(eventId).append("|");
-
-		StringBuilder methodString = convertToString(s.assoBindMethod());
-		result.append(methodString).append("|");
-		
-		StringBuilder argmentString = convertToString(s.getRuntimeArgument());
-		result.append(argmentString);
-		
-		result.append("}");
-		
-		byte[] resultByte = result.toString().getBytes(Charset.forName("UTF-8"));
-		*/
-		
 		return s;
+	}
+
+	private Collection<RuntimeParam> parseStringToRuntimeParam(String runtimeParamStr) throws ClassNotFoundException {
+		Collection<RuntimeParam> runtimeParamColl = new Vector<RuntimeParam>();
+		 
+		StringTokenizer st = new StringTokenizer( runtimeParamStr , ";" );		 
+		
+		String paramNames = st.nextToken();
+		
+		String paramTypes = st.nextToken();
+		
+		String paramValues = st.nextToken();
+
+		String[] paraNamesArray = paramNames.split(",");
+		String[] paramTypesArray = paramTypes.split(",");
+		String[] paramValuesArray = paramValues.split(",");		
+		
+		
+		for (int i = 0 ; i < paraNamesArray.length ;i++) {
+			RuntimeParam runtimeParam = new RuntimeParam();
+			runtimeParam.setParamName( paraNamesArray[i] );
+			runtimeParam.setParamClzType(  Class.forName( paramTypesArray[i] ) );
+			runtimeParam.setParamVal( parseValueToSerializable( paramValuesArray[i]  , runtimeParam.getParamClzType())  );
+			
+			runtimeParamColl.add( runtimeParam );
+		}
+		
+		
+		return runtimeParamColl;
+	}	
+	
+	private java.io.Serializable parseValueToSerializable(String valReceived , Class<?> clzType) {
+		String[] valCont = valReceived.split("`");
+		
+		
+		if (clzType.equals( java.lang.String.class )) {
+			return valCont[1];
+		}
+		
+		return null;		
 	}
 	
 	

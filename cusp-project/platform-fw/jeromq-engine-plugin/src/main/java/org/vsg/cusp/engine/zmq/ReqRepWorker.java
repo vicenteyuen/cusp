@@ -1,9 +1,6 @@
 package org.vsg.cusp.engine.zmq;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.RunnableFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -11,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageEncoder;
+import org.vsg.cusp.event.MessageInbox;
 import org.vsg.cusp.event.impl.CodecManager;
 import org.vsg.cusp.event.impl.WorkerTrigger;
 import org.zeromq.ZMQ;
@@ -29,8 +27,18 @@ public class ReqRepWorker implements Runnable {
 	public ReqRepWorker(int workerPort) {
 		this.workerPort = workerPort;
 	}
-
 	
+	private MessageInbox msgInbox;
+
+	public MessageInbox getMsgInbox() {
+		return msgInbox;
+	}
+
+	@Inject	
+	public void setMsgInbox(MessageInbox msgInbox) {
+		this.msgInbox = msgInbox;
+	}
+
 	private  MessageEncoder encoder;
 	
 	public MessageEncoder getEncoder() {
@@ -62,7 +70,10 @@ public class ReqRepWorker implements Runnable {
         receiver.connect ("tcp://localhost:5560");
         
 		Socket requester = context.socket(ZMQ.PUSH);
-		requester.connect("tcp://localhost:5561");			        
+		requester.connect("tcp://localhost:5561");
+		
+		
+		Objects.requireNonNull( msgInbox , "Message Inbox is not null. ");
 
         try {
         	logger.info("ReqRepWorker Running. ");
@@ -76,14 +87,18 @@ public class ReqRepWorker implements Runnable {
 	            	if (null != message) {
 	            		Message<byte[]> msgRef = encoder.decode(message);
 	            		
+	            		msgInbox.receiveMsg( msgRef );
+	            		
 	            		/**
-	            		 * trigger event handle 
+	            		 * fire comsumer object
 	            		 */
+	            		/*
 	            		WorkerTrigger trggerService = new WorkerTrigger();
 	            		trggerService.setCodecManager( codecManager );
 	            		trggerService.setReplySocket( requester );
 	            		trggerService.receiveMessage(msgRef);
 	            		trggerService.trigger();
+	            		*/
           		
 	            		
 	            	} else {
