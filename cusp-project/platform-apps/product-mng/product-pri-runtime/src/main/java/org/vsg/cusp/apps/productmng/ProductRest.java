@@ -67,7 +67,7 @@ public class ProductRest {
 					
 				}
 			};
-			
+
 			asyncResponse.resume("get out");
 			
 			
@@ -83,6 +83,7 @@ public class ProductRest {
 				}
 				
 			});
+
 
 			
 			DefaultRuntimeParams runParams2 = new DefaultRuntimeParams();
