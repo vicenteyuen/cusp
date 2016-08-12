@@ -5,10 +5,10 @@ package org.vsg.cusp.event;
  * @author vison
  *
  */
-public interface MessageQueueBox {
+public interface MessageQueueBox<T> {
 	
 	
-	void receiveMessage(Message<byte[]> message);
+	void handle(Message<T> message);
 	
 	
 

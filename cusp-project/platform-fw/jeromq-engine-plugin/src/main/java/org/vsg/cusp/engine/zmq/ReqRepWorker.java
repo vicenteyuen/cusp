@@ -7,10 +7,11 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.event.Message;
+import org.vsg.cusp.event.MessageConsumerBoxFactory;
 import org.vsg.cusp.event.MessageEncoder;
 import org.vsg.cusp.event.MessageQueueBox;
-import org.vsg.cusp.event.MessageQueueBoxFactory;
 import org.vsg.cusp.event.impl.CodecManager;
+import org.vsg.cusp.eventbus.MessageConsumer;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
@@ -30,8 +31,17 @@ public class ReqRepWorker implements Runnable {
 	
 
 	@Inject		
-	private MessageQueueBoxFactory boxFactory;
+	private MessageConsumerBoxFactory boxFactory;
 	
+	public MessageConsumerBoxFactory getBoxFactory() {
+		return boxFactory;
+	}
+
+	public void setBoxFactory(MessageConsumerBoxFactory boxFactory) {
+		this.boxFactory = boxFactory;
+	}
+
+
 	private  MessageEncoder encoder;
 	
 	public MessageEncoder getEncoder() {
@@ -84,9 +94,9 @@ public class ReqRepWorker implements Runnable {
 	            		String address = msgRef.address();
 	            		
 	            		// --- get message container from address --
-	            		MessageQueueBox box = boxFactory.getBox(address);
-
-	            		box.receiveMessage( msgRef );
+	            		MessageConsumer<Object>  consumer =  boxFactory.getConsumer( address );
+	            		MessageQueueBox<byte[]> box = (MessageQueueBox<byte[]>)consumer;
+	            		box.handle( msgRef );
 
 	            		
 	            		/**

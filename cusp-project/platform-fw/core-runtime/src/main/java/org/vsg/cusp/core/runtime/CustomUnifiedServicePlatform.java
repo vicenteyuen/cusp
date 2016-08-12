@@ -36,6 +36,7 @@ import org.vsg.cusp.core.LifecycleException;
 import org.vsg.cusp.core.LifecycleListener;
 import org.vsg.cusp.core.LifecycleState;
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.core.Service;
 import org.vsg.cusp.core.ServiceHolder;
 
 import com.alibaba.fastjson.JSON;
@@ -110,6 +111,19 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
         		bootEngines.put( className , argsMap);
         	}
         	
+        	
+        	JSONArray services = jObj.getJSONArray("services");
+
+        	for (Iterator<String> servIter = (Iterator<String>)(Iterator)services.iterator(); servIter.hasNext();) {
+        		String serviceName = servIter.next();
+        		
+        		Class clz = Class.forName(serviceName, true, parentClassLoader);
+        		serviceCls.add( clz );
+        	}        	
+
+        	
+        	
+        	
         	// --- custom server ---
         	JSONObject server = jObj.getJSONObject("server");
         	shutdown = server.getString("cmd-shutdown");
@@ -118,11 +132,14 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} 
-		
-        
     }
     
+    private List<Class> serviceCls = new ArrayList<Class>();
+
     
     /**
      * define all engines
@@ -264,8 +281,9 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 			Injector injector = Guice.createInjector( stage , this.modules);
 			
 			// ---- start service all ---
-			startAllServices(injector);
+			startAllEngines(injector);
 			
+			startAllServices(injector);
 			
 			// --- start and boot container ---
 			ContainerBase cb = new ContainerBase();
@@ -320,7 +338,7 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 	 * @param injector
 	 * @throws InterruptedException 
 	 */
-	private void startAllServices(Injector injector) throws InterruptedException {
+	private void startAllEngines(Injector injector) throws InterruptedException {
 		
 		ServiceHolder serviceHolder =  injector.getInstance(ServiceHolder.class);
 
@@ -357,6 +375,22 @@ public class CustomUnifiedServicePlatform implements Lifecycle {
 			}
 		}
 		startSignal.await();
+	}
+	
+	
+	private void startAllServices(Injector injector) throws InterruptedException {
+		
+		try {
+			for (Class serviceCls : this.serviceCls) {
+				Service service =  injector.getInstance(Key.get(Service.class, Names.named(serviceCls.getName()) ));
+				service.start();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		
 	}
 	
 	

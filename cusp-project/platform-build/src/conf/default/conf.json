@@ -18,6 +18,7 @@
       "port":"8700"
     }
   }],
+  "services":["org.vsg.cusp.event.engine.modules.EventWorkerService"],
   "server":{
     "port":"7101",
     "cmd-shutdown":"SHUTDOWN"

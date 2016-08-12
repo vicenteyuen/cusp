@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.vsg.cusp.core.ServEngine;
+import org.vsg.cusp.core.Service;
 import org.vsg.cusp.engine.zmq.MasterEventBusServEngine;
 import org.vsg.cusp.engine.zmq.ReqRepBroker;
 import org.vsg.cusp.engine.zmq.ReqRepWorker;
@@ -14,19 +15,17 @@ import org.vsg.cusp.event.EventMethodRegister;
 import org.vsg.cusp.event.EventTrigger;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageBus;
+import org.vsg.cusp.event.MessageConsumerBoxFactory;
 import org.vsg.cusp.event.MessageEncoder;
-import org.vsg.cusp.event.MessageQueueBox;
 import org.vsg.cusp.event.impl.CodecManager;
 import org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder;
 import org.vsg.cusp.event.impl.EventTriggerImpl;
 import org.vsg.cusp.event.impl.MessageBusImpl;
 import org.vsg.cusp.event.impl.MessageProvider;
-import org.vsg.cusp.event.impl.MessageQueueBoxImpl;
+import org.vsg.cusp.event.impl.MessageQueueBoxBean;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;
 import org.vsg.cusp.event.impl.ResResultMessageCodec;
 import org.vsg.cusp.event.register.EhcacheEventMethodRegister;
-import org.vsg.cusp.eventbus.MessageConsumer;
-import org.vsg.cusp.eventbus.impl.MessageConsumerImpl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -65,6 +64,15 @@ public class EventBusMasterEngineModule extends AbstractModule {
 		
 		// --- set the service --
 		this.bind(Runnable.class).annotatedWith(Names.named("RequestResponseBroker")).to(ReqRepBroker.class).in( Scopes.SINGLETON );
+
+		
+		//this.bind( MessageQueueBox.class ).to( MessageQueueBoxImpl.class ).in( Scopes.SINGLETON );
+		
+		//this.bind( MessageConsumer.class ).to(  MessageConsumerImpl.class).in( Scopes.SINGLETON );
+		// --- create queue box bean ---
+		this.bind(MessageConsumerBoxFactory.class).to(MessageQueueBoxBean.class).in( Scopes.SINGLETON );
+		
+		
 		this.bind(Runnable.class).annotatedWith(Names.named("RequestResponseWorker")).to(ReqRepWorker.class).in( Scopes.SINGLETON );
 		
 		
@@ -74,9 +82,8 @@ public class EventBusMasterEngineModule extends AbstractModule {
 		bindClientEndpoint();
 		bindEventMethodCache();
 		
-		this.bind( MessageQueueBox.class ).to( MessageQueueBoxImpl.class ).in( Scopes.SINGLETON );
-		
-		this.bind( MessageConsumer.class ).to(  MessageConsumerImpl.class).in( Scopes.SINGLETON );
+		this.bind( Service.class ).annotatedWith(Names.named(EventWorkerService.class.getName())).to( EventWorkerService.class ).in(Scopes.SINGLETON);
+
 	}
 
 	
