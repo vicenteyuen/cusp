@@ -16,6 +16,7 @@
     <module>event-api</module>
     <module>core-runtime</module>
     <module>jeromq-engine-plugin</module>
+    <module>deferred</module>
   </modules>
   <properties>
   	<vertx.version>3.2.0</vertx.version>

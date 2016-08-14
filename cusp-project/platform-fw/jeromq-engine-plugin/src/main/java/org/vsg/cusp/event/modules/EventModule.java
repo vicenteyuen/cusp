@@ -7,15 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.concurrent.AsyncResult;
 import org.vsg.cusp.concurrent.Handler;
-import org.vsg.cusp.concurrent.Promise;
 import org.vsg.cusp.concurrent.impl.FlowManagerOptions;
 import org.vsg.cusp.event.EventMethodRegister;
 import org.vsg.cusp.event.MessageEncoder;
-import org.vsg.cusp.event.flow.FlowManager;
 import org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint;
 import org.vsg.cusp.event.impl.CodecManager;
 import org.vsg.cusp.event.impl.OperationEventMessageCodec;
-import org.vsg.cusp.event.impl.PromiseProvider;
 import org.vsg.cusp.event.impl.ResResultMessageCodec;
 import org.vsg.cusp.event.impl.ZmqcmdHelper;
 import org.vsg.cusp.eventbus.EventBus;
@@ -59,7 +56,7 @@ public class EventModule extends AbstractModule {
 		
 		
 		try {
-			Class<FlowManager>  cls =  (Class<FlowManager>)Class.forName(managerImpl);
+			//Class<FlowManager>  cls =  (Class<FlowManager>)Class.forName(managerImpl);
 			
 			FlowManagerOptions options = parseConfForManagerOptions(jsonConf);
 			
@@ -81,7 +78,7 @@ public class EventModule extends AbstractModule {
 			
 			
 			// --- reset promise ---
-			this.bind( Promise.class ).toProvider( PromiseProvider.class );
+			//this.bind( Promise.class ).toProvider( PromiseProvider.class );
 			
 			
 			// ---- register method ---
