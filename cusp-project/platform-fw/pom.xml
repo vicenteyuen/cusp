@@ -11,6 +11,7 @@
   <name>平台定义的框架</name>
   <description>使用预定义好的框架模</description>
   <modules>
+    <module>deferred</module>
   	<module>bootstrap</module>
     <module>cusp-api</module>
     <module>event-api</module>

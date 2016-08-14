@@ -36,6 +36,11 @@
 			<artifactId>event-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jdeferred</groupId>
+			<artifactId>jdeferred-core</artifactId>
+			<version>1.2.4</version>
+		</dependency>
 	</dependencies>
 	<name>应用模块 - 产品管理私有运行模块</name>
 	
