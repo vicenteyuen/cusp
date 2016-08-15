@@ -2,8 +2,8 @@ package org.vsg.cusp.event.engine.modules;
 
 import javax.inject.Inject;
 
-import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.core.Buffer;
+import org.vsg.cusp.core.Handler;
 import org.vsg.cusp.core.Service;
 import org.vsg.cusp.event.Message;
 import org.vsg.cusp.event.MessageBus;

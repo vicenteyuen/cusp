@@ -11,8 +11,8 @@ import javax.inject.Named;
 
 import org.vsg.cusp.concurrent.AsyncResult;
 import org.vsg.cusp.concurrent.Callback;
-import org.vsg.cusp.concurrent.Handler;
 import org.vsg.cusp.core.Buffer;
+import org.vsg.cusp.core.Handler;
 import org.vsg.cusp.event.DeliveryOptions;
 import org.vsg.cusp.event.EventMethodDescription;
 import org.vsg.cusp.event.EventMethodRegister;

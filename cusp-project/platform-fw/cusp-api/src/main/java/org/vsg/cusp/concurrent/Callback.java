@@ -6,6 +6,7 @@ package org.vsg.cusp.concurrent;
  *
  * @param <T>
  */
+@FunctionalInterface
 public interface Callback<T> {
 
 	void onDone(T result, Throwable error) throws Exception;	

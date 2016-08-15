@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.concurrent.AsyncResult;
 import org.vsg.cusp.concurrent.Callback;
-import org.vsg.cusp.concurrent.Handler;
+import org.vsg.cusp.core.Handler;
 import org.vsg.cusp.event.DefaultRuntimeParams;
 import org.vsg.cusp.event.EventTrigger;
 import org.vsg.cusp.event.RuntimeParam;
@@ -53,12 +53,8 @@ public class ProductRest {
 					// --- call remove event ---
 					DefaultRuntimeParams runParams = new DefaultRuntimeParams();
 					runParams.addRuntimeParam(new RuntimeParam("testparam1", String.class, "test value1"));
-					eventTrigger.fire("testCase1", runParams, new Callback() {
-
-						@Override
-						public void onDone(Object result, Throwable error) throws Exception {
-							System.out.println("invoke test case 1" + result);
-						}
+					eventTrigger.fire("testCase1", runParams, (res ,error) -> {
+						System.out.println("invoke test case 1" + res);
 
 					});
 				} catch (Exception e) {
