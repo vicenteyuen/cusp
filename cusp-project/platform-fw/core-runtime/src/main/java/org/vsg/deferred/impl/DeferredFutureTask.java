@@ -18,6 +18,7 @@ public class DeferredFutureTask<D, P>  extends FutureTask<D> {
 	
 	public DeferredFutureTask(Runnable runnable, D result) {
 		super(runnable, result);
+		
 	}
 
 	public Promise<D, Throwable, P> promise() {

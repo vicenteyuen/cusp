@@ -17,36 +17,25 @@ public abstract class AbstractDeferredManager implements DeferredManager {
 	 * @see org.vsg.deferred.DeferredManager#when(java.util.concurrent.Future)
 	 */
 	@Override
-	public <D> Promise<D, Throwable, Void> when(Handler<D>... futures) {
+	public <D> Promise<D, Throwable, Void> when(Handler<D>... handlers) {
 
-		return null;
+		Promise[] promises = new Promise[handlers.length];
+
+		for (int i = 0; i < handlers.length; i++) {
+			promises[i] = when(handlers[i]);
+		}		
+		
+		return new MergedDeferredObject(promises);
 	}
 
 	@Override
 	public <D> Promise<D, Throwable, Void> when(Handler<D> handler) {
 		
-		Runnable runHandler = () -> {
-			handler.handle(null);
-		};
-		
-		DeferredFutureTask task = new DeferredFutureTask(runHandler, null);
-		when(task);
+		DeferredObject deferredObject = new DeferredObject();
+		deferredObject.progress( handler );
+		return deferredObject;
+	}
 
-		return when(task);
-	}
-	
-	private <D> Promise<D, Throwable, Void> when(DeferredFutureTask task ) {
-		/*
-		if (task.getStartPolicy() == StartPolicy.AUTO 
-				|| (task.getStartPolicy() == StartPolicy.DEFAULT && isAutoSubmit())) {
-			//submit(task);			
-		}
-		*/
-		Promise<D, Throwable, Void> promise = task.promise();
-	
-		return promise;
-		
-	}
 	
 	
 

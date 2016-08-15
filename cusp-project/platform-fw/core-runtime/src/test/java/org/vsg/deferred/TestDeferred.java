@@ -11,7 +11,11 @@ public class TestDeferred {
 		DefaultDeferredManager deferredManager = new DefaultDeferredManager();
 		
 		Promise<Object, Throwable, Void> promise =   deferredManager.when((e) -> {
-			System.out.println("base");
+			System.out.println("base1");
+		} , (e) -> {
+			System.out.println("base2");
+		}, (e) -> {
+			System.out.println("base3");
 		});
 		
 		

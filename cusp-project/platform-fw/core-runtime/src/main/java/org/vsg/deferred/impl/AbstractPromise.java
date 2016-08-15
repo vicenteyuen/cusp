@@ -2,6 +2,7 @@ package org.vsg.deferred.impl;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,6 +107,38 @@ public class AbstractPromise<D, F, P> implements Promise<D, F, P> {
 		/**
 		 * execute progress handle 
 		 */
+	    CountDownLatch doneSignal = new CountDownLatch(progressCallbacks.size());
+		
+		for (int calllbackCounter = progressCallbacks.size()-1 ; calllbackCounter >= 0 ; calllbackCounter--) {
+			Handler<P> handlerEvent = progressCallbacks.get(calllbackCounter);
+			
+			Runnable runTask = () -> {
+				handlerEvent.handle(null);
+				doneSignal.countDown();
+			};
+			
+			Thread executeThread = new Thread(runTask);
+			executeThread.start();
+		}
+		
+		doneSignal.await();
+		
+		
+		
+		// --- check if success ,call success event ---
+		for (int calllbackCounter = this.doneCallbacks.size()-1 ; calllbackCounter >= 0 ; calllbackCounter--) {
+			Handler<D> handlerEvent = doneCallbacks.get(calllbackCounter);
+			
+			Runnable runTask = () -> {
+				handlerEvent.handle(null);
+			};
+			
+			Thread executeThread = new Thread(runTask);
+			executeThread.start();			
+		}
+
+		
+		
 		
 		return this;
 	}
