@@ -15,6 +15,8 @@ public class MergedDeferredObject extends DeferredObject{
 	
 	public MergedDeferredObject(Promise... promises) {
 		
+		
+		
 	}
 	
 	private void init() {

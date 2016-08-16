@@ -2,6 +2,7 @@ package org.vsg.deferred.impl;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,8 +179,8 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements Prom
 		
 		this.setCommited(false);
 		
-		
-		System.out.println( this.scheActivityUnits );
+		doRun();
+
 		
 		/*
 	    CountDownLatch doneSignal = new CountDownLatch(progressCallbacks.size());
@@ -213,10 +214,48 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements Prom
 		}
 		*/
 
-		
-		
-		
 		return this;
+	}
+	
+	
+	private void doRun() {
+		
+		ActivityUnit[] activityUnits = this.scheActivityUnits.toArray(new ActivityUnit[0]);
+		
+		for (int i = 0 ; i < activityUnits.length ;i++) {
+			Handler<?>[] processHandlers = activityUnits[i].getProcessHandlers();
+			if (null == processHandlers) {
+				continue;
+			}
+			
+			CountDownLatch procSignal = new CountDownLatch(processHandlers.length);
+			
+			System.out.println(processHandlers.length);
+			try {
+				for (int j = 0 ; j < processHandlers.length ; j++) {
+					
+					Handler<?> handlerEvent = processHandlers[j];
+
+					Runnable runTask = () -> {
+						handlerEvent.handle(null);
+						procSignal.countDown();
+					};
+					
+					Thread executeThread = new Thread(runTask);
+					executeThread.start();					
+					
+				}
+				
+				procSignal.await();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		
+			
+		}
+		
 	}
 	
 	
