@@ -53,7 +53,12 @@ public interface Promise<D, F, P> {
 	 * @param handler
 	 * @return
 	 */
-	Promise<D, F, P> then(Handler<D> handler);
+	Promise<D, F, P> then(Handler<P> handler);
+	
+	
+	
+	Promise<D, F, P> then(Handler<P> handler , Handler<D> succeedHandler , Handler<F> failHandler);
+	
 	
 	/**
 	 * 
