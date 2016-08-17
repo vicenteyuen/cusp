@@ -38,7 +38,7 @@ public class TestDeferred {
 		Promise<Object, Throwable, Void> promise =   deferredManager.when((e) -> {
 			System.out.println("case2 base1");
 		} , (e) -> {
-			System.out.println("case2 base2");
+			throw new Exception ("hello");
 		}, (e) -> {
 			System.out.println("case2 base3");
 		});
@@ -48,16 +48,16 @@ public class TestDeferred {
 		} , (e) -> {
 			System.out.println("hello then successed.");
 		} , (e) -> {
-			System.out.println("hello then fail");
+			System.out.println("hello then fail " + e.getMessage());
 		});
 		
 		
 		promise.succeed( (e) -> {
-			System.out.println("successful");
+			System.out.println("case2 successful");
 		});
 		
 		promise.fail( (e) -> {
-			System.out.println("fail");
+			System.out.println("case2 fail");
 		});
 		
 		promise.await();

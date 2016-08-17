@@ -1,6 +1,8 @@
 package org.vsg.deferred.impl;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -72,7 +74,7 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements Prom
 	}
 
 	private void triggerSucceed(Handler<D> callback, D resolved) {
-		callback.handle( resolved );
+		//callback.handle( resolved );
 	}
 	
 	
@@ -84,7 +86,7 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements Prom
 	}
 	
 	protected void triggerFail(Handler<F> callback, F rejected) {
-		callback.handle(rejected);
+		//callback.handle(rejected);
 	}
 	
 
@@ -95,7 +97,7 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements Prom
 	}
 	
 	private void triggerProgress(Handler<P> callback, P progress) {
-		callback.handle(progress);
+		//callback.handle(progress);
 	}
 	
 	
@@ -175,9 +177,11 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements Prom
 		this.setCommited(true);
 		this.end = true;
 		
+
 		notifyActivityUnitCollection(null, null);
 		
 		this.setCommited(false);
+
 		
 		doRun();
 
@@ -222,23 +226,122 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements Prom
 		
 		ActivityUnit[] activityUnits = this.scheActivityUnits.toArray(new ActivityUnit[0]);
 		
+		
+		Collection<Handler<?>> doneHandlerColl = new Vector<Handler<?>>();
+		Collection<Handler<Throwable>> failHandlerColl = new Vector<Handler<Throwable>>();
+
+		
+		/**
+		 * pre arrange activity unit handle 
+		 */
 		for (int i = 0 ; i < activityUnits.length ;i++) {
-			Handler<?>[] processHandlers = activityUnits[i].getProcessHandlers();
-			if (null == processHandlers) {
-				continue;
+			Handler<?>[] doneHandlers = activityUnits[i].getDoneHandlers();
+			Handler<Throwable>[] failHandlers =  activityUnits[i].getFailHandlers();
+			
+			if (null != doneHandlers) {
+				for (int j = 0 ; j < doneHandlers.length ; j++) {
+					doneHandlerColl.add( doneHandlers[j] );
+				}
 			}
 			
-			CountDownLatch procSignal = new CountDownLatch(processHandlers.length);
+			if ( null != failHandlers) {
+				for (int j = 0 ; j < failHandlers.length ; j++) {
+					failHandlerColl.add( failHandlers[j] );
+				}
+			}
+		}
+		
+		
+		
+		try {
 			
-			System.out.println(processHandlers.length);
-			try {
-				for (int j = 0 ; j < processHandlers.length ; j++) {
+			for (int i = 0 ; i < activityUnits.length ;i++) {
+				Handler<?>[] processHandlers = activityUnits[i].getProcessHandlers();
+				
+				try {
 					
-					Handler<?> handlerEvent = processHandlers[j];
+					/**
+					 * process handle
+					 */
+					if (null != processHandlers) {
+						
+						CountDownLatch procSignal = new CountDownLatch(processHandlers.length);
+
+						for (int j = 0 ; j < processHandlers.length ; j++) {
+							
+							Handler<?> handlerEvent = processHandlers[j];
+
+							Runnable runTask = () -> {
+								try {
+									handlerEvent.handle(null);
+								} catch (Exception e) {
+									e.printStackTrace();
+								} finally {
+									procSignal.countDown();									
+								}
+							};
+							
+							Thread executeThread = new Thread(runTask);
+							executeThread.start();					
+							
+						}
+						
+						procSignal.await();				
+						
+					}
+
+					
+					/**
+					 * handle done finish event 
+					 */
+					if (null != activityUnits[i].getThenDoneHandler()) {
+						Handler<?> doneHandler =  activityUnits[i].getThenDoneHandler();
+						Runnable runTask = () -> {
+							try {
+								doneHandler.handle(null);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						};
+						Thread executeThread = new Thread(runTask);
+						executeThread.start();					
+					}
+
+
+					
+				} catch (InterruptedException e) {
+					
+					Handler<Throwable> errHandler = activityUnits[i].getThenFailHandler();
+					if (null != errHandler) {
+						errHandler.handle(e);
+					}
+					throw new Exception(e.getCause());
+
+				}
+				
+			}
+			
+			
+			// --- call done handle ---
+			Handler<?>[]  doneHandlers = doneHandlerColl.toArray( new Handler[0] );
+			if (null != doneHandlers) {
+				CountDownLatch doneSignal = new CountDownLatch(doneHandlers.length);
+				
+				for (int j = 0 ; j < doneHandlers.length ; j++) {
+					
+					Handler<?> handlerEvent = doneHandlers[j];
 
 					Runnable runTask = () -> {
-						handlerEvent.handle(null);
-						procSignal.countDown();
+						try {
+							handlerEvent.handle(null);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} finally {
+							doneSignal.countDown();							
+						}
+
 					};
 					
 					Thread executeThread = new Thread(runTask);
@@ -246,16 +349,70 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements Prom
 					
 				}
 				
-				procSignal.await();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				doneSignal.await();			
 			}
+
 			
-		
 			
+			
+			
+		} catch (Exception e) {
+			Handler<Throwable>[] failHandlers =  failHandlerColl.toArray(new Handler[0]);
+			
+			try {
+			
+				if ( null != failHandlers) {
+					
+					CountDownLatch failSignal = new CountDownLatch(failHandlers.length);				
+					
+					for (int j = 0 ; j < failHandlers.length ; j++) {
+						
+						Handler<?> handlerEvent = failHandlers[j];
+
+						Runnable runTask = () -> {
+							try {
+								handlerEvent.handle(null);
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} finally {
+								failSignal.countDown();								
+							}
+
+						};
+						
+						Thread executeThread = new Thread(runTask);
+						executeThread.start();					
+						
+					}
+					
+					failSignal.await();
+					
+				}
+				
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			if (logger.isDebugEnabled() ) {
+				logger.debug("Promise has been handled.");
+			}			
 		}
 		
+	}
+	
+	
+	protected List<Handler<P>> getProgressCallbacks() {
+		return this.progressCallbacks;
+	}
+	
+	
+	protected List<Handler<D>> getDoneCallbacks() {
+		return this.doneCallbacks;
+	}
+	
+	protected List<Handler<Throwable>> getFailCallbacks() {
+		return this.failCallbacks;
 	}
 	
 	
