@@ -3,6 +3,6 @@ package org.vsg.cusp.core;
 @FunctionalInterface
 public interface Handler<E> {
 
-	  void handle(E event) throws Exception;
+	 void handle(E evtResult) throws java.lang.Throwable;
 	  
 }
