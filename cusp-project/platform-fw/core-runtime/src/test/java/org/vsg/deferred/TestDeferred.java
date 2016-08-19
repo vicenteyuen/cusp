@@ -57,7 +57,7 @@ public class TestDeferred {
 		});
 		
 		promise.fail( (e) -> {
-			System.out.println("case2 fail");
+			System.out.println("case2 fail" + e);
 		});
 		
 		promise.await();

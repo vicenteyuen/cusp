@@ -239,12 +239,10 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 
 		try {
 			
-			List<Throwable> thenException = new Vector<Throwable>();
-
-
 			for (int i = 0; i < activityUnits.length; i++) {
-				Handler<?>[] processHandlers = activityUnits[i]
-						.getProcessHandlers();
+				List<Throwable> thenException = new Vector<Throwable>();
+				
+				Handler<?>[] processHandlers = activityUnits[i].getProcessHandlers();
 
 				/**
 				 * process handle
@@ -293,15 +291,87 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 					Thread executeThread = new Thread(runTask);
 					executeThread.start();
 				}
+				
+				
+				
+				// ---- check the current doen execption ---
+				if (!thenException.isEmpty()) {
+					
+					Handler<Throwable> throwableHandler =  activityUnits[i].getThenFailHandler();
+					if (null != throwableHandler) {
+						
+						Runnable runTask = () -> {
+							try {
+								throwableHandler.handle(thenException.iterator().next());
+							} catch (Throwable e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} finally {
 
+							}
+
+						};
+						
+						Thread executeThread = new Thread(runTask);
+						executeThread.start();						
+					}
+					
+					throw new Exception("Stop for exception");
+					
+
+				}				
+				
 			}
 			
-			// ---- check the current doen execption ---
-			if (!thenException.isEmpty()) {
-				throw new Exception("Then exception existed.");
-			}
+
 			
 			if ( !runningThrowables.isEmpty() ) {
+				
+				StringBuilder allExceptionMsg = new StringBuilder();
+
+				for (int k = 0 ; k < runningThrowables.size() ; k++) {
+					
+					allExceptionMsg.append( runningThrowables.get(k).getLocalizedMessage() );
+					allExceptionMsg.append("\n");
+					
+				}
+				
+				Exception ex = new Exception(allExceptionMsg.toString());
+				
+				Handler<Throwable>[] failHandlers = failHandlerColl.toArray(new Handler[0]);
+				if (null != failHandlers) {
+
+					
+					
+					
+					CountDownLatch failSignal = new CountDownLatch(
+							failHandlers.length);
+
+					for (int j = 0; j < failHandlers.length; j++) {
+
+						Handler<Throwable> handlerEvent = failHandlers[j];
+
+						Runnable runTask = () -> {
+							try {
+								handlerEvent.handle(ex);
+							} catch (Throwable e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} finally {
+								failSignal.countDown();
+							}
+
+						};
+
+						Thread executeThread = new Thread(runTask);
+						executeThread.start();
+
+					}
+
+					failSignal.await();
+
+				}				
+				
 				throw new Exception("error existed.");
 			}
 			
@@ -338,60 +408,8 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 
 		} catch (Exception e) {
 			
-			
-			String localMessage = e.getLocalizedMessage();
-			
-			if ( localMessage.contains("Then exception existed.") ) {
-				
-				
-				
-				
-			} else if (localMessage.contains( "error existed." ))  {
-				
-				
-				
-				
-			}
-			
-			
-			
-			Handler<Throwable>[] failHandlers = failHandlerColl.toArray(new Handler[0]);
+			e.printStackTrace();
 
-			try {
-
-				if (null != failHandlers) {
-
-					CountDownLatch failSignal = new CountDownLatch(
-							failHandlers.length);
-
-					for (int j = 0; j < failHandlers.length; j++) {
-
-						Handler<?> handlerEvent = failHandlers[j];
-
-						Runnable runTask = () -> {
-							try {
-								handlerEvent.handle(null);
-							} catch (Throwable e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							} finally {
-								failSignal.countDown();
-							}
-
-						};
-
-						Thread executeThread = new Thread(runTask);
-						executeThread.start();
-
-					}
-
-					failSignal.await();
-
-				}
-
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
 		} finally {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Promise has been handled.");
