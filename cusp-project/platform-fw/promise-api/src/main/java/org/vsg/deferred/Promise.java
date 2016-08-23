@@ -1,6 +1,5 @@
 package org.vsg.deferred;
 
-import org.vsg.cusp.core.Handler;
 
 public interface Promise<D, F, P> {
 	
@@ -53,11 +52,11 @@ public interface Promise<D, F, P> {
 	 * @param handler
 	 * @return
 	 */
-	Promise<D, F, P> then(Handler<P> handler);
+	Promise<D, F, P> then(Callback<P> handler);
 	
 	
 	
-	Promise<D, F, P> then(Handler<P> handler , Handler<D> succeedHandler , Handler<F> failHandler);
+	Promise<D, F, P> then(Callback<P> handler , Callback<D> succeedHandler , Callback<F> failHandler);
 	
 	
 	/**
@@ -65,14 +64,14 @@ public interface Promise<D, F, P> {
 	 * @param succeedCallback
 	 * @return
 	 */
-	Promise<D, F, P> succeed(Handler<D> succeedCallback);
+	Promise<D, F, P> succeed(Callback<D> succeedCallback);
 	
 	/**
 	 * 
 	 * @param errorCallback
 	 * @return
 	 */
-	Promise<D, F, P> fail(Handler<F> errorCallback);
+	Promise<D, F, P> fail(Callback<F> errorCallback);
 	
 	
 	/**
@@ -80,7 +79,7 @@ public interface Promise<D, F, P> {
 	 * @param callback
 	 * @return
 	 */
-	Promise<D, F, P> progress(Handler<P> callback);
+	Promise<D, F, P> progress(Callback<P> callback);
 	
 	
 

@@ -9,7 +9,7 @@ import java.util.concurrent.CountDownLatch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vsg.cusp.core.Handler;
+import org.vsg.deferred.Callback;
 import org.vsg.deferred.Promise;
 
 public abstract class AbstractPromise<D, F extends Throwable, P> implements
@@ -23,9 +23,9 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 
 	protected F rejectResult;
 
-	private List<Handler<D>> doneCallbacks = new CopyOnWriteArrayList<Handler<D>>();
-	private List<Handler<Throwable>> failCallbacks = new CopyOnWriteArrayList<Handler<Throwable>>();
-	private List<Handler<P>> progressCallbacks = new CopyOnWriteArrayList<Handler<P>>();
+	private List<org.vsg.deferred.Callback<D>> doneCallbacks = new CopyOnWriteArrayList<Callback<D>>();
+	private List<Callback<Throwable>> failCallbacks = new CopyOnWriteArrayList<Callback<Throwable>>();
+	private List<Callback<P>> progressCallbacks = new CopyOnWriteArrayList<Callback<P>>();
 
 	private List<ActivityUnit> scheActivityUnits = new CopyOnWriteArrayList<ActivityUnit>();
 
@@ -60,53 +60,53 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 	}
 
 	@Override
-	public Promise<D, F, P> then(Handler<P> handler) {
+	public Promise<D, F, P> then(Callback<P> Callback) {
 		// --- set commit ---
 
 		return this;
 	}
 
 	@Override
-	public Promise<D, F, P> succeed(Handler<D> callback) {
+	public Promise<D, F, P> succeed(Callback<D> callback) {
 		doneCallbacks.add(callback);
 		return this;
 	}
 
-	private void triggerSucceed(Handler<D> callback, D resolved) {
+	private void triggerSucceed(Callback<D> callback, D resolved) {
 		// callback.handle( resolved );
 	}
 
 	@Override
-	public Promise<D, F, P> fail(Handler<F> errorCallback) {
-		failCallbacks.add((Handler) errorCallback);
+	public Promise<D, F, P> fail(Callback<F> errorCallback) {
+		failCallbacks.add((Callback) errorCallback);
 
 		return this;
 	}
 
-	protected void triggerFail(Handler<F> callback, F rejected) {
+	protected void triggerFail(Callback<F> callback, F rejected) {
 		// callback.handle(rejected);
 	}
 
 	@Override
-	public Promise<D, F, P> progress(Handler<P> callback) {
+	public Promise<D, F, P> progress(Callback<P> callback) {
 		progressCallbacks.add(callback);
 		return this;
 	}
 
-	private void triggerProgress(Handler<P> callback, P progress) {
+	private void triggerProgress(Callback<P> callback, P progress) {
 		// callback.handle(progress);
 	}
 
 	@Override
-	public Promise<D, F, P> then(Handler<P> handler, Handler<D> succeedHandler,
-			Handler<F> failHandler) {
+	public Promise<D, F, P> then(Callback<P> Callback, Callback<D> succeedCallback,
+			Callback<F> failCallback) {
 
 		this.setCommited(true);
 
-		this.progressCallbacks.add(handler);
+		this.progressCallbacks.add(Callback);
 		// --- create activityUnit ----
-		notifyActivityUnitCollection((Handler<?>) succeedHandler,
-				(Handler<Throwable>) failHandler);
+		notifyActivityUnitCollection((Callback<?>) succeedCallback,
+				(Callback<Throwable>) failCallback);
 
 		this.setCommited(false);
 
@@ -118,8 +118,8 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 	/**
 	 * nodify to create activity unit collection
 	 */
-	private void notifyActivityUnitCollection(Handler<?> doneHandler,
-			Handler<Throwable> failHandler) {
+	private void notifyActivityUnitCollection(Callback<?> doneCallback,
+			Callback<Throwable> failCallback) {
 		ActivityUnit activityUnit = new ActivityUnit();
 		activityUnit.setSequenceOrder(seqNo++);
 		/**
@@ -127,23 +127,23 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 		 */
 		if (!this.progressCallbacks.isEmpty()) {
 
-			activityUnit.setProcessHandlers(this.progressCallbacks
-					.toArray(new Handler[0]));
+			activityUnit.setProcessCallbacks(this.progressCallbacks
+					.toArray(new Callback[0]));
 		}
 
-		activityUnit.setThenDoneHandler(doneHandler);
-		activityUnit.setThenFailHandler(failHandler);
+		activityUnit.setThenDoneCallback(doneCallback);
+		activityUnit.setThenFailCallback(failCallback);
 
 		if (end) {
 
 			if (!this.doneCallbacks.isEmpty()) {
-				activityUnit.setDoneHandlers(this.doneCallbacks
-						.toArray(new Handler[0]));
+				activityUnit.setDoneCallbacks(this.doneCallbacks
+						.toArray(new Callback[0]));
 			}
 
 			if (!this.failCallbacks.isEmpty()) {
-				activityUnit.setFailHandlers(this.failCallbacks
-						.toArray(new Handler[0]));
+				activityUnit.setFailCallbacks(this.failCallbacks
+						.toArray(new Callback[0]));
 			}
 
 			this.doneCallbacks.clear();
@@ -181,10 +181,10 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 		 * CountDownLatch(progressCallbacks.size());
 		 * 
 		 * for (int calllbackCounter = progressCallbacks.size()-1 ;
-		 * calllbackCounter >= 0 ; calllbackCounter--) { Handler<P> handlerEvent
+		 * calllbackCounter >= 0 ; calllbackCounter--) { Callback<P> CallbackEvent
 		 * = progressCallbacks.get(calllbackCounter);
 		 * 
-		 * Runnable runTask = () -> { handlerEvent.handle(null);
+		 * Runnable runTask = () -> { CallbackEvent.handle(null);
 		 * doneSignal.countDown(); };
 		 * 
 		 * Thread executeThread = new Thread(runTask); executeThread.start(); }
@@ -195,10 +195,10 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 		 * 
 		 * // --- check if success ,call success event --- for (int
 		 * calllbackCounter = this.doneCallbacks.size()-1 ; calllbackCounter >=
-		 * 0 ; calllbackCounter--) { Handler<D> handlerEvent =
+		 * 0 ; calllbackCounter--) { Callback<D> CallbackEvent =
 		 * doneCallbacks.get(calllbackCounter);
 		 * 
-		 * Runnable runTask = () -> { handlerEvent.handle(null); };
+		 * Runnable runTask = () -> { CallbackEvent.handle(null); };
 		 * 
 		 * Thread executeThread = new Thread(runTask); executeThread.start(); }
 		 */
@@ -211,8 +211,8 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 		ActivityUnit[] activityUnits = this.scheActivityUnits
 				.toArray(new ActivityUnit[0]);
 
-		Collection<Handler<?>> doneHandlerColl = new Vector<Handler<?>>();
-		Collection<Handler<Throwable>> failHandlerColl = new Vector<Handler<Throwable>>();
+		Collection<Callback<?>> doneCallbackColl = new Vector<Callback<?>>();
+		Collection<Callback<Throwable>> failCallbackColl = new Vector<Callback<Throwable>>();
 
 		List<Throwable> runningThrowables = new ArrayList<Throwable>();
 
@@ -220,19 +220,19 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 		 * pre arrange activity unit handle
 		 */
 		for (int i = 0; i < activityUnits.length; i++) {
-			Handler<?>[] doneHandlers = activityUnits[i].getDoneHandlers();
-			Handler<Throwable>[] failHandlers = activityUnits[i]
-					.getFailHandlers();
+			Callback<?>[] doneCallbacks = activityUnits[i].getDoneCallbacks();
+			Callback<Throwable>[] failCallbacks = activityUnits[i]
+					.getFailCallbacks();
 
-			if (null != doneHandlers) {
-				for (int j = 0; j < doneHandlers.length; j++) {
-					doneHandlerColl.add(doneHandlers[j]);
+			if (null != doneCallbacks) {
+				for (int j = 0; j < doneCallbacks.length; j++) {
+					doneCallbackColl.add(doneCallbacks[j]);
 				}
 			}
 
-			if (null != failHandlers) {
-				for (int j = 0; j < failHandlers.length; j++) {
-					failHandlerColl.add(failHandlers[j]);
+			if (null != failCallbacks) {
+				for (int j = 0; j < failCallbacks.length; j++) {
+					failCallbackColl.add(failCallbacks[j]);
 				}
 			}
 		}
@@ -242,23 +242,23 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 			for (int i = 0; i < activityUnits.length; i++) {
 				List<Throwable> thenException = new Vector<Throwable>();
 				
-				Handler<?>[] processHandlers = activityUnits[i].getProcessHandlers();
+				Callback<?>[] processCallbacks = activityUnits[i].getProcessCallbacks();
 
 				/**
 				 * process handle
 				 */
-				if (null != processHandlers) {
+				if (null != processCallbacks) {
 
 					CountDownLatch procSignal = new CountDownLatch(
-							processHandlers.length);
+							processCallbacks.length);
 
-					for (int j = 0; j < processHandlers.length; j++) {
+					for (int j = 0; j < processCallbacks.length; j++) {
 
-						Handler<?> handlerEvent = processHandlers[j];
+						Callback<?> CallbackEvent = processCallbacks[j];
 
 						Runnable runTask = () -> {
 							try {
-								handlerEvent.handle(null);
+								CallbackEvent.handle(null);
 							} catch (Throwable e) {
 								runningThrowables.add(e);
 							} finally {
@@ -278,12 +278,12 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 				/**
 				 * handle done finish event
 				 */
-				if (null != activityUnits[i].getThenDoneHandler()) {
-					Handler<?> doneHandler = activityUnits[i]
-							.getThenDoneHandler();
+				if (null != activityUnits[i].getThenDoneCallback()) {
+					Callback<?> doneCallback = activityUnits[i]
+							.getThenDoneCallback();
 					Runnable runTask = () -> {
 						try {
-							doneHandler.handle(null);
+							doneCallback.handle(null);
 						} catch (Throwable e) {
 							thenException.add(e);
 						}
@@ -297,12 +297,12 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 				// ---- check the current doen execption ---
 				if (!thenException.isEmpty()) {
 					
-					Handler<Throwable> throwableHandler =  activityUnits[i].getThenFailHandler();
-					if (null != throwableHandler) {
+					Callback<Throwable> throwableCallback =  activityUnits[i].getThenFailCallback();
+					if (null != throwableCallback) {
 						
 						Runnable runTask = () -> {
 							try {
-								throwableHandler.handle(thenException.iterator().next());
+								throwableCallback.handle(thenException.iterator().next());
 							} catch (Throwable e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -338,22 +338,22 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 				
 				Exception ex = new Exception(allExceptionMsg.toString());
 				
-				Handler<Throwable>[] failHandlers = failHandlerColl.toArray(new Handler[0]);
-				if (null != failHandlers) {
+				Callback<Throwable>[] failCallbacks = failCallbackColl.toArray(new Callback[0]);
+				if (null != failCallbacks) {
 
 					
 					
 					
 					CountDownLatch failSignal = new CountDownLatch(
-							failHandlers.length);
+							failCallbacks.length);
 
-					for (int j = 0; j < failHandlers.length; j++) {
+					for (int j = 0; j < failCallbacks.length; j++) {
 
-						Handler<Throwable> handlerEvent = failHandlers[j];
+						Callback<Throwable> CallbackEvent = failCallbacks[j];
 
 						Runnable runTask = () -> {
 							try {
-								handlerEvent.handle(ex);
+								CallbackEvent.handle(ex);
 							} catch (Throwable e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -377,18 +377,18 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 			
 
 			// --- call done handle ---
-			Handler<?>[] doneHandlers = doneHandlerColl.toArray(new Handler[0]);
-			if (null != doneHandlers) {
+			Callback<?>[] doneCallbacks = doneCallbackColl.toArray(new Callback[0]);
+			if (null != doneCallbacks) {
 				CountDownLatch doneSignal = new CountDownLatch(
-						doneHandlers.length);
+						doneCallbacks.length);
 
-				for (int j = 0; j < doneHandlers.length; j++) {
+				for (int j = 0; j < doneCallbacks.length; j++) {
 
-					Handler<?> handlerEvent = doneHandlers[j];
+					Callback<?> CallbackEvent = doneCallbacks[j];
 
 					Runnable runTask = () -> {
 						try {
-							handlerEvent.handle(null);
+							CallbackEvent.handle(null);
 						} catch (Throwable e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -418,15 +418,15 @@ public abstract class AbstractPromise<D, F extends Throwable, P> implements
 
 	}
 
-	protected List<Handler<P>> getProgressCallbacks() {
+	protected List<Callback<P>> getProgressCallbacks() {
 		return this.progressCallbacks;
 	}
 
-	protected List<Handler<D>> getDoneCallbacks() {
+	protected List<Callback<D>> getDoneCallbacks() {
 		return this.doneCallbacks;
 	}
 
-	protected List<Handler<Throwable>> getFailCallbacks() {
+	protected List<Callback<Throwable>> getFailCallbacks() {
 		return this.failCallbacks;
 	}
 

@@ -2,9 +2,6 @@
  * 
  */
 package org.vsg.deferred.impl;
-import java.util.List;
-
-import org.vsg.cusp.core.Handler;
 import org.vsg.deferred.Promise;
 
 
