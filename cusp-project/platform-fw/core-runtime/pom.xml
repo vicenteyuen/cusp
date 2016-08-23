@@ -70,6 +70,16 @@
   		<artifactId>rxjava</artifactId>
   		<version>1.1.9</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.vsg</groupId>
+  		<artifactId>promise-api</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.vsg</groupId>
+  		<artifactId>promise-default-impl</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
   <build>
     <plugins>

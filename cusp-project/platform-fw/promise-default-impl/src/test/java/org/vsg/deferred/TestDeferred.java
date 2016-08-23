@@ -8,7 +8,7 @@ public class TestDeferred {
 	@Test
 	public void testDeferred_when() throws Exception {
 		
-		DefaultDeferredManager deferredManager = new DefaultDeferredManager();
+		DeferredManager deferredManager = DeferredManager.loadFactory(DeferredManager.class);
 		
 		Promise<Object, Throwable, Void> promise =   deferredManager.when((e) -> {
 			System.out.println("base1");
