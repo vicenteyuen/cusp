@@ -11,8 +11,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import org.jdeferred.DeferredManager;
-import org.jdeferred.impl.DefaultDeferredManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vsg.cusp.concurrent.AsyncResult;
@@ -21,6 +19,7 @@ import org.vsg.cusp.core.Handler;
 import org.vsg.cusp.event.DefaultRuntimeParams;
 import org.vsg.cusp.event.EventTrigger;
 import org.vsg.cusp.event.RuntimeParam;
+import org.vsg.deferred.DeferredManager;
 
 /**
  * 
@@ -47,8 +46,8 @@ public class ProductRest {
 			ResponseBuilder rb = Response.ok("hello world, VISON , my dear");
 			rb.type(MediaType.TEXT_PLAIN);
 
-			DeferredManager dm = new DefaultDeferredManager();
-			dm.when(() -> {
+			DeferredManager dm = DeferredManager.loadFactory(DeferredManager.class);
+			dm.when((result) -> {
 				try {
 					// --- call remove event ---
 					DefaultRuntimeParams runParams = new DefaultRuntimeParams();
@@ -61,7 +60,7 @@ public class ProductRest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			} , () -> {
+			} , (result) -> {
 
 				try {
 					DefaultRuntimeParams runParams2 = new DefaultRuntimeParams();
@@ -79,7 +78,7 @@ public class ProductRest {
 					e.printStackTrace();
 				}
 
-			},()->{
+			},(result)->{
 				try {
 					DefaultRuntimeParams runParams3 = new DefaultRuntimeParams();
 					runParams3.addRuntimeParam(new RuntimeParam("testparam3", Integer.TYPE, 10));
@@ -98,7 +97,7 @@ public class ProductRest {
 				}				
 			}
 
-			).done(r -> {
+			).succeed(r -> {
 
 				Handler<AsyncResult<Future>> eventHandler = new Handler<AsyncResult<Future>>() {
 
