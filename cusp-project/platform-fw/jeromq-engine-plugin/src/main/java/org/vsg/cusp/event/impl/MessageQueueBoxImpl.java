@@ -63,6 +63,7 @@ public class MessageQueueBoxImpl implements MessageQueueBox<byte[]> ,  MessageCo
 		}
 		
 		// --- call handle message --- 
+		/*
 		try {
 			this.handler.handle( msg );
 		} catch (Exception e) {
@@ -75,6 +76,7 @@ public class MessageQueueBoxImpl implements MessageQueueBox<byte[]> ,  MessageCo
 				endHandler.handle(null);
 			}
 		}
+		*/
 
 	}
 

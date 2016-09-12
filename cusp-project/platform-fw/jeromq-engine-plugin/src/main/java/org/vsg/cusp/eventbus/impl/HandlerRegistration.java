@@ -203,7 +203,7 @@ public class HandlerRegistration<T> implements MessageConsumer<T>,
 					pending.add(message);
 				} else {
 					if (discardHandler != null) {
-						discardHandler.handle(message);
+						//discardHandler.handle(message);
 					} else {
 						log.warn("Discarding message as more than "
 								+ maxBufferedMessages
