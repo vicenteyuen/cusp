@@ -17,7 +17,6 @@
     <module>cusp-api</module>
     <module>event-api</module>
     <module>core-runtime</module>
-    <module>jeromq-engine-plugin</module>
     <module>rapidoid-engine-plugin</module>
   </modules>
   <properties>
