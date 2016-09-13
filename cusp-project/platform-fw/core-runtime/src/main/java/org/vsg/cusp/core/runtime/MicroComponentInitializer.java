@@ -6,7 +6,6 @@ package org.vsg.cusp.core.runtime;
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -19,8 +18,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.ws.rs.Path;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;

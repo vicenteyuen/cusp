@@ -28,15 +28,6 @@
   		<version>1.7.7</version>
   	</dependency>
   	<dependency>
-  		<groupId>javax.ws.rs</groupId>
-  		<artifactId>javax.ws.rs-api</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.rapidoid</groupId>
-  		<artifactId>rapidoid-http-server</artifactId>
-  		<version>${rapidoid.version}</version>
-  	</dependency>
-  	<dependency>
   		<groupId>com.alibaba</groupId>
   		<artifactId>fastjson</artifactId>
   		<version>1.2.12</version>

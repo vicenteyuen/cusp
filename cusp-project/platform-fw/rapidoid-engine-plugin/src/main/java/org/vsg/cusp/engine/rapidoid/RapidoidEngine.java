@@ -40,7 +40,6 @@ import org.vsg.cusp.core.LifecycleState;
 import org.vsg.cusp.core.MethodParametersMetaInfo;
 import org.vsg.cusp.core.MicroCompInjector;
 import org.vsg.cusp.core.ServEngine;
-import org.vsg.cusp.core.runtime.InjecterHandler;
 import org.vsg.cusp.engine.rapidoid.specimpl.AsyncHttpRequestImpl;
 
 import com.google.inject.Injector;
