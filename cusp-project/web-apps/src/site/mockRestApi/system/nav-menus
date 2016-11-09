@@ -1,0 +1,22 @@
+{
+  "success":true,
+  "data":[{
+    "id": "sys-mng",
+    "text": "系统管理",
+    "nodes":[{
+      "id": "security-mng",
+      "text": "安全管理",
+      "nodes":[
+        {"id":"user-mng", "text":"用户管理" , "href":"/apps/security-mng/user.html"},
+        {"id":"role-mng", "text":"角色管理" , "href":"/apps/security-mng/role.html"},
+        {"id":"flow-interface" ,"text":"流程界面" , "href":"/apps/etl/flow"}
+      ]
+    }]
+  },{
+    "id": "prod-mng",
+    "text": "产品管理",
+    "nodes":[
+      {"id":"prod-matain", "text":"产品维护" , "href":"/apps/prod-mng/prod.html"}
+    ]
+  }]
+}

@@ -1,0 +1,15 @@
+{
+  "engines": [{
+    "class-name":"org.vsg.cusp.core.RapidoidHttpServEngine",
+    "args":{
+      "host":"localhost",
+      "port":"8100"
+    }
+  },{
+    "class-name":"org.vsg.cusp.core.JeroMQServEngine",
+    "args":{
+      "host":"localhost",
+      "port":"5100"
+    }
+  }]
+}

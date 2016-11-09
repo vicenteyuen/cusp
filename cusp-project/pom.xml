@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.vsg</groupId>
+  <artifactId>cusp-project</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+  	<module>platform-fw</module>
+  	<module>platform-build</module>
+  </modules>
+  <properties>
+  	<guice.version>4.0</guice.version>
+  	<slf4j.version>1.7.7</slf4j.version>
+  	<logback.version>1.1.2</logback.version>
+  	<jdk.version>1.8</jdk.version>
+  	<encoding>UTF-8</encoding>
+  	<junit.version>4.11</junit.version>
+  </properties>
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>com.google.inject</groupId>
+  			<artifactId>guice</artifactId>
+  			<version>${guice.version}</version>
+  			<scope>runtime</scope>
+  		</dependency>
+  		<dependency>
+  			<groupId>org.slf4j</groupId>
+  			<artifactId>slf4j-api</artifactId>
+  			<version>${slf4j.version}</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>ch.qos.logback</groupId>
+  			<artifactId>logback-core</artifactId>
+  			<version>${logback.version}</version>
+  			<scope>runtime</scope>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
+  <name>自定义统一平台服务 Custom Unified Service Platform</name>
+  <description>自定义统一平台服务
+服务平台为微服务平台</description>
+</project>

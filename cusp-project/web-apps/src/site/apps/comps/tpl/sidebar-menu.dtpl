@@ -1,0 +1,24 @@
+                    {{~it: value:index}}
+                    <!-- first level-->
+                    <li class="header">{{=value.text}}</li>
+                    <!-- check second node-->
+                    {{? value.nodes && value.nodes.length > 0 }}
+                    {{~value.nodes: secMenuRef:secMenuIndex}}
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-dashboard"></i> <span>{{=secMenuRef.text}}</span> <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        {{? secMenuRef.nodes && secMenuRef.nodes.length > 0 }}
+                        <ul class="treeview-menu">
+                            {{~secMenuRef.nodes: thiMenuRef:thiMenuIndex}}
+                            <li><a href="{{=thiMenuRef.href}}"><i class="fa fa-circle-o"></i>{{=thiMenuRef.text}}</a></li>
+                            {{~}}
+
+                        </ul>
+                        {{?}}
+                    </li>
+                    {{~}}
+                    {{??}}
+                    empty
+                    {{?}}
+                    {{~}}

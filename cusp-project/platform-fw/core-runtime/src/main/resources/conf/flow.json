@@ -1,0 +1,13 @@
+{
+  "impl":"org.vsg.cusp.event.flow.impl.FlowManagerImpl",
+  "event-bus":{
+     "impl":"org.vsg.cusp.event.flow.impl.ZmqEventBusImplEndPoint",
+     "encoder":"org.vsg.cusp.event.impl.DefaultMessageExchangeEncoder",
+     "options":{
+        "senders":[
+           {"host":"localhost","port":"8701"}
+        ]
+     }
+  },
+  "scan-packages":["org.vsg"]
+}
