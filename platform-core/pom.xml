@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.vsg.cusp</groupId>
+  <artifactId>platform-core</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <description>平台定义好的核心框架，以及定义的API使用接口</description>
+  <name>自定义统一微服务框架</name>
+  <modules>
+  	<!-- boot classpath building -->
+   	<module>base-api</module>   
+  	<module>bootstrap</module>
+  	<!-- runtime classpath building -->  
+  	<module>core-api</module>
+  	<module>runtime</module>
+
+  </modules>
+  <properties>
+  	<junit.version>4.12</junit.version>
+  	<slf4j.version>1.7.21</slf4j.version>
+  </properties>
+</project>
