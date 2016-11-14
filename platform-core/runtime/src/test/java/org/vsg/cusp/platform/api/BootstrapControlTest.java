@@ -16,6 +16,8 @@ public class BootstrapControlTest {
 	
 	@BeforeClass
 	public static void initClass() {
+		// --- set home directory ---
+		System.setProperty("cusp.home","");
 		
 		String[] args = new String[]{"start"};
 		Bootstrap.main(args);		

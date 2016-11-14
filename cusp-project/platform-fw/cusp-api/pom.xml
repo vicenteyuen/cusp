@@ -6,12 +6,6 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>cusp-api</artifactId>
-  <dependencies>
-  	<dependency>
-  		<groupId>com.google.inject</groupId>
-  		<artifactId>guice</artifactId>
-  	</dependency>
-  </dependencies>
   <build>
   	<plugins>
   		<plugin>
