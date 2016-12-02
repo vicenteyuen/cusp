@@ -3,7 +3,7 @@ package org.vsg.cusp.platform.core.api;
 import org.vsg.common.async.AsyncResult;
 import org.vsg.common.async.Callback;
 
-public interface Service {
+public interface Service{
 
 	/**
 	  * Starts the service. This method blocks until the service has completely started.

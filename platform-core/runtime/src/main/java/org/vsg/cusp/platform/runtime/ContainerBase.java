@@ -5,10 +5,12 @@ package org.vsg.cusp.platform.runtime;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,24 +39,27 @@ public class ContainerBase implements Container{
 	
 	// --- start container base 
 	
-	public void init() {
+	public void load() {
 		
-		File microCompsFolder = new File(cuspHome , "mico-comps");
+		File microCompsFolder = new File(cuspHome , "micro-comps");
 		
 		if (!microCompsFolder.exists()) {
-			logger.error("Could not found folder \"mico-comps\".");
+			logger.error("Could not found folder \"micro-comps\".");
 			return ;
 		}
 		
 		// --- share folder ---
 		File shareLibFolder = new File(microCompsFolder , "share");
 		
+		ClassLoader  clsLoader = parentClassLoader;
+		if (shareLibFolder.exists()) {
+			clsLoader = getClassLoaderForDir(parentClassLoader , shareLibFolder);
+		}
+
 		try {
-			// --- load the share libs ---
-			ClassLoader shareLibClassLoader = getFolderClassLoader(new File(shareLibFolder,"lib") , parentClassLoader);
+			
 			
 			File[] subFolder = microCompsFolder.listFiles(new FileFilter() {
-
 				@Override
 				public boolean accept(File pathname) {
 					// TODO Auto-generated method stub
@@ -65,6 +70,17 @@ public class ContainerBase implements Container{
 					if (folderName.equalsIgnoreCase("share")) {
 						return false;
 					}
+					
+					// --- check validate micro comps ---
+					File confPath = new File(pathname , "conf");
+					if (!confPath.exists()) {
+						return false;
+					}
+					
+					File confFile = new File(confPath , "conf.json");
+					if (!confPath.exists()) {
+						return false;
+					}					
 					return true;
 				}
 				
@@ -72,11 +88,13 @@ public class ContainerBase implements Container{
 			
 			
 			// --- load component class loader ---
+
 			for (File compFolder : subFolder) {
-				ClassLoader compClassLoader = getFolderClassLoader(new File(compFolder,"lib") , shareLibClassLoader);
+				ClassLoader compClassLoader = getClassLoaderForDir( clsLoader , compFolder);
 				supportCompClsMapping.put(compFolder.getName(), compClassLoader);
 				supportedCompsPathMapping.put(compFolder.getName() , compFolder);
 			}
+
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -84,6 +102,38 @@ public class ContainerBase implements Container{
 		}
 	}
 	
+	private ClassLoader getClassLoaderForDir(ClassLoader parentClassLoader , File compDir) {
+		
+		ClassLoader outputClzLoader = parentClassLoader;
+		
+		// --- load the share libs ---
+		File folder = new File(compDir,"lib");
+		try {
+			if (folder.exists()) {
+				outputClzLoader = getClassLoaderForJars(folder , outputClzLoader);
+			}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			folder = null;
+		}
+				
+		folder = new File(compDir,"classes");
+		try {
+			if (folder.exists()) {
+				outputClzLoader = getClassLoaderForClassesDir(folder , outputClzLoader);
+			}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			folder = null;
+		}
+		
+		return outputClzLoader;
+		
+	}
 	
 	public void	setInjector(Injector injector) {
 		this.injector = injector;
@@ -94,7 +144,7 @@ public class ContainerBase implements Container{
 	}
 	
 	
-	private void reflash() {
+	private void init() {
 		
 	}
 	
@@ -105,7 +155,7 @@ public class ContainerBase implements Container{
 	}
 	
 	
-	public ClassLoader getFolderClassLoader(File shareLibFolder , ClassLoader parentClassLoader) throws Exception {
+	public ClassLoader getClassLoaderForJars(File shareLibFolder , ClassLoader parentClassLoader) throws MalformedURLException {
 		
 		File[] files = shareLibFolder.listFiles(new FileFilter() {
 
@@ -130,6 +180,19 @@ public class ContainerBase implements Container{
 		return urlClsLoader;
 	}
 	
+	public ClassLoader getClassLoaderForClassesDir(File shareClassFolder , ClassLoader parentClassLoader) throws MalformedURLException {
+		URL[] urls = new URL[]{shareClassFolder.toURI().toURL()};
+		URLClassLoader urlClsLoader = new URLClassLoader(urls , parentClassLoader);
+
+		return urlClsLoader;		
+	}
+	
+	@Override
+	public Map<String, Properties> getComponentsProps() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public ClassLoader getParentClassLoader() {
         if (parentClassLoader != null)
             return (parentClassLoader);
@@ -151,10 +214,8 @@ public class ContainerBase implements Container{
 	}
 
 
-	private void loadMicoCompsLibs() {
-		
-	}
-
+	
+	
 
 	public Map<String, File> getComponentsPath() {
 		// TODO Auto-generated method stub

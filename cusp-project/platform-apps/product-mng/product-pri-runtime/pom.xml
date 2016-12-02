@@ -20,32 +20,10 @@
 			<version>4.11</version>
 		</dependency>
 		<dependency>
-			<groupId>org.vsg</groupId>
-			<artifactId>cusp-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.vsg</groupId>
-			<artifactId>event-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jdeferred</groupId>
-			<artifactId>jdeferred-core</artifactId>
-			<version>1.2.4</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.vsg</groupId>
-			<artifactId>promise-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<name>应用模块 - 产品管理私有运行模块</name>

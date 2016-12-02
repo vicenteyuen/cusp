@@ -2,6 +2,7 @@ package org.vsg.cusp.platform.api;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * 
@@ -24,5 +25,8 @@ public interface Container {
 	
 	
 	Map<String, File> getComponentsPath();
+	
+	
+	Map<String, Properties> getComponentsProps();
 
 }

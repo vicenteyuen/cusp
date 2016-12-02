@@ -1,6 +1,7 @@
 package org.vsg.cusp.platform.runtime;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,14 +21,20 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vsg.common.async.AsyncResult;
+import org.vsg.common.async.Callback;
 import org.vsg.cusp.platform.api.ClassLoaderAwareBean;
 import org.vsg.cusp.platform.api.Lifecycle;
 import org.vsg.cusp.platform.api.LifecycleException;
@@ -35,7 +42,9 @@ import org.vsg.cusp.platform.api.LifecycleListener;
 import org.vsg.cusp.platform.api.LifecycleState;
 import org.vsg.cusp.platform.api.LoadMethodAwareBean;
 import org.vsg.cusp.platform.api.ServiceHelper;
+import org.vsg.cusp.platform.core.api.ContainerAware;
 import org.vsg.cusp.platform.core.api.ServEngine;
+import org.vsg.cusp.platform.core.api.ServEngineInfo;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -74,12 +83,15 @@ public class RuntimeServer implements Lifecycle , ClassLoaderAwareBean , LoadMet
     }
     
     private Map<String, Map<String,String>> bootEngines = new LinkedHashMap<String, Map<String,String>>();
-     
+
     /**
      *  load server environment 
      */
     @Override
     public void load() {
+    	
+    	// --- set state ----
+    	this.setState( LifecycleState.INITIALIZING );
     	
     	// pre load runtime module
     	loadRuntimeModules();
@@ -91,55 +103,92 @@ public class RuntimeServer implements Lifecycle , ClassLoaderAwareBean , LoadMet
 
         	File file = new File(this.configFile);
         	
-        	JSONObject jObj = (JSONObject)JSON.parse( IOUtils.toString(file.toURI() , "utf-8") );        	
+        	Properties props = new Properties();        	
+        	// --- check the external config file exist ---
+        	if (file.exists()) {
+        		// --- load file exist ---
+        		FileInputStream is = new FileInputStream(file);
+        		props.load(is);
+        	}
+        	else {
+        		// --- load default config file ---
+        		URL url = this.getClass().getClassLoader().getResource("config-default.properties");
+        		props.load( url.openStream() );
+        	}
+
+
+			// --- set parent class loader ---
+			File cuspHome = new File(System.getProperty("cusp.home"));
+
+			
+        	// --- init hold server micro-comps ---
+        	ContainerBase cb = new ContainerBase();			
+			cb.setCuspHome(cuspHome);
+			cb.setParentClassLoader( parentClassLoader );
+			
+			cb.load();        	
         	
+
+        	
+        	// ---- handle result ---
+        	Callback<AsyncResult<ServEngine>> asyncHandleResult = new Callback<AsyncResult<ServEngine>>() {
+
+				@Override
+				public void invoke(AsyncResult<ServEngine> result) throws Exception {
+					ServEngine current = result.result();
+					ServEngineInfo sen = current.getClass().getAnnotation(ServEngineInfo.class);
+					if (result.succeeded()) {
+		        		registerServEngines.add( current );							
+						if (log.isInfoEnabled()) {
+							log.info("Engine \""+ sen.name() +"\" load completly.");
+						}
+					}
+				}
+    			
+    		};
+
         	// ---- scan all jar package load mapping ---
-        	ServEngine  servEngine = ServiceHelper.loadFactory( ServEngine.class , parentClassLoader);
+        	Collection<ServEngine>  servEngines = ServiceHelper.loadFactories( ServEngine.class , parentClassLoader);
         	
-        	registerServEngines.add( servEngine );
-        	
-        	// --- add parameter handle ---
-        	
-        	// --- init parameter handle ---
- 
+        	for (ServEngine servEngine : servEngines) {
+    			
+        		if (servEngine instanceof ContainerAware) {
+    				ContainerAware awaredBean = (ContainerAware)servEngine;
+    				awaredBean.setContainer( cb );
+    			}
+        		
+        		ServEngineInfo sen = servEngine.getClass().getAnnotation(ServEngineInfo.class);
+        		
+        		URL configUrl = sen.getClass().getClassLoader().getResource("META-INF/"+sen.name()+".properties");
 
-        	/*
-        	JSONArray engines = jObj.getJSONArray("boot-engines");
-        	for (Iterator<JSONObject> engineIter = (Iterator<JSONObject>)(Iterator)engines.iterator(); engineIter.hasNext();) {
-        		JSONObject jsonObj = engineIter.next();
-        		
-        		
-        		Map<String,String> argsMap = new LinkedHashMap<String,String>();
-        		
-        		String className = jsonObj.getString("class-name");
-        		JSONObject arguments = jsonObj.getJSONObject("args");
-        		Set<Map.Entry<String,Object>> entries =  arguments.entrySet();
-        		for (Map.Entry<String, Object> entry : entries) {
-        			argsMap.put(entry.getKey(), entry.getValue().toString());
+        		InputStream confInStream = null;
+        		Map<String,String> engineArguments  = new LinkedHashMap<String,String>();
+        		try {
+            		Properties engineProps = new Properties();
+        			confInStream = configUrl.openStream();
+            		engineProps.load( confInStream );
+            		Set<Entry<Object, Object>>  propSet =  engineProps.entrySet();
+            		for(Entry<Object,Object> propItem : propSet) {
+            			engineArguments.put( propItem.getKey().toString() , propItem.getValue().toString());
+            		}
+        		} catch (IOException is ) {
+        			is.printStackTrace();
+        		} finally {
+        			if ( null != confInStream ) {
+        				confInStream.close();
+        			}
+        			confInStream = null;
         		}
-        		
-        		bootEngines.put( className , argsMap);
-        	}
-        	
-        	
-        	JSONArray services = jObj.getJSONArray("services");
 
-        	for (Iterator<String> servIter = (Iterator<String>)(Iterator)services.iterator(); servIter.hasNext();) {
-        		String serviceName = servIter.next();
-        		
-        		Class clz = Class.forName(serviceName, true, parentClassLoader);
-        		serviceCls.add( clz );
-        	}
-        	*/
-    	
+        		// --- get current engine arguments ---
+        		servEngine.init(engineArguments, asyncHandleResult);
 
-        	
-        	
-        	
+            	
+        	}
+ 	
         	// --- custom server ---
-        	JSONObject server = jObj.getJSONObject("server");
-        	shutdown = server.getString("cmd-shutdown");
-        	port = server.getIntValue("port");        	
+        	shutdown = props.getProperty("cuspserver.start.port");
+        	port = Integer.parseInt( props.getProperty("cuspserver.shutdown.port") );       	
         	
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -221,6 +270,7 @@ public class RuntimeServer implements Lifecycle , ClassLoaderAwareBean , LoadMet
         	if (args[i].startsWith("-conf_file=")) {
         		configFile = args[i].replace("-conf_file=", "");
         	}
+        	
 
         	/*
         	if (isConfig) {
@@ -281,13 +331,16 @@ public class RuntimeServer implements Lifecycle , ClassLoaderAwareBean , LoadMet
         setState(LifecycleState.STARTING);
         
         try {
-
 			// --- create inject ---
 			Stage stage = Stage.PRODUCTION;
 			Injector injector = Guice.createInjector( stage , this.modules);
+
+			startAllEngines(injector);			
+
 			
 			// ---- start service all ---
-			startAllEngines(injector);
+			/*
+
 			
 			startAllServices(injector);
 			
@@ -301,12 +354,14 @@ public class RuntimeServer implements Lifecycle , ClassLoaderAwareBean , LoadMet
 			cb.setParentClassLoader( parentClassLoader );
 			cb.setInjector( injector );
 			cb.init();
+
 			
 			
 			// --- init multi component environment ---
 			Map<String, File> components =  cb.getComponentsPath();
 			
 			Set<Map.Entry<String, File>> entries = components.entrySet();
+			*/
 			/*
 			for (Map.Entry<String, File> entry : entries) {
 				
@@ -348,6 +403,39 @@ public class RuntimeServer implements Lifecycle , ClassLoaderAwareBean , LoadMet
 	 * @throws InterruptedException 
 	 */
 	private void startAllEngines(Injector injector) throws InterruptedException {
+		
+		
+    	Callback<AsyncResult<ServEngine>> asyncHandleResult = new Callback<AsyncResult<ServEngine>>() {
+
+			@Override
+			public void invoke(AsyncResult<ServEngine> result) throws Exception {
+				ServEngine servEngine = result.result();
+				
+        		ServEngineInfo sen = servEngine.getClass().getAnnotation(ServEngineInfo.class);
+        		
+				// --- add shutdown hook
+				addShutdownHook( servEngine );
+				if (log.isInfoEnabled()) {
+					log.info("Engine \""+sen.name()+"\" started. ");
+				}
+			}
+			
+		};
+		
+		Executor executor = Executors.newFixedThreadPool(registerServEngines.size());
+		
+		for (int i = 0 ; i < registerServEngines.size() ; i++) {
+			ServEngine servEngine = registerServEngines.get(i);
+			
+			if (servEngine instanceof GuiceInjectorAware) {
+				GuiceInjectorAware bean = (GuiceInjectorAware)servEngine;
+				bean.setParentInjector( injector );
+			}
+			
+			servEngine.start( asyncHandleResult );
+
+		}
+		
 		/*
 		ServiceHolder serviceHolder =  injector.getInstance(ServiceHolder.class);
 
@@ -376,7 +464,7 @@ public class RuntimeServer implements Lifecycle , ClassLoaderAwareBean , LoadMet
 					EngineCompLoaderService ecls = (EngineCompLoaderService)servEngine;
 					serviceHolder.addEngineCompLoaderService( ecls );				
 				}
-				addShutdownHook( servEngine );
+
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

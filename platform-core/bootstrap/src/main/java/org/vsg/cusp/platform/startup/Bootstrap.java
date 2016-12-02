@@ -30,8 +30,8 @@ public class Bootstrap {
      */
     private static Bootstrap daemon = null;
 
-    private static final File cuspBase;
-    private static final File cuspHomeFile;
+    private static File cuspBase;
+    private static File cuspHomeFile;
 
     private static final Pattern PATH_PATTERN = Pattern.compile("(\".*?\")|(([^,])*)");
     
@@ -270,9 +270,19 @@ public class Bootstrap {
     		if (arg.equalsIgnoreCase("start") ) {
     			continue;
     		}
+    		if (arg.startsWith("-cusp.home=")) {
+    			String argValue = arg.replaceFirst("-cusp.home=", "").trim();
+    			this.cuspHomeFile = new File(argValue);
+    			System.setProperty("cusp.home", argValue);
+    		}
     		argumentsList.add(arg);
     	}
-    	argumentsList.add("-conf_file="+this.cuspBase+"/conf/"+profile+"/conf.json");
+    	argumentsList.add("-conf_file="+this.cuspBase+"/conf/"+profile+"/config.properties");
+    	// --- check home dir exist ---
+    	if (!cuspHomeFile.exists()) {
+    		throw new Exception("Please specify cusp.home directory. ");
+    	}
+    	
 
         String[] param;
         if (arguments==null || arguments.length==0) {

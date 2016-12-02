@@ -1,4 +1,4 @@
-package org.vsg.cusp.core.utils;
+package org.vsg.cusp.platform;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

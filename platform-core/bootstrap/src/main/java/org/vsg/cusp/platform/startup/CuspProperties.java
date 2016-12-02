@@ -84,8 +84,7 @@ public class CuspProperties {
 
         if (is == null) {
             try {
-                is = CuspProperties.class.getResourceAsStream
-                    ("/cusp.properties");
+                is = CuspProperties.class.getResourceAsStream("/cusp.properties");
             } catch (Throwable t) {
                 handleThrowable(t);
             }
@@ -102,14 +101,14 @@ public class CuspProperties {
                 try {
                     is.close();
                 } catch (IOException ioe) {
-                    log.warn("Could not close catalina.properties", ioe);
+                    log.warn("Could not close cusp.properties", ioe);
                 }
             }
         }
 
         if ((is == null) || (error != null)) {
             // Do something
-            log.warn("Failed to load catalina.properties", error);
+            log.warn("Failed to load cusp.properties", error);
             // That's fine - we have reasonable defaults.
             properties = new Properties();
         }

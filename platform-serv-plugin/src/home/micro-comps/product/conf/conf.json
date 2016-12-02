@@ -1,0 +1,10 @@
+{
+  engines:[{
+    engine_name:"netty-resteasy",
+    arguments:{
+	  package_scan:[
+	    "org.vsg.cusp.apps"
+	  ]
+    }
+  }]
+}

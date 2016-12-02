@@ -1,4 +1,4 @@
-package org.vsg.cusp.core.utils;
+package org.vsg.cusp.platform;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +82,41 @@ public class AnnotationReflectionUtils {
 		}
 		return candidates;
 	}
+	
+	public static <T extends Annotation> List<Class<?>> findCandidates(
+			String basePackage, Class<T> searchedAnnotation , ClassLoader clsLoader) {
+		ArrayList<Class<?>> candidates = new ArrayList<Class<?>>();
+		Enumeration<URL> urls;
 
+		String basePath = basePackage.replaceAll("\\.", "/");
+		
+		try {
+			urls = clsLoader.getResources(basePath);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		while (urls.hasMoreElements()) {
+			URL url = urls.nextElement();
+			if (isJarURL(url)) {
+				try {
+					candidates.addAll(doFindPathMatchingJarResources(url,basePath, searchedAnnotation));
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			} else {
+				File directory = new File(url.getFile());
+				if (directory.exists() && directory.isDirectory()) {
+					for (File file : new File(url.getFile()).listFiles())
+						fetchCandidates(basePackage, file, searchedAnnotation,
+								candidates);
+				}
+			}
+		}
+		return candidates;
+	}
+
+	
+	
 	private static <T extends Annotation> void fetchCandidates(
 			String basePackage, File candidate, Class<T> searchedAnnotation,
 			List<Class<?>> candidates) {
@@ -95,7 +129,7 @@ public class AnnotationReflectionUtils {
 			if (fileName.endsWith(".class")) {
 				String className = fileName.substring(0, fileName.length() - 6);
 				Class<?> foundClass = checkCandidate(basePackage + "."
-						+ className, searchedAnnotation);
+						+ className, searchedAnnotation , Thread.currentThread().getContextClassLoader());
 
 				if (foundClass != null)
 					candidates.add(foundClass);
@@ -112,9 +146,9 @@ public class AnnotationReflectionUtils {
 	}
 
 	public static <T extends Annotation> Class<?> checkCandidate(
-			String className, Class<T> searchedAnnotation) {
+			String className, Class<T> searchedAnnotation , ClassLoader classLoader) {
 		try {
-			Class<?> candidateClass = Class.forName(className);
+			Class<?> candidateClass = classLoader.loadClass( className );
 			Target target = searchedAnnotation.getAnnotation(Target.class);
 			for (ElementType elementType : target.value()) {
 				switch (elementType) {
@@ -142,9 +176,9 @@ public class AnnotationReflectionUtils {
 					break;
 				}
 			}
-		} catch (ClassNotFoundException e) {
-		} catch (NoClassDefFoundError e) {
-		}
+		} catch (ClassNotFoundException | NoClassDefFoundError e) {
+			e.printStackTrace();
+		} 
 		return null;
 	}
 
@@ -216,11 +250,12 @@ public class AnnotationReflectionUtils {
 				if (entryPath.startsWith(rootEntryPath)
 						&& entryPath.endsWith(".class")) {
 					int entryLength = entryPath.length();
-					String className = entryPath.replaceAll(File.separator, ".").substring(0,entryLength - 6);
-					Class<?> foundClass = checkCandidate(className,
-							searchedAnnotation);
-					if (foundClass != null)
-						result.add(foundClass);
+					String className = entryPath.replaceAll("/", ".").substring(0,entryLength - 6);
+					Class<?> foundClass = checkCandidate(className,	searchedAnnotation , Thread.currentThread().getContextClassLoader());
+					if (foundClass != null) {
+						result.add(foundClass);						
+					}
+
 				}
 			}
 			return result;

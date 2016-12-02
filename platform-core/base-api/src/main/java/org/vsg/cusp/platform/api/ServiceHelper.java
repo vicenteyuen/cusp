@@ -1,5 +1,8 @@
 package org.vsg.cusp.platform.api;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.ServiceLoader;
 
 public class ServiceHelper {
@@ -49,6 +52,40 @@ public class ServiceHelper {
 								+ " on classpath");
 			}
 		}
+	}
+	
+	public static <T> Collection<T> loadFactories(Class<T> clazz, ClassLoader parentClassLoader) {
+		ServiceLoader<T> factories = ServiceLoader.load(clazz);
+		
+		Iterator<T>  factoriesIter =  factories.iterator();
+		
+		Collection<T> factoryColl = new ArrayList<T>();
+		
+		while (factoriesIter.hasNext()) {
+			factoryColl.add( factoriesIter.next() );
+		}
+		
+		// --- check class loader from ---
+		if (factoryColl.isEmpty()) {
+			factories = ServiceLoader.load(clazz,
+					parentClassLoader);
+			
+			factoriesIter = factories.iterator();
+
+			while (factoriesIter.hasNext()) {
+				factoryColl.add( factoriesIter.next() );
+			}		
+		}
+		
+		
+		if (factoryColl.isEmpty()) {
+			throw new IllegalStateException(
+					"Cannot find META-INF/services/" + clazz.getName()
+							+ " on classpath");			
+		}
+		
+		return factoryColl;
+
 	}	
 
 }
