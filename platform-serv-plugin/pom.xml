@@ -7,5 +7,35 @@
   <packaging>pom</packaging>
   <modules>
     <module>netty-resteasy-engine-plugin</module>
+    <module>zeromq-engine-plugin</module>
   </modules>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.vsg.cusp</groupId>
+  		<artifactId>runtime</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>  
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>${junit.version}</version>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.vsg.cusp</groupId>
+  		<artifactId>bootstrap</artifactId>
+  		<version>${project.version}</version>
+  		<scope>provided</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.slf4j</groupId>
+  		<artifactId>slf4j-jdk14</artifactId>
+  		<version>${slf4j.version}</version>
+  		<scope>test</scope>
+  	</dependency>  	
+  </dependencies>    
+  <properties>
+  	<slf4j.version>1.7.21</slf4j.version>
+  	<junit.version>4.12</junit.version>
+  </properties>
 </project>
