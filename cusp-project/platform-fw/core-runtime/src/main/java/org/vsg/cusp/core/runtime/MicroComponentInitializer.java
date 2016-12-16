@@ -91,7 +91,7 @@ public class MicroComponentInitializer implements Runnable {
 
 		
 		MicroCompInjector mci = new MicroCompInjector();
-		mci.setInjector(inject);
+		//mci.setInjector(inject);
 		mci.setAnnotationMaps( annotationMaps );
 		mci.setHomeClassLoader( compClassLoader );
 		mci.setHomePath( homePath );
