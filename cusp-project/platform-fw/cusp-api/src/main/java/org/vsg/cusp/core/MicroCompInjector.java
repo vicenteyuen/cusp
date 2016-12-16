@@ -4,11 +4,6 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
-import com.google.inject.Injector;
-/**
- * 
- */
-
 /**
  * @author ruanweibiao
  *
@@ -16,7 +11,7 @@ import com.google.inject.Injector;
 public class MicroCompInjector {
 	
 	
-	private Injector injector;
+	//private Injector injector;
 	
 	private File homePath;
 	
@@ -26,6 +21,7 @@ public class MicroCompInjector {
 	
 	private String contextPath;
 
+	/*
 	public Injector getInjector() {
 		return injector;
 	}
@@ -33,6 +29,7 @@ public class MicroCompInjector {
 	public void setInjector(Injector injector) {
 		this.injector = injector;
 	}
+	*/
 
 	public File getHomePath() {
 		
