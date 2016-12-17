@@ -61,11 +61,22 @@
   		<version>4.12</version>
   		<scope>test</scope>
   	</dependency>
-
   	<dependency>
   		<groupId>org.vsg.cusp</groupId>
   		<artifactId>core-api</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+        	<source>${jdk.version}</source>
+        	<target>${jdk.version}</target> 
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>  
 </project>

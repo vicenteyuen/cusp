@@ -112,5 +112,19 @@
     	</plugins>
     </pluginManagement>
   </build>
-  <packaging>maven-plugin</packaging>    
+  <packaging>maven-plugin</packaging>
+  <distributionManagement>
+  	<repository>
+  		<uniqueVersion>true</uniqueVersion>
+  		<id>sonatype-nexus-staging</id>
+  		<name>Vsg Businesss Component lib release</name>
+  		<url>http://oss.sonatype.org/content/repositories/releases</url>  		
+  	</repository>
+  	<snapshotRepository>
+  		<uniqueVersion>true</uniqueVersion>
+  		<id>sonatype-nexus-snapshots</id>
+  		<name>Vsg Businesss Component lib Snapshots</name>
+  		<url>http://oss.sonatype.org/content/repositories/snapshots</url>
+  	</snapshotRepository>
+  </distributionManagement>      
 </project>
