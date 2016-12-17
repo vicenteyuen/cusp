@@ -18,5 +18,6 @@
   <properties>
   	<junit.version>4.12</junit.version>
   	<slf4j.version>1.7.21</slf4j.version>
+  	<jdk.version>1.8</jdk.version>
   </properties>
 </project>

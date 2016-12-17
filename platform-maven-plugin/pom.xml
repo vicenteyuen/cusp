@@ -43,7 +43,7 @@
     	<version>2.4</version>
     </dependency>
     <dependency>
-    	<groupId>org.vsg</groupId>
+    	<groupId>org.vsg.cusp</groupId>
     	<artifactId>bootstrap</artifactId>
     	<version>${platfrom-framework.version}</version>
     	<optional>true</optional>
