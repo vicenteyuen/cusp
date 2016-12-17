@@ -8,6 +8,7 @@
     <platfrom-framework.version>${project.version}</platfrom-framework.version>
     <maven-compiler.version>3.6.0</maven-compiler.version>
     <jdk.version>1.8</jdk.version>
+    <protostuff.version>1.5.2</protostuff.version>
  </properties>
   <dependencies>
     <dependency>
@@ -33,11 +34,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>com.alibaba</groupId>
-    	<artifactId>fastjson</artifactId>
-    	<version>1.2.7</version>
-    </dependency>
-    <dependency>
     	<groupId>commons-io</groupId>
     	<artifactId>commons-io</artifactId>
     	<version>2.4</version>
@@ -47,6 +43,16 @@
     	<artifactId>bootstrap</artifactId>
     	<version>${platfrom-framework.version}</version>
     	<optional>true</optional>
+    </dependency>
+    <dependency>
+    	<groupId>io.protostuff</groupId>
+    	<artifactId>protostuff-core</artifactId>
+    	<version>${protostuff.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>io.protostuff</groupId>
+    	<artifactId>protostuff-xml</artifactId>
+    	<version>${protostuff.version}</version>
     </dependency>    
   </dependencies>
   

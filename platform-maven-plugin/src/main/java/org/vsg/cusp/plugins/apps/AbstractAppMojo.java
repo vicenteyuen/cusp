@@ -16,6 +16,8 @@ import org.apache.maven.project.MavenProject;
  *
  */
 public abstract class AbstractAppMojo extends AbstractMojo {
+
+	
 	
 	@Parameter( defaultValue = "${project}", readonly = true, required = true )
 	private MavenProject mavenProject;
@@ -24,6 +26,7 @@ public abstract class AbstractAppMojo extends AbstractMojo {
 	public MavenProject getProject() {
 		return mavenProject;
 	}
+
 
 
 	

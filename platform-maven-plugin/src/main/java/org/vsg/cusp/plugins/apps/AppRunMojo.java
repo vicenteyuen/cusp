@@ -5,8 +5,8 @@ package org.vsg.cusp.plugins.apps;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -18,6 +18,9 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.vsg.cusp.plugins.apps.vo.CuspConfigration;
+
+import io.protostuff.XmlIOUtil;
 
 /**
  * @author Vison Ruan
@@ -30,9 +33,12 @@ public class AppRunMojo extends AbstractAppMojo {
     @Parameter( defaultValue = "${project.artifacts}", required = true, readonly = true )
     private Set<Artifact> dependencies;	
     
+    /**
+     * Config file in current project
 
-    @Parameter(defaultValue = "${project.platformHome}",  required = true , readonly = true )   
-    private File platformHome;
+     */
+    @Parameter(defaultValue="${project.configFile}")
+    private File configFile;
     
     @Parameter(defaultValue = "${run.debug}") 
     private boolean debug;
@@ -43,21 +49,26 @@ public class AppRunMojo extends AbstractAppMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		// TODO Auto-generated method stub
+		// --- check config file ---
+		File _confFile = checkAndResetTheConfigPath(this.configFile);
+		
+		// --- parse config file parameter ---
+		CuspConfigration  conf = parseConfigration(_confFile);
+
 
 		
-        ClassLoader originalClassLoader = loadBootLibLoader(platformHome , Thread.currentThread().getContextClassLoader());
+        //ClassLoader originalClassLoader = loadBootLibLoader(platformHome , Thread.currentThread().getContextClassLoader());
         
-        originalClassLoader = loadLibLoader(platformHome , originalClassLoader);
+        //originalClassLoader = loadLibLoader(platformHome , originalClassLoader);
 
 		// ---create classloader handle ---
 		
-        try {
+       // try {
 			
-        	Class<?> bootCls = originalClassLoader.loadClass("org.vsg.cusp.bootstrap.BootstrapAgent");
+        	//Class<?> bootCls = originalClassLoader.loadClass("org.vsg.cusp.bootstrap.BootstrapAgent");
 			
 
-			Method instanceMethod = bootCls.getMethod("getInstance");
+			//Method instanceMethod = bootCls.getMethod("getInstance");
 			
 			/*
 			BootstrapAgent inst = (BootstrapAgent)instanceMethod.invoke(null);
@@ -82,12 +93,49 @@ public class AppRunMojo extends AbstractAppMojo {
 			inst.startup(new String[]{});
 			*/
 			
-		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException  e) {
+		//} catch (ClassNotFoundException | NoSuchMethodException | SecurityException  e) {
 			// TODO Auto-generated catch block
-			throw new MojoExecutionException(e.getLocalizedMessage());
-		}
-
+		//	throw new MojoExecutionException(e.getLocalizedMessage());
+		//}
 	}
+	
+	private CuspConfigration parseConfigration(File configFile) {
+		
+		CuspConfigration configuration = CuspConfigration.getConfigrationInstance();
+		
+		try {
+			FileInputStream fis = new FileInputStream(configFile);
+			
+			//XmlIOUtil.mergeFrom(in, message, schema);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+
+		
+		return configuration;
+		
+	}
+	
+	
+	private File checkAndResetTheConfigPath(File configFile) {
+		if (configFile == null) {
+			this.getLog().warn("Could not find the \"configFile\" configuration, system use default value.");
+		}
+		else {
+			return configFile;
+		}
+		String defaultPath = this.basedir.getPath() + "/platform-home/conf/config.properties";
+		File _confFile = new File(defaultPath);
+		if (_confFile.exists()) {
+			getLog().info("Use default config path : " + _confFile);
+		}
+		return _confFile;
+	}
+	
 	
 	private ClassLoader loadBootLibLoader(File platformHome ,  ClassLoader parentClsLoader) {
 		
