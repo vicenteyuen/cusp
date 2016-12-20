@@ -5,8 +5,8 @@ package org.vsg.cusp.plugins.apps;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -20,7 +20,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.vsg.cusp.plugins.apps.vo.CuspConfigration;
 
+import io.protostuff.Schema;
 import io.protostuff.XmlIOUtil;
+import io.protostuff.runtime.RuntimeSchema;
 
 /**
  * @author Vison Ruan
@@ -101,13 +103,22 @@ public class AppRunMojo extends AbstractAppMojo {
 	
 	private CuspConfigration parseConfigration(File configFile) {
 		
-		CuspConfigration configuration = CuspConfigration.getConfigrationInstance();
+		CuspConfigration message = CuspConfigration.getConfigrationInstance();
+		
+		Schema<CuspConfigration> schema = RuntimeSchema.getSchema(CuspConfigration.class);
 		
 		try {
+			/*
 			FileInputStream fis = new FileInputStream(configFile);
 			
-			//XmlIOUtil.mergeFrom(in, message, schema);
-		} catch (FileNotFoundException e) {
+			XmlIOUtil.mergeFrom(fis, message, schema);
+			*/
+			
+			FileOutputStream fos = new FileOutputStream(new File("out.xml"));
+			
+			XmlIOUtil.writeTo(fos, message, schema);
+			
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -116,7 +127,7 @@ public class AppRunMojo extends AbstractAppMojo {
 		
 
 		
-		return configuration;
+		return message;
 		
 	}
 	

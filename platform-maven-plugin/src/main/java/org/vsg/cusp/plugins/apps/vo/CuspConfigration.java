@@ -14,28 +14,34 @@ public class CuspConfigration {
 	
 	private Platform platform = new Platform();
 	
-	
-	private Set<MicroComp> microcomps = new LinkedHashSet<MicroComp>();
-	
+
 	
 	
 	
-	
-	
-	private class Platform {
-		
-		private String configrationPath;
-		
-		
+	public Platform getPlatform() {
+		return platform;
 	}
-	
-	
-	private class MicroComp {
-		
-		private String configationPath;
-		
+
+
+	public void setPlatform(Platform platform) {
+		this.platform = platform;
 	}
+
+
+	private Set<MicroComp> microComps = new LinkedHashSet<MicroComp>();
 	
+	
+	
+	public Set<MicroComp> getMicroComps() {
+		return microComps;
+	}
+
+
+	public void setMicroComps(Set<MicroComp> microComps) {
+		this.microComps = microComps;
+	}
+
+
 	
 	public static CuspConfigration getConfigrationInstance() {
 		return new CuspConfigration();
